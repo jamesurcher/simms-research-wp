@@ -34,6 +34,8 @@ final class Simms_Lab_Results_Meta_Boxes {
 		'_simms_net_content'       => array( 'Net Content', 'text' ),
 		'_simms_net_content_delta' => array( 'Net Content Delta', 'text' ),
 		'_simms_endotoxins'        => array( 'Endotoxins', 'text' ),
+		'_simms_heavy_metals'      => array( 'Heavy Metals', 'text' ),
+		'_simms_sterility'         => array( 'Sterility', 'text' ),
 		'_simms_test_type'         => array( 'Test Type', 'text' ),
 		'_simms_tested_at'         => array( 'Tested At', 'date' ),
 		'_simms_coa_url'           => array( 'COA URL', 'url' ),
@@ -173,4 +175,3 @@ final class Simms_Lab_Results_Meta_Boxes {
 		</style>';
 	}
 }
-

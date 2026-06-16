@@ -71,6 +71,8 @@ final class Simms_Lab_Results_Post_Types {
 			'_simms_net_content',
 			'_simms_net_content_delta',
 			'_simms_endotoxins',
+			'_simms_heavy_metals',
+			'_simms_sterility',
 			'_simms_test_type',
 			'_simms_tested_at',
 			'_simms_coa_url',
@@ -117,4 +119,3 @@ final class Simms_Lab_Results_Post_Types {
 		);
 	}
 }
-
