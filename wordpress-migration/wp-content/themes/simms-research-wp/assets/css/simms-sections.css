@@ -1673,3 +1673,221 @@
     width: 100%;
   }
 }
+
+/* ============================================================
+   AFFILIATE APPLICATION PAGE
+   ============================================================ */
+.affiliate-application-page {
+  padding-block-start: var(--affiliate-application-padding-block-start, 48px);
+  padding-block-end: var(--affiliate-application-padding-block-end, 120px);
+  background:
+    radial-gradient(circle at 50% 0%, rgb(var(--color-foreground-rgb) / 0.026), transparent 30rem),
+    rgb(var(--color-background-rgb));
+}
+.affiliate-application-page,
+.affiliate-application-page * {
+  box-sizing: border-box;
+}
+.affiliate-application-page__inner {
+  width: 85%;
+  max-width: 40rem;
+  margin-inline: auto;
+}
+.affiliate-application-page__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-block-end: clamp(1.5rem, 3vw, 2.4rem);
+  color: rgb(var(--color-foreground-rgb) / 0.56);
+  font-size: 0.9375rem;
+  line-height: 1.3;
+  text-decoration: none;
+}
+.affiliate-application-page__back:hover {
+  color: var(--color-foreground);
+}
+.affiliate-application-page__eyebrow,
+.affiliate-application-page__field label {
+  margin: 0;
+  color: rgb(var(--color-foreground-rgb) / 0.62);
+  font-family: var(--font-body--family);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+.affiliate-application-page__eyebrow {
+  color: rgb(var(--color-foreground-rgb) / 0.48);
+  font-family: var(--font-mono--family);
+  font-size: 0.75rem;
+  font-weight: var(--font-mono--weight);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.affiliate-application-page__title {
+  margin: 0.65rem 0 0;
+  color: var(--color-foreground);
+  font-family: var(--font-heading--family);
+  font-size: clamp(2rem, 3.4vw, 2.4rem);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+}
+.affiliate-application-page__intro {
+  max-width: 34rem;
+  margin-block-start: 0.75rem;
+  color: rgb(var(--color-foreground-rgb) / 0.58);
+  font-size: 1.0625rem;
+  line-height: 1.45;
+}
+.affiliate-application-page__intro p {
+  margin: 0;
+}
+.affiliate-application-page__form {
+  display: grid;
+  gap: 1.1rem;
+  margin-block-start: clamp(1.8rem, 3vw, 2.4rem);
+}
+.affiliate-application-page__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.affiliate-application-page__field {
+  display: grid;
+  gap: 0.45rem;
+}
+.affiliate-application-page__field :is(input, select, textarea) {
+  width: 100%;
+  min-height: 3.4rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.12);
+  border-radius: 12px;
+  background: rgb(var(--color-background-rgb) / 0.74);
+  box-shadow: 0 0 0 1px rgb(var(--color-foreground-rgb) / 0.03);
+  color: var(--color-foreground);
+  font: inherit;
+}
+.affiliate-application-page__field select {
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, rgb(var(--color-foreground-rgb) / 0.5) 50%),
+    linear-gradient(135deg, rgb(var(--color-foreground-rgb) / 0.5) 50%, transparent 50%);
+  background-position:
+    calc(100% - 1.25rem) 50%,
+    calc(100% - 0.95rem) 50%;
+  background-size:
+    0.35rem 0.35rem,
+    0.35rem 0.35rem;
+  background-repeat: no-repeat;
+}
+.affiliate-application-page__field textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+.affiliate-application-page__field :is(input, select, textarea)::placeholder {
+  color: rgb(var(--color-foreground-rgb) / 0.36);
+}
+.affiliate-application-page__field :is(input, select, textarea):focus {
+  border-color: rgb(var(--color-foreground-rgb) / 0.42);
+  outline: 2px solid rgb(var(--color-foreground-rgb) / 0.1);
+  outline-offset: 2px;
+}
+.affiliate-application-page__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  min-height: 3.55rem;
+  margin-block-start: 0.35rem;
+  border-radius: 12px;
+  background: var(--color-primary-button-background);
+  color: var(--color-primary-button-text);
+}
+.affiliate-application-page__submit:hover {
+  background: var(--color-primary-button-hover-background);
+  border-color: var(--color-primary-button-hover-border);
+  color: var(--color-primary-button-hover-text);
+}
+.affiliate-application-page__submit span {
+  display: inline-flex;
+}
+.affiliate-application-page__submit svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  --icon-stroke-width: 2;
+  transform: rotate(-35deg);
+}
+.affiliate-application-page__message {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+}
+.affiliate-application-page__message--error {
+  background: rgb(190 18 60 / 0.08);
+  color: rgb(136 19 55);
+}
+.affiliate-application-page__message svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+.affiliate-application-page__confirmation {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  margin-block-start: clamp(1.8rem, 3vw, 2.4rem);
+  padding: clamp(1.35rem, 3vw, 2rem);
+  border: 1px solid rgb(0 122 70 / 0.28);
+  border-radius: 14px;
+  background:
+    linear-gradient(rgb(0 155 87 / 0.08), rgb(0 155 87 / 0.08)),
+    rgb(var(--color-background-rgb));
+}
+.affiliate-application-page__confirmation:focus {
+  outline: 2px solid rgb(0 122 70 / 0.32);
+  outline-offset: 3px;
+}
+.affiliate-application-page__confirmation-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  background: #007a46;
+  color: #fff;
+}
+.affiliate-application-page__confirmation-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+.affiliate-application-page__confirmation-title {
+  margin: 0;
+  color: rgb(var(--color-foreground-rgb) / 0.9);
+  font-size: clamp(1.65rem, 3vw, 2.2rem);
+  letter-spacing: 0;
+  line-height: 1.05;
+}
+.affiliate-application-page__confirmation p {
+  max-width: 29rem;
+  margin: 0.7rem 0 0;
+  color: rgb(var(--color-foreground-rgb) / 0.64);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+.affiliate-application-page__confirmation-button {
+  width: fit-content;
+  min-height: 3rem;
+  margin-block-start: 1.4rem;
+  border-radius: 999px;
+}
+@media (max-width: 749px) {
+  .affiliate-application-page__inner { width: 100%; }
+  .affiliate-application-page__row { grid-template-columns: 1fr; }
+  .affiliate-application-page__title { font-size: clamp(2rem, 10vw, 2.5rem); }
+  .affiliate-application-page__confirmation { grid-template-columns: 1fr; }
+}

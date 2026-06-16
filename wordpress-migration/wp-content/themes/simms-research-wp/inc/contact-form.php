@@ -11,6 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 add_action( 'admin_post_nopriv_simms_contact', 'simms_handle_contact_form' );
 add_action( 'admin_post_simms_contact', 'simms_handle_contact_form' );
+add_action( 'admin_post_nopriv_simms_affiliate_application', 'simms_handle_affiliate_application' );
+add_action( 'admin_post_simms_affiliate_application', 'simms_handle_affiliate_application' );
 
 function simms_handle_contact_form(): void {
 	$redirect = wp_get_referer() ? wp_get_referer() : home_url( '/contact/' );
@@ -46,5 +48,69 @@ function simms_handle_contact_form(): void {
 	}
 
 	wp_safe_redirect( add_query_arg( 'contact', 'sent', $redirect ) );
+	exit;
+}
+
+function simms_handle_affiliate_application(): void {
+	$redirect = wp_get_referer() ? wp_get_referer() : home_url( '/apply/' );
+
+	if ( ! isset( $_POST['simms_affiliate_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['simms_affiliate_nonce'] ) ), 'simms_affiliate_application' ) ) {
+		wp_safe_redirect( add_query_arg( 'application', 'error', $redirect ) );
+		exit;
+	}
+
+	$contact = array();
+	if ( isset( $_POST['contact'] ) && is_array( $_POST['contact'] ) ) {
+		$contact = wp_unslash( $_POST['contact'] );
+	}
+
+	$first_name          = sanitize_text_field( $contact['First name'] ?? '' );
+	$last_name           = sanitize_text_field( $contact['Last name'] ?? '' );
+	$email               = sanitize_email( $contact['email'] ?? '' );
+	$phone               = sanitize_text_field( $contact['phone'] ?? '' );
+	$social_handles      = sanitize_text_field( $contact['Social handles'] ?? '' );
+	$instagram_followers = sanitize_text_field( $contact['Instagram followers'] ?? '' );
+	$tiktok_followers    = sanitize_text_field( $contact['TikTok followers'] ?? '' );
+	$total_followers     = sanitize_text_field( $contact['Total followers'] ?? '' );
+	$audience_info       = sanitize_textarea_field( $contact['body'] ?? '' );
+	$referral_source     = sanitize_text_field( $contact['How did you find us'] ?? '' );
+	$notes               = sanitize_textarea_field( $contact['Additional notes'] ?? '' );
+
+	if (
+		'' === $first_name ||
+		'' === $last_name ||
+		! is_email( $email ) ||
+		'' === $phone ||
+		'' === $social_handles ||
+		'' === $instagram_followers ||
+		'' === $tiktok_followers ||
+		'' === $referral_source
+	) {
+		wp_safe_redirect( add_query_arg( 'application', 'error', $redirect ) );
+		exit;
+	}
+
+	$name    = trim( "{$first_name} {$last_name}" );
+	$to      = get_option( 'admin_email' );
+	$subject = '[Simms Affiliate] Affiliate Program Application';
+	$body    = "Program: Affiliate Program\n"
+		. "Name: {$name}\n"
+		. "Email: {$email}\n"
+		. "Phone: {$phone}\n"
+		. "Social Handle(s): {$social_handles}\n"
+		. "Instagram Followers: {$instagram_followers}\n"
+		. "TikTok Followers: {$tiktok_followers}\n"
+		. "Total Followers: {$total_followers}\n"
+		. "How Did You Find Us: {$referral_source}\n\n"
+		. "Platform / Audience Info:\n{$audience_info}\n\n"
+		. "Additional Notes:\n{$notes}";
+	$headers = array( 'Reply-To: ' . ( $name ? "{$name} <{$email}>" : $email ) );
+
+	if ( ! wp_mail( $to, $subject, $body, $headers ) ) {
+		wp_safe_redirect( add_query_arg( 'application', 'error', $redirect ) );
+		exit;
+	}
+
+	wp_safe_redirect( add_query_arg( 'application', 'sent', $redirect ) );
 	exit;
 }
