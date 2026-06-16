@@ -41,16 +41,16 @@ Each product page includes:
 
 ## Pages
 
-- Homepage: <?php echo esc_url( $origin ); ?>
-- All Products: <?php echo esc_url( $origin . '/shop' ); ?>
-- Lab Results / COA Library: <?php echo esc_url( $origin . '/lab-results' ); ?>
-- About / Quality: <?php echo esc_url( $origin . '/about-us' ); ?>
-- FAQ: <?php echo esc_url( $origin . '/faq' ); ?>
-- Contact: <?php echo esc_url( $origin . '/contact' ); ?>
+- Homepage: <?php echo esc_url( $origin ) . "\n"; ?>
+- All Products: <?php echo esc_url( $origin . '/shop' ) . "\n"; ?>
+- Lab Results / COA Library: <?php echo esc_url( $origin . '/lab-results' ) . "\n"; ?>
+- About / Quality: <?php echo esc_url( $origin . '/about-us' ) . "\n"; ?>
+- FAQ: <?php echo esc_url( $origin . '/faq' ) . "\n"; ?>
+- Contact: <?php echo esc_url( $origin . '/contact' ) . "\n"; ?>
 
 ## Contact
 
-- Website: <?php echo esc_url( $origin ); ?>
-- Support: <?php echo esc_url( $origin . '/contact' ); ?>
+- Website: <?php echo esc_url( $origin ) . "\n"; ?>
+- Support: <?php echo esc_url( $origin . '/contact' ) . "\n"; ?>
 <?php
 exit;

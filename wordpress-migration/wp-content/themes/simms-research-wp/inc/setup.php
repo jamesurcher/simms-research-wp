@@ -48,7 +48,10 @@ add_action(
 			SIMMS_THEME_VERSION
 		);
 
-		if ( is_page_template( 'page-lab-results.php' ) || is_page( 'lab-results' ) ) {
+		$request_path = isset( $_SERVER['REQUEST_URI'] ) ? wp_parse_url( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), PHP_URL_PATH ) : '';
+		$request_path = trim( (string) $request_path, '/' );
+
+		if ( is_page_template( 'page-lab-results.php' ) || is_page( 'lab-results' ) || 'lab-results' === $request_path ) {
 			wp_enqueue_script(
 				'simms-lab-results',
 				SIMMS_THEME_URI . '/assets/js/lab-results.js',
@@ -59,4 +62,3 @@ add_action(
 		}
 	}
 );
-
