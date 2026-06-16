@@ -18,3 +18,4 @@ require SIMMS_THEME_DIR . '/inc/contact-form.php';
 require SIMMS_THEME_DIR . '/inc/robots.php';
 require SIMMS_THEME_DIR . '/inc/search.php';
 require SIMMS_THEME_DIR . '/inc/collections.php';
+require SIMMS_THEME_DIR . '/inc/blog.php';
