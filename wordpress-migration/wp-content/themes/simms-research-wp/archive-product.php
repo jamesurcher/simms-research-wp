@@ -1,6 +1,6 @@
 <?php
 /**
- * WooCommerce product archive scaffold.
+ * WooCommerce product archive (shop / collection).
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -9,27 +9,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header();
 ?>
-<section class="simms-section simms-shop">
-	<div class="simms-rail">
-		<header class="simms-shop__header">
-			<p class="simms-eyebrow">Research Catalog</p>
-			<h1><?php woocommerce_page_title(); ?></h1>
-			<p>Independently tested · 99%+ purity</p>
-			<?php get_product_search_form(); ?>
-		</header>
+<div class="shop-page color-scheme-1">
+	<header class="shop-page__head">
+		<p class="shop-page__eyebrow"><?php esc_html_e( 'Research Catalog', 'simms-research' ); ?></p>
+		<h1 class="shop-page__title"><?php woocommerce_page_title(); ?></h1>
+		<p class="shop-page__sub"><?php esc_html_e( 'Every compound independently third-party tested · 99%+ purity · COA on every batch.', 'simms-research' ); ?></p>
+	</header>
+
+	<div class="shop-page__inner">
 		<?php if ( woocommerce_product_loop() ) : ?>
-			<?php woocommerce_product_loop_start(); ?>
-			<?php while ( have_posts() ) : ?>
-				<?php the_post(); ?>
-				<?php wc_get_template_part( 'content', 'product' ); ?>
-			<?php endwhile; ?>
-			<?php woocommerce_product_loop_end(); ?>
-			<?php woocommerce_pagination(); ?>
+			<?php
+			do_action( 'woocommerce_before_shop_loop' );
+			woocommerce_product_loop_start();
+			while ( have_posts() ) :
+				the_post();
+				wc_get_template_part( 'content', 'product' );
+			endwhile;
+			woocommerce_product_loop_end();
+			do_action( 'woocommerce_after_shop_loop' );
+			?>
 		<?php else : ?>
-			<?php wc_no_products_found(); ?>
+			<p class="shop-page__empty"><?php esc_html_e( 'No products found.', 'simms-research' ); ?></p>
 		<?php endif; ?>
 	</div>
-</section>
+</div>
 <?php
 get_footer();
-

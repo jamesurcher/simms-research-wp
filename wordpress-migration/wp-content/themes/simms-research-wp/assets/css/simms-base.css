@@ -274,8 +274,8 @@ h2 {
 .simms-product-card__image {
   display: block;
   overflow: hidden;
-  aspect-ratio: 1 / 1;
-  border-radius: var(--simms-radius);
+  aspect-ratio: 3 / 4;
+  border-radius: 16px;
   background: var(--simms-mist);
 }
 

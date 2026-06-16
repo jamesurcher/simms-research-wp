@@ -72,24 +72,7 @@ get_header();
 				<?php
 				while ( $home_products->have_posts() ) :
 					$home_products->the_post();
-					$product = function_exists( 'wc_get_product' ) ? wc_get_product( get_the_ID() ) : null;
-					?>
-					<li class="simms-product-card">
-						<a class="simms-product-card__image" href="<?php the_permalink(); ?>">
-							<?php
-							if ( has_post_thumbnail() ) {
-								the_post_thumbnail( 'simms-product-card' );
-							} elseif ( function_exists( 'wc_placeholder_img' ) ) {
-								echo wc_placeholder_img( 'simms-product-card' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-							}
-							?>
-						</a>
-						<h3 class="simms-product-card__title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h3>
-						<?php if ( $product ) : ?>
-							<div class="simms-product-card__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
-						<?php endif; ?>
-					</li>
-					<?php
+					wc_get_template_part( 'content', 'product' );
 				endwhile;
 				wp_reset_postdata();
 				?>
