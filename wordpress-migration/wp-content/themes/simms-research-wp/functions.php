@@ -1,0 +1,17 @@
+<?php
+/**
+ * Simms Research WP theme bootstrap.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+define( 'SIMMS_THEME_VERSION', '0.1.0' );
+define( 'SIMMS_THEME_DIR', get_template_directory() );
+define( 'SIMMS_THEME_URI', get_template_directory_uri() );
+
+require SIMMS_THEME_DIR . '/inc/setup.php';
+require SIMMS_THEME_DIR . '/inc/helpers.php';
+require SIMMS_THEME_DIR . '/inc/woocommerce.php';
+

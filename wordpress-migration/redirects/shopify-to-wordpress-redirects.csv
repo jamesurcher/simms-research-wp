@@ -1,0 +1,11 @@
+source_url,target_url,status,notes
+/products/{handle},/product/{handle},301,Confirm WooCommerce product base before launch
+/collections/all,/shop,301,Confirm final shop slug
+/collections/{handle},/product-category/{handle},301,Confirm category import slugs
+/pages/lab-results,/lab-results,301,Preserve as page slug if preferred
+/pages/about-us,/about-us,301,
+/pages/contact,/contact,301,
+/pages/faq,/faq,301,
+/pages/partners,/partners,301,
+/cart,/cart,301,WooCommerce cart page
+

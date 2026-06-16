@@ -1,0 +1,67 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "version": 3,
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "ink",
+          "color": "#0a0a0a",
+          "name": "Ink"
+        },
+        {
+          "slug": "paper",
+          "color": "#ffffff",
+          "name": "Paper"
+        },
+        {
+          "slug": "mist",
+          "color": "#f5f5f4",
+          "name": "Mist"
+        },
+        {
+          "slug": "line",
+          "color": "#e6e6e2",
+          "name": "Line"
+        },
+        {
+          "slug": "research-blue",
+          "color": "#263a72",
+          "name": "Research Blue"
+        },
+        {
+          "slug": "verified-green",
+          "color": "#4b9a85",
+          "name": "Verified Green"
+        }
+      ]
+    },
+    "layout": {
+      "contentSize": "85%",
+      "wideSize": "85%"
+    },
+    "spacing": {
+      "units": ["px", "rem", "%", "vh", "svh"]
+    },
+    "typography": {
+      "fontFamilies": [
+        {
+          "slug": "satoshi",
+          "name": "Satoshi",
+          "fontFamily": "Satoshi, system-ui, -apple-system, Segoe UI, sans-serif"
+        },
+        {
+          "slug": "neue-montreal",
+          "name": "PP Neue Montreal",
+          "fontFamily": "'PP Neue Montreal', system-ui, -apple-system, Segoe UI, sans-serif"
+        },
+        {
+          "slug": "geist-mono",
+          "name": "Geist Mono",
+          "fontFamily": "'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+        }
+      ]
+    }
+  }
+}
+

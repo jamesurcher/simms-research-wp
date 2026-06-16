@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mariadb:11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${WORDPRESS_DB_NAME:-simms_wordpress}
+      MARIADB_USER: ${WORDPRESS_DB_USER:-simms}
+      MARIADB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-simms}
+      MARIADB_ROOT_PASSWORD: ${WORDPRESS_DB_ROOT_PASSWORD:-simms_root}
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+
+  wordpress:
+    image: wordpress:6.5-php8.2-apache
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "${WORDPRESS_PORT:-8080}:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME:-simms_wordpress}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER:-simms}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:-simms}
+      WORDPRESS_DEBUG: "1"
+    volumes:
+      - ./wordpress-data:/var/www/html
+      - ./wp-content/themes/simms-research-wp:/var/www/html/wp-content/themes/simms-research-wp
+      - ./wp-content/plugins/simms-lab-results:/var/www/html/wp-content/plugins/simms-lab-results
+
