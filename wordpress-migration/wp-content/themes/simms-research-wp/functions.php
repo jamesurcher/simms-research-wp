@@ -14,4 +14,5 @@ define( 'SIMMS_THEME_URI', get_template_directory_uri() );
 require SIMMS_THEME_DIR . '/inc/setup.php';
 require SIMMS_THEME_DIR . '/inc/helpers.php';
 require SIMMS_THEME_DIR . '/inc/woocommerce.php';
+require SIMMS_THEME_DIR . '/inc/contact-form.php';
 
