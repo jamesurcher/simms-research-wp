@@ -41,6 +41,13 @@ add_action(
 			SIMMS_THEME_VERSION
 		);
 
+		wp_enqueue_style(
+			'simms-sections',
+			SIMMS_THEME_URI . '/assets/css/simms-sections.css',
+			array( 'simms-base' ),
+			SIMMS_THEME_VERSION
+		);
+
 		if ( is_page_template( 'page-lab-results.php' ) || is_page( 'lab-results' ) ) {
 			wp_enqueue_script(
 				'simms-lab-results',

@@ -17,31 +17,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 <a class="skip-link screen-reader-text" href="#main"><?php esc_html_e( 'Skip to content', 'simms-research' ); ?></a>
-<header class="simms-header">
-	<div class="simms-header__inner">
-		<a class="simms-header__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Simms Research home', 'simms-research' ); ?>">
-			<span class="simms-logo">simms</span>
-			<span class="simms-logo__sub">research</span>
+
+<div class="announcement-bar">
+	<div class="announcement-bar__track">
+		<span class="announcement-bar__item"><?php esc_html_e( 'Free Shipping On Orders $200+', 'simms-research' ); ?></span>
+		<span class="announcement-bar__sep" aria-hidden="true">·</span>
+		<span class="announcement-bar__item"><?php esc_html_e( 'US-Based | Third-Party Tested', 'simms-research' ); ?></span>
+		<span class="announcement-bar__sep" aria-hidden="true">·</span>
+		<span class="announcement-bar__item"><?php esc_html_e( 'For Research Use Only', 'simms-research' ); ?></span>
+	</div>
+</div>
+
+<header class="site-header">
+	<div class="site-header__inner">
+		<button class="site-header__toggle" type="button" aria-label="<?php esc_attr_e( 'Open menu', 'simms-research' ); ?>" aria-expanded="false">
+			<?php echo simms_inline_icon( 'menu' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		</button>
+		<a class="site-header__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Simms Research home', 'simms-research' ); ?>">
+			<img src="<?php echo esc_url( SIMMS_THEME_URI . '/assets/images/simms-logo.png' ); ?>" alt="Simms Research" width="800" height="200">
 		</a>
-		<nav class="simms-header__nav" aria-label="<?php esc_attr_e( 'Primary menu', 'simms-research' ); ?>">
+		<nav class="site-nav" aria-label="<?php esc_attr_e( 'Primary', 'simms-research' ); ?>">
 			<?php
 			wp_nav_menu(
 				array(
 					'theme_location' => 'primary',
 					'container'      => false,
+					'items_wrap'     => '<ul>%3$s</ul>',
 					'fallback_cb'    => false,
-					'menu_class'     => 'simms-menu',
+					'depth'          => 1,
 				)
 			);
 			?>
 		</nav>
-		<div class="simms-header__actions">
-			<a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url() ); ?>" aria-label="<?php esc_attr_e( 'Account', 'simms-research' ); ?>">
-				<?php echo simms_inline_icon( 'account' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-			</a>
-			<a href="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>" aria-label="<?php esc_attr_e( 'Cart', 'simms-research' ); ?>">
-				<?php echo simms_inline_icon( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-			</a>
+		<div class="site-header__actions">
+			<a href="<?php echo esc_url( home_url( '/?post_type=product&s=' ) ); ?>" aria-label="<?php esc_attr_e( 'Search', 'simms-research' ); ?>"><?php echo simms_inline_icon( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
+			<a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url() ); ?>" aria-label="<?php esc_attr_e( 'Account', 'simms-research' ); ?>"><?php echo simms_inline_icon( 'account' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
+			<a href="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>" aria-label="<?php esc_attr_e( 'Cart', 'simms-research' ); ?>"><?php echo simms_inline_icon( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
 		</div>
 	</div>
 </header>

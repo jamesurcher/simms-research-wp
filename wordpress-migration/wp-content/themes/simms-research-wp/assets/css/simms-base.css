@@ -1,49 +1,93 @@
-@font-face {
-  font-family: "Satoshi";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/Satoshi-Regular.otf") format("opentype");
-}
+/* ============================================================
+   Simms Research — design tokens (ported 1:1 from Shopify source)
+   fonts:   snippets/custom-fonts.liquid
+   palette: config/settings_data.json -> color_schemes
+   Token names mirror the Horizon source so section CSS ports cleanly.
+   ============================================================ */
 
-@font-face {
-  font-family: "Satoshi";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("../fonts/Satoshi-Medium.otf") format("opentype");
-}
+/* Satoshi — body / subheading (300–900 + italics) */
+@font-face { font-family:"Satoshi"; font-style:normal; font-weight:300; font-display:swap; src:url("../fonts/Satoshi-Light.otf") format("opentype"); }
+@font-face { font-family:"Satoshi"; font-style:italic; font-weight:300; font-display:swap; src:url("../fonts/Satoshi-LightItalic.otf") format("opentype"); }
+@font-face { font-family:"Satoshi"; font-style:normal; font-weight:400; font-display:swap; src:url("../fonts/Satoshi-Regular.otf") format("opentype"); }
+@font-face { font-family:"Satoshi"; font-style:italic; font-weight:400; font-display:swap; src:url("../fonts/Satoshi-Italic.otf") format("opentype"); }
+@font-face { font-family:"Satoshi"; font-style:normal; font-weight:500; font-display:swap; src:url("../fonts/Satoshi-Medium.otf") format("opentype"); }
+@font-face { font-family:"Satoshi"; font-style:italic; font-weight:500; font-display:swap; src:url("../fonts/Satoshi-MediumItalic.otf") format("opentype"); }
+@font-face { font-family:"Satoshi"; font-style:normal; font-weight:700; font-display:swap; src:url("../fonts/Satoshi-Bold.otf") format("opentype"); }
+@font-face { font-family:"Satoshi"; font-style:italic; font-weight:700; font-display:swap; src:url("../fonts/Satoshi-BoldItalic.otf") format("opentype"); }
+@font-face { font-family:"Satoshi"; font-style:normal; font-weight:900; font-display:swap; src:url("../fonts/Satoshi-Black.otf") format("opentype"); }
+@font-face { font-family:"Satoshi"; font-style:italic; font-weight:900; font-display:swap; src:url("../fonts/Satoshi-BlackItalic.otf") format("opentype"); }
 
-@font-face {
-  font-family: "PP Neue Montreal";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("../fonts/ppneuemontreal-medium.otf") format("opentype");
-}
+/* PP Neue Montreal — heading / display */
+@font-face { font-family:"PP Neue Montreal"; font-style:normal; font-weight:100; font-display:swap; src:url("../fonts/ppneuemontreal-thin.otf") format("opentype"); }
+@font-face { font-family:"PP Neue Montreal"; font-style:normal; font-weight:400; font-display:swap; src:url("../fonts/ppneuemontreal-book.otf") format("opentype"); }
+@font-face { font-family:"PP Neue Montreal"; font-style:italic; font-weight:400; font-display:swap; src:url("../fonts/ppneuemontreal-italic.otf") format("opentype"); }
+@font-face { font-family:"PP Neue Montreal"; font-style:normal; font-weight:500; font-display:swap; src:url("../fonts/ppneuemontreal-medium.otf") format("opentype"); }
+@font-face { font-family:"PP Neue Montreal"; font-style:italic; font-weight:600; font-display:swap; src:url("../fonts/ppneuemontreal-semibolditalic.otf") format("opentype"); }
+@font-face { font-family:"PP Neue Montreal"; font-style:normal; font-weight:700; font-display:swap; src:url("../fonts/ppneuemontreal-bold.otf") format("opentype"); }
 
-@font-face {
-  font-family: "Geist Mono";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("../fonts/GeistMono-Regular.woff2") format("woff2");
-}
+/* Geist Mono — specs / numbers / micro-labels */
+@font-face { font-family:"Geist Mono"; font-style:normal; font-weight:400; font-display:swap; src:url("../fonts/GeistMono-Regular.woff2") format("woff2"); }
+@font-face { font-family:"Geist Mono"; font-style:normal; font-weight:500; font-display:swap; src:url("../fonts/GeistMono-Medium.woff2") format("woff2"); }
+@font-face { font-family:"Geist Mono"; font-style:normal; font-weight:600; font-display:swap; src:url("../fonts/GeistMono-SemiBold.woff2") format("woff2"); }
 
 :root {
-  --simms-ink: #0a0a0a;
-  --simms-paper: #fff;
+  /* Type — mirrors snippets/custom-fonts.liquid */
+  --font-body--family: "Satoshi", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body--weight: 400;
+  --font-subheading--family: "Satoshi", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-subheading--weight: 500;
+  --font-heading--family: "PP Neue Montreal", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-heading--weight: 500;
+  --font-accent--family: "PP Neue Montreal", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-accent--weight: 400;
+  --font-mono--family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-mono--weight: 400;
+
+  /* Palette — scheme-1 (default) from config/settings_data.json */
+  --color-background: #ffffff;
+  --color-background-rgb: 255 255 255;
+  --color-foreground: #0a0a0a;
+  --color-foreground-rgb: 10 10 10;
+  --color-foreground-heading: #0a0a0a;
+  --color-primary: #0a0a0a;
+  --color-tint: #f6fbff;   /* cool product-list overlay tint */
+  --color-tint-2: #e1edf5;
+
+  /* Layout + component tokens (config/settings_data.json) */
+  --normal-page-width: clamp(320px, 85vw, 1600px);
+  --style-border-radius-buttons-primary: 10px;
+  --style-border-radius-buttons-secondary: 10px;
+  --inputs-border-radius: 8px;
+  --badge-corner-radius: 40px;
+
+  /* Named accents used by specific sections (process-steps hover, cta card) */
+  --horizon: #d4ada6;
+  --horizon-deep: #c19084;
+  --dusk-deep: #263d73;
+  --dusk-mid: #1b2f62;
+  --dusk-violet: #172953;
+  --dusk-fg: #ece6df;
+
+  /* Legacy scaffold aliases — kept so existing classes keep working.
+     blue/green are NOT in the source palette; flagged for removal during section port. */
+  --simms-ink: var(--color-foreground);
+  --simms-paper: var(--color-background);
   --simms-mist: #f5f5f4;
   --simms-line: #e6e6e2;
-  --simms-muted: rgb(10 10 10 / 0.55);
-  --simms-blue: #263a72;
-  --simms-green: #4b9a85;
-  --simms-font-body: "Satoshi", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --simms-font-heading: "PP Neue Montreal", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --simms-font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --simms-muted: rgb(var(--color-foreground-rgb) / 0.55);
+  --simms-blue: #263a72;   /* TODO: not in source palette — verify/remove */
+  --simms-green: #4b9a85;  /* TODO: not in source palette — verify/remove */
+  --simms-font-body: var(--font-body--family);
+  --simms-font-heading: var(--font-heading--family);
+  --simms-font-mono: var(--font-mono--family);
   --simms-rail: 85%;
   --simms-radius: 8px;
 }
+
+/* Color schemes — config/settings_data.json color_schemes */
+.color-scheme-1 { --color-background:#ffffff; --color-background-rgb:255 255 255; --color-foreground:#0a0a0a; --color-foreground-rgb:10 10 10; --color-foreground-heading:#0a0a0a; --color-primary:#0a0a0a; background:var(--color-background); color:var(--color-foreground); }
+.color-scheme-2 { --color-background:#121212; --color-background-rgb:18 18 18; --color-foreground:#f1f4f0; --color-foreground-rgb:241 244 240; --color-foreground-heading:#f1f4f0; --color-primary:#f0f9ff; background:var(--color-background); color:var(--color-foreground); }
+.color-scheme-3 { --color-background:#f7f7f7; --color-background-rgb:247 247 247; --color-foreground:#1c2329; --color-foreground-rgb:28 35 41; --color-foreground-heading:#1c2329; --color-primary:#f2f3f1; background:var(--color-background); color:var(--color-foreground); }
 
 body {
   margin: 0;
