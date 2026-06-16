@@ -1891,3 +1891,111 @@
   .affiliate-application-page__title { font-size: clamp(2rem, 10vw, 2.5rem); }
   .affiliate-application-page__confirmation { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   POLICY PAGES
+   ============================================================ */
+.simms-policy-page {
+  padding-block-start: 40px;
+  padding-block-end: 80px;
+  background: rgb(var(--color-background-rgb));
+}
+.simms-policy-page,
+.simms-policy-page * {
+  box-sizing: border-box;
+}
+.simms-policy-page .section-content-wrapper {
+  max-width: min(46rem, calc(100% - 2rem));
+  margin-inline: auto;
+  gap: 0;
+}
+.simms-policy-page .section-content-wrapper > .text-block:first-child {
+  display: none;
+}
+.simms-policy-page .shopify-block.rte {
+  width: 100%;
+}
+.simms-policy-page rte-formatter {
+  display: block;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #111;
+}
+.simms-policy-page rte-formatter :where(h1, h2, h3, h4, p, ul, ol) {
+  margin: 0;
+}
+.simms-policy-page rte-formatter > [class*='text-center'] {
+  margin-block: 0 2rem;
+  text-align: left;
+}
+.simms-policy-page rte-formatter h1 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0;
+  color: #111;
+}
+.simms-policy-page rte-formatter h1 + p {
+  margin-block-start: 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: #444;
+}
+.simms-policy-page rte-formatter h2 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0;
+  color: #111;
+}
+.simms-policy-page rte-formatter h3 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0;
+  color: #111;
+}
+.simms-policy-page rte-formatter p,
+.simms-policy-page rte-formatter li {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: #222;
+}
+.simms-policy-page rte-formatter p + p {
+  margin-block-start: 1rem;
+}
+.simms-policy-page rte-formatter ul,
+.simms-policy-page rte-formatter ol {
+  padding-inline-start: 1.5rem;
+  margin-block-start: 0.75rem;
+}
+.simms-policy-page rte-formatter li + li {
+  margin-block-start: 0.25rem;
+}
+.simms-policy-page rte-formatter section {
+  padding-block-start: 0;
+  margin-block-start: 1.75rem;
+  border: 0;
+}
+.simms-policy-page rte-formatter section > * + * {
+  margin-block-start: 0.75rem;
+}
+.simms-policy-page rte-formatter :is([class*='shadcn-card'], [class*='border'], [class*='bg-'], [class*='rounded'], [class*='shadow']) {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.simms-policy-page rte-formatter :is([class*='shadcn-card'], [class*='border'], [class*='bg-'], [class*='rounded'], [class*='shadow']) + * {
+  margin-block-start: 1.25rem;
+}
+.simms-policy-page rte-formatter [class*='flex'] {
+  display: block;
+}
+.simms-policy-page rte-formatter svg {
+  display: none;
+}
