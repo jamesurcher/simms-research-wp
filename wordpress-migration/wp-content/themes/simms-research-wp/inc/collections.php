@@ -17,6 +17,17 @@ add_action(
 	'template_redirect',
 	function (): void {
 		$path = simms_collection_request_path();
+		$parts = explode( '/', $path );
+
+		if ( 4 === count( $parts ) && 'collections' === $parts[0] && 'products' === $parts[2] ) {
+			$product_slug = sanitize_title( $parts[3] );
+			$product      = '' !== $product_slug ? get_page_by_path( $product_slug, OBJECT, 'product' ) : null;
+
+			if ( $product instanceof WP_Post ) {
+				wp_safe_redirect( get_permalink( $product ), 301 );
+				exit;
+			}
+		}
 
 		if ( in_array( $path, array( 'collections/all', 'collections/catalog' ), true ) ) {
 			wp_safe_redirect( home_url( '/shop/' ), 301 );
