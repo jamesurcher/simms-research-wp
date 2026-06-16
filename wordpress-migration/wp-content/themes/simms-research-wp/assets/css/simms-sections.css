@@ -759,3 +759,52 @@
   .product-research-details__spec:nth-child(odd) { padding-right: 0; border-right: none; }
   .product-research-details__spec:nth-child(even) { padding-left: 0; }
 }
+
+/* ============================================================
+   WOOCOMMERCE CART + CHECKOUT (block-based) — brand overrides
+   Blocks ship their own base CSS; we layer Simms brand on top.
+   ============================================================ */
+.woocommerce-cart main, .woocommerce-checkout main, .woocommerce-account main { padding-block: 40px 96px; }
+.wc-block-cart, .wc-block-checkout {
+  width: 92%; max-width: 1240px; margin-inline: auto;
+  font-family: var(--font-body--family); color: var(--color-foreground);
+}
+/* Section + summary titles → heading font */
+.wc-block-components-title,
+.wp-block-woocommerce-checkout-order-summary-block .wc-block-components-title {
+  font-family: var(--font-heading--family) !important;
+  font-weight: 500 !important; letter-spacing: -0.01em;
+}
+/* Primary actions (proceed to checkout, place order, contained buttons) → brand ink */
+.wc-block-cart__submit-button,
+.wc-block-components-checkout-place-order-button,
+.wc-block-components-button.contained {
+  background-color: var(--color-foreground) !important;
+  color: var(--color-background) !important;
+  border-radius: var(--style-border-radius-buttons-primary) !important;
+  font-family: var(--font-body--family) !important;
+  font-weight: 500 !important;
+  transition: opacity 160ms ease;
+}
+.wc-block-cart__submit-button:hover,
+.wc-block-components-checkout-place-order-button:hover,
+.wc-block-components-button.contained:hover { opacity: 0.88; }
+/* Totals figures in mono for the lab texture */
+.wc-block-components-totals-item__value,
+.wc-block-components-order-summary-item__total-price { font-family: var(--font-mono--family); }
+/* Links + selected accents → brand ink */
+.wc-block-cart a, .wc-block-checkout a,
+.wc-block-components-checkout-step__title { color: var(--color-foreground); }
+/* Form fields → brand radius + focus */
+.wc-block-components-text-input input,
+.wc-block-checkout input.input-text,
+.wc-block-components-text-input .input-text {
+  border-radius: var(--inputs-border-radius) !important;
+  font-family: var(--font-body--family) !important;
+}
+.wc-block-components-text-input.is-active label,
+.wc-block-components-checkout-step--with-step-number .wc-block-components-checkout-step__title { color: var(--color-foreground); }
+/* Notices */
+.wc-block-components-notice-banner { border-radius: 10px; font-family: var(--font-body--family); }
+/* Empty-cart state */
+.wc-block-cart__empty-cart__title, .cart-empty { font-family: var(--font-heading--family); }
