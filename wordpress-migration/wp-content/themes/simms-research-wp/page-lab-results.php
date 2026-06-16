@@ -43,13 +43,14 @@ $avg_purity = $purity_count > 0 ? round( $purity_total / $purity_count, 2 ) . '%
 			<p>Every batch we ship is third-party tested. Below is every result, by product, by batch.</p>
 			<label class="simms-search">
 				<span class="screen-reader-text">Search lab results</span>
+				<span class="simms-search__icon" aria-hidden="true"><?php echo simms_inline_icon( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 				<input type="search" data-lab-search placeholder="Search compound, CAS, or batch ID">
 			</label>
 			<dl class="simms-lab-stats">
-				<div><dt>Batches tested</dt><dd><?php echo esc_html( (string) $batch_count ); ?></dd></div>
-				<div><dt>Avg purity</dt><dd><?php echo esc_html( $avg_purity ); ?></dd></div>
-				<div><dt>Endotoxin standard</dt><dd>USP &lt;85&gt;</dd></div>
-				<div><dt>Method</dt><dd>HPLC Verified</dd></div>
+				<div><span class="simms-lab-stats__icon" aria-hidden="true"><?php echo simms_inline_icon( 'flask-conical' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span><dt>Batches tested</dt><dd><?php echo esc_html( (string) $batch_count ); ?></dd></div>
+				<div><span class="simms-lab-stats__icon" aria-hidden="true"><?php echo simms_inline_icon( 'gauge' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span><dt>Avg purity</dt><dd><?php echo esc_html( $avg_purity ); ?></dd></div>
+				<div><span class="simms-lab-stats__icon" aria-hidden="true"><?php echo simms_inline_icon( 'shield-check' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span><dt>Endotoxin standard</dt><dd>USP &lt;85&gt;</dd></div>
+				<div><span class="simms-lab-stats__icon" aria-hidden="true"><?php echo simms_inline_icon( 'award' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span><dt>Method</dt><dd>HPLC Verified</dd></div>
 			</dl>
 		</header>
 
