@@ -15,7 +15,7 @@ function simms_static_page_request_path(): string {
 
 function simms_static_page_templates(): array {
 	return array(
-		'about-us'         => 'page-about-us.php',
+		'about'            => 'page-about.php',
 		'apply'            => 'page-apply.php',
 		'contact'          => 'page-contact.php',
 		'faq'              => 'page-faq.php',

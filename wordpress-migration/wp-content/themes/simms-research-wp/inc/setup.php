@@ -48,6 +48,36 @@ add_action(
 			SIMMS_THEME_VERSION
 		);
 
+		wp_enqueue_script(
+			'simms-announcement-bar',
+			SIMMS_THEME_URI . '/assets/js/announcement-bar.js',
+			array(),
+			SIMMS_THEME_VERSION,
+			true
+		);
+
+		if ( function_exists( 'WC' ) ) {
+			wp_enqueue_script(
+				'simms-cart-drawer',
+				SIMMS_THEME_URI . '/assets/js/cart-drawer.js',
+				array(),
+				SIMMS_THEME_VERSION,
+				true
+			);
+
+			wp_localize_script(
+				'simms-cart-drawer',
+				'simmsCartDrawer',
+				array(
+					'ajaxUrl'     => admin_url( 'admin-ajax.php' ),
+					'nonce'       => wp_create_nonce( 'simms_cart_drawer' ),
+					'cartUrl'     => function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ),
+					'checkoutUrl' => function_exists( 'wc_get_checkout_url' ) ? wc_get_checkout_url() : home_url( '/checkout/' ),
+				)
+			);
+
+		}
+
 		$request_path = isset( $_SERVER['REQUEST_URI'] ) ? wp_parse_url( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), PHP_URL_PATH ) : '';
 		$request_path = trim( (string) $request_path, '/' );
 

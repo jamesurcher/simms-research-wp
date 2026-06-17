@@ -31,7 +31,12 @@ if ( ! $product->is_purchasable() || ! $product->is_in_stock() ) {
 ?>
 <li <?php wc_product_class( 'simms-product-card', $product ); ?>>
 	<a class="simms-product-card__image" href="<?php echo esc_url( $permalink ); ?>">
-		<?php echo $product->get_image( 'simms-product-card' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		<?php
+		// Use the ratio-preserving WooCommerce single size (3:4) rather than the
+		// square 'simms-product-card' crop, which zoomed in and removed the
+		// product photo's built-in breathing room.
+		echo $product->get_image( 'woocommerce_single' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		?>
 	</a>
 	<?php if ( ! empty( $spec_parts ) ) : ?>
 		<p class="simms-product-card__meta"><?php echo esc_html( implode( ' · ', $spec_parts ) ); ?></p>
@@ -46,8 +51,10 @@ if ( ! $product->is_purchasable() || ! $product->is_in_stock() ) {
 		class="simms-product-card__button"
 		href="<?php echo esc_url( $button_url ); ?>"
 		<?php if ( $product->is_type( 'simple' ) && $product->is_purchasable() && $product->is_in_stock() ) : ?>
+			data-simms-add-to-cart
 			data-product_id="<?php echo esc_attr( $product_id ); ?>"
 			data-product_sku="<?php echo esc_attr( $product->get_sku() ); ?>"
+			data-quantity="1"
 			aria-label="<?php echo esc_attr( sprintf( __( 'Add %s to your cart', 'simms-research' ), $product->get_name() ) ); ?>"
 		<?php endif; ?>
 	>

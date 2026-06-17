@@ -18,9 +18,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<a class="site-footer__cta site-footer__cta--ghost" href="<?php echo esc_url( home_url( '/lab-results/' ) ); ?>"><?php esc_html_e( 'View COA library', 'simms-research' ); ?></a>
 			</div>
 			<div class="site-footer__social">
-				<a href="https://www.facebook.com/simmsresearch" target="_blank" rel="noopener">Facebook</a>
-				<a href="https://www.instagram.com/simmsresearch/" target="_blank" rel="noopener">Instagram</a>
-				<a href="https://www.tiktok.com/@simmsresearch" target="_blank" rel="noopener">TikTok</a>
+				<a href="https://www.facebook.com/simmsresearch" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Simms Research on Facebook', 'simms-research' ); ?>">
+					<?php echo simms_inline_icon( 'facebook' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</a>
+				<a href="https://www.instagram.com/simmsresearch/" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Simms Research on Instagram', 'simms-research' ); ?>">
+					<?php echo simms_inline_icon( 'instagram' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</a>
+				<a href="https://www.tiktok.com/@simmsresearch" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Simms Research on TikTok', 'simms-research' ); ?>">
+					<?php echo simms_inline_icon( 'tiktok' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</a>
 			</div>
 		</div>
 
@@ -68,6 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 </footer>
+<?php get_template_part( 'template-parts/cart-drawer' ); ?>
 <?php wp_footer(); ?>
 </body>
 </html>
