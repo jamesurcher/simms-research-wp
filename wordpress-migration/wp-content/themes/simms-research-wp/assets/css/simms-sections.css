@@ -828,6 +828,482 @@ html.simms-nav-open .mobile-nav__panel { transform: translateX(0); }
 @media (max-width: 560px) { .shop-page__inner ul.products { grid-template-columns: 1fr; } }
 
 /* ============================================================
+   ORDER CONFIRMATION
+   ============================================================ */
+.woocommerce-order-received .simms-section {
+  padding-block: 56px 96px;
+  background: #fbfbfa;
+}
+body.woocommerce-order-received {
+  overflow-x: hidden;
+}
+.woocommerce-order-received .simms-rail {
+  width: min(92%, 1160px);
+}
+.woocommerce-order-received .simms-entry > h1 {
+  display: none;
+}
+.woocommerce-order-received .simms-entry__content {
+  margin: 0;
+}
+.simms-order-confirmation {
+  --confirmation-accent: #2b8d85;
+  --confirmation-accent-soft: rgb(43 141 133 / 0.1);
+  --confirmation-border: rgb(var(--color-foreground-rgb) / 0.12);
+  --confirmation-muted: rgb(var(--color-foreground-rgb) / 0.58);
+  display: grid;
+  gap: 24px;
+  color: var(--color-foreground);
+}
+.simms-order-confirmation :where(h1, h2, h3, p, dl, dd) {
+  margin: 0;
+}
+.simms-order-confirmation__hero,
+.simms-order-confirmation__panel {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  padding: 46px 40px;
+  border: 1px solid rgb(43 141 133 / 0.42);
+  border-radius: 8px;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(180deg, rgb(43 141 133 / 0.08), transparent) border-box;
+  text-align: center;
+}
+.simms-order-confirmation__hero--compact {
+  max-width: 780px;
+  margin-inline: auto;
+}
+.simms-order-confirmation__panel--failed {
+  border-color: rgb(188 52 52 / 0.4);
+}
+.simms-order-confirmation__status-icon {
+  --icon-stroke-width: 2.25;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  background: var(--color-foreground);
+  color: var(--color-background);
+}
+.simms-order-confirmation__panel--failed .simms-order-confirmation__status-icon {
+  background: #bc3434;
+}
+.simms-order-confirmation__status-icon svg {
+  width: 24px;
+  height: 24px;
+}
+.simms-order-confirmation__eyebrow {
+  color: var(--confirmation-accent);
+  font-family: var(--font-mono--family);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+.simms-order-confirmation h1 {
+  max-width: 12ch;
+  color: var(--color-foreground-heading);
+  font-family: var(--font-heading--family);
+  font-size: 4rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 0.98;
+}
+.simms-order-confirmation__hero > p:not(.simms-order-confirmation__eyebrow),
+.simms-order-confirmation__panel > p:not(.simms-order-confirmation__eyebrow) {
+  max-width: 58ch;
+  color: var(--confirmation-muted);
+  font-size: 1.0625rem;
+  line-height: 1.55;
+}
+.simms-order-confirmation__thanks {
+  color: var(--color-foreground) !important;
+  font-weight: 600;
+}
+.simms-order-confirmation__overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.simms-order-confirmation__overview > div,
+.simms-order-confirmation__detail-card {
+  min-width: 0;
+  border: 1px solid var(--confirmation-border);
+  border-radius: 8px;
+  background: #fff;
+}
+.simms-order-confirmation__overview > div {
+  padding: 18px;
+}
+.simms-order-confirmation dt {
+  color: var(--confirmation-muted);
+  font-family: var(--font-mono--family);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+.simms-order-confirmation dd {
+  margin-block-start: 8px;
+  color: var(--color-foreground);
+  font-weight: 600;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.simms-order-confirmation__section {
+  display: grid;
+  gap: 24px;
+  padding-block: 24px;
+}
+.simms-order-confirmation__summary {
+  padding: 32px;
+  border: 1px solid var(--confirmation-border);
+  border-radius: 8px;
+  background: #fff;
+}
+.simms-order-confirmation__section-head {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+}
+.simms-order-confirmation__section-head h2 {
+  color: var(--color-foreground-heading);
+  font-family: var(--font-heading--family);
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.08;
+}
+.simms-order-confirmation__items {
+  display: grid;
+  gap: 14px;
+}
+.simms-order-confirmation__item {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr) auto;
+  gap: 18px;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.08);
+  border-radius: 8px;
+  background: #fbfbfa;
+}
+.simms-order-confirmation__item-media {
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  border-radius: 6px;
+  background: rgb(var(--color-foreground-rgb) / 0.04);
+}
+.simms-order-confirmation__product-image,
+.simms-order-confirmation__item-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.simms-order-confirmation__item-body {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+.simms-order-confirmation__item h3 {
+  color: var(--color-foreground-heading);
+  font-family: var(--font-body--family);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+.simms-order-confirmation__item h3 a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+.simms-order-confirmation__quantity,
+.simms-order-confirmation__item-meta {
+  color: var(--confirmation-muted);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+.simms-order-confirmation__item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.simms-order-confirmation__item-meta span {
+  color: var(--color-foreground);
+  font-weight: 600;
+}
+.simms-order-confirmation__item-total {
+  align-self: center;
+  color: var(--color-foreground);
+  font-size: 1.0625rem;
+  line-height: 1.2;
+  text-align: right;
+  white-space: nowrap;
+}
+.simms-order-confirmation__purchase-note {
+  padding: 14px 16px;
+  border-radius: 8px;
+  background: var(--confirmation-accent-soft);
+  color: rgb(var(--color-foreground-rgb) / 0.72);
+  font-size: 0.9375rem;
+}
+.simms-order-confirmation__totals {
+  justify-self: end;
+  width: min(100%, 520px);
+  margin-block-start: 6px;
+  padding-block-start: 22px;
+  border-block-start: 1px solid var(--confirmation-border);
+}
+.simms-order-confirmation__totals h3 {
+  margin-block-end: 12px;
+  color: var(--color-foreground-heading);
+  font-family: var(--font-heading--family);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+.simms-order-confirmation__totals dl {
+  display: grid;
+  gap: 10px;
+}
+.simms-order-confirmation__totals dl > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+}
+.simms-order-confirmation__totals dt {
+  color: var(--confirmation-muted);
+  font-family: var(--font-body--family);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.simms-order-confirmation__totals dd {
+  margin: 0;
+  text-align: right;
+}
+.simms-order-confirmation__totals .is-total {
+  margin-block-start: 8px;
+  padding-block-start: 16px;
+  border-block-start: 1px solid var(--confirmation-border);
+}
+.simms-order-confirmation__totals .is-total :where(dt, dd) {
+  color: var(--confirmation-accent);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+.simms-order-confirmation__address-grid,
+.simms-order-confirmation__methods {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.simms-order-confirmation__detail-card {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 24px;
+}
+.simms-order-confirmation__detail-card h3 {
+  color: var(--color-foreground-heading);
+  font-family: var(--font-body--family);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+.simms-order-confirmation__detail-card p,
+.simms-order-confirmation__detail-card address {
+  color: rgb(var(--color-foreground-rgb) / 0.72);
+  font-size: 0.9375rem;
+  font-style: normal;
+  line-height: 1.55;
+}
+.simms-order-confirmation__detail-card address {
+  display: grid;
+  gap: 8px;
+}
+.simms-order-confirmation__detail-card address br {
+  display: block;
+  content: "";
+  margin-block: 2px;
+}
+.simms-order-confirmation__detail-icon {
+  --icon-stroke-width: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  background: var(--confirmation-accent-soft);
+  color: var(--confirmation-accent);
+}
+.simms-order-confirmation__detail-icon svg {
+  width: 19px;
+  height: 19px;
+}
+.simms-order-confirmation__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.simms-order-confirmation__button,
+.simms-order-confirmation .order-again .button {
+  min-height: 52px;
+  border: 1px solid var(--color-foreground);
+  border-radius: 999px;
+  background: var(--color-foreground);
+  color: var(--color-background);
+  font-family: var(--font-body--family);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-decoration: none;
+}
+.simms-order-confirmation__button:hover,
+.simms-order-confirmation .order-again .button:hover {
+  opacity: 0.86;
+}
+.simms-order-confirmation__button--secondary {
+  background: transparent;
+  color: var(--color-foreground);
+}
+.simms-order-confirmation__additional,
+.simms-order-confirmation .woocommerce-order-downloads,
+.simms-order-confirmation .order-again {
+  padding: 24px;
+  border: 1px solid var(--confirmation-border);
+  border-radius: 8px;
+  background: #fff;
+}
+.simms-order-confirmation__additional :where(h2, h3),
+.simms-order-confirmation .woocommerce-order-downloads__title {
+  margin-block: 0 14px;
+  color: var(--color-foreground-heading);
+  font-family: var(--font-heading--family);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+.simms-order-confirmation__additional :where(p, ul, ol) {
+  color: rgb(var(--color-foreground-rgb) / 0.7);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+.simms-order-confirmation .woocommerce-order-downloads table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.simms-order-confirmation .woocommerce-order-downloads th,
+.simms-order-confirmation .woocommerce-order-downloads td {
+  padding: 12px;
+  border-block-start: 1px solid var(--confirmation-border);
+  text-align: left;
+}
+@media (max-width: 860px) {
+  .simms-order-confirmation__item {
+    grid-template-columns: 78px minmax(0, 1fr);
+  }
+  .simms-order-confirmation__item-total {
+    grid-column: 2;
+    justify-self: start;
+    text-align: left;
+  }
+  .simms-order-confirmation__address-grid,
+  .simms-order-confirmation__methods {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 620px) {
+  .woocommerce-order-received .simms-section {
+    padding: 28px 0 72px;
+  }
+  .woocommerce-order-received .simms-rail {
+    width: calc(100% - 32px);
+    max-width: 1160px;
+  }
+  .simms-order-confirmation {
+    gap: 18px;
+  }
+  .simms-order-confirmation__hero,
+  .simms-order-confirmation__panel {
+    padding: 34px 20px;
+  }
+  .simms-order-confirmation h1 {
+    max-width: 100%;
+    font-size: 2.35rem;
+  }
+  .simms-order-confirmation__hero > p:not(.simms-order-confirmation__eyebrow),
+  .simms-order-confirmation__panel > p:not(.simms-order-confirmation__eyebrow) {
+    font-size: 1rem;
+  }
+  .simms-order-confirmation__summary {
+    padding: 20px;
+  }
+  .simms-order-confirmation__overview {
+    grid-template-columns: 1fr;
+  }
+  .simms-order-confirmation__section-head {
+    justify-items: start;
+    text-align: left;
+  }
+  .simms-order-confirmation__section-head h2 {
+    font-size: 1.65rem;
+  }
+  .simms-order-confirmation__item {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 14px;
+    padding: 12px;
+  }
+  .simms-order-confirmation__totals {
+    justify-self: stretch;
+  }
+  .simms-order-confirmation__totals dl > div {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .simms-order-confirmation__totals dd {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    text-align: left;
+  }
+  .simms-order-confirmation__detail-card,
+  .simms-order-confirmation__additional,
+  .simms-order-confirmation .woocommerce-order-downloads,
+  .simms-order-confirmation .order-again {
+    padding: 20px;
+  }
+  .simms-order-confirmation__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .simms-order-confirmation__button,
+  .simms-order-confirmation .order-again .button {
+    width: 100%;
+  }
+}
+
+/* ============================================================
    SEARCH RESULTS
    ============================================================ */
 .search-page {
