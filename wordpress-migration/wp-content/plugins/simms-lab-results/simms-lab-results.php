@@ -18,6 +18,10 @@ require SIMMS_LAB_RESULTS_DIR . 'includes/class-post-types.php';
 require SIMMS_LAB_RESULTS_DIR . 'includes/class-meta-boxes.php';
 require SIMMS_LAB_RESULTS_DIR . 'includes/class-query.php';
 
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	require SIMMS_LAB_RESULTS_DIR . 'includes/class-cli.php';
+}
+
 add_action(
 	'plugins_loaded',
 	function () {

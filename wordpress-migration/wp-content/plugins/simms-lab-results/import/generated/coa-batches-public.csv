@@ -1,0 +1,20 @@
+shopify_product_handle,wp_product_id,variant_label,batch_id,purity,avg_purity,vials_tested,labeled_content,net_content,net_content_delta,endotoxins,heavy_metals,sterility,test_type,tested_at,coa_url,coa_file_path,is_current
+bpc-157,,10mg,B334,99.58,99.58,1,10mg,10.23mg,.23mg,Not Tested,,,HPLC-UV,2026-02-13,https://simmsresearch.com/cdn/shop/files/BPC-157_10mg_-_B334.pdf?v=17903764125336927145,,0
+bpc-157,,10mg,B164,99.13,99.13,1,10mg,10.38mg,.38mg,Not Tested,,,HPLC-UV,2025-12-03,https://simmsresearch.com/cdn/shop/files/BPC-157_10mg_-_B164.pdf?v=3660467239365932005,,0
+bpc-157,,10mg,B085,99.24,99.24,1,10mg,10.24mg,.24mg,Not Tested,,,HPLC-UV,2025-09-18,https://simmsresearch.com/cdn/shop/files/BPC-157_10mg_-_B085.pdf?v=18104703274860025450,,0
+bpc-157,,10mg,B544,99.41,99.41,1,10mg,11.29mg,1.29mg,Pass,,,HPLC-UV,2026-04-29,https://simmsresearch.com/cdn/shop/files/26_5082007e-b4d5-45fe-bdd6-3b099059da4b.pdf?v=6787098524342152759,,1
+dsip,,10mg,DP172,99.94%,99.94%,1,10mg,11.52mg,1.52mg,Pass,,,HPLC-UV,2026-04-21,https://simmsresearch.com/cdn/shop/files/DSIP.pdf?v=862692792822684318,,1
+epithalon,,10mg,EN129,99.83%,99.83%,1,10mg,9.79mg,-.21mg,Not Tested,,,HPLC-UV,2025-11-06,https://simmsresearch.com/cdn/shop/files/Epithalon_e453da2f-d274-42f1-b10c-f9e9a104cbe5.pdf?v=18441055761176263066,,1
+ghk-cu,,50mg,GH287,99.94,99.94,1,50mg,51.20mg,1.20mg,Not Tested,,,HPLC-UV,2026-01-13,https://simmsresearch.com/cdn/shop/files/26.pdf?v=13931173179589203745,,0
+ghk-cu,,50mg,GH203,99.815,99.815,1,50mg,57.82mg,7.82mg,Not Tested,,,HPLC-UV,2025-11-04,https://simmsresearch.com/cdn/shop/files/26-1.pdf?v=10767557572085375450,,0
+ghk-cu,,50mg,GH556,99.67,99.67,1,50mg,56.54mg,6.54mg,Pass,,,HPLC-Uv,2026-04-13,https://simmsresearch.com/cdn/shop/files/26-1_b996e94c-6f96-4e24-b0bf-de2649e67b35.pdf?v=12901846135189094166,,1
+glutathione,,1500mg,GE122,99.79%,99.79%,1,1500mg,1593.22mg,93.22mg,Not Tested,,,HPLC,2025-10-14,https://simmsresearch.com/cdn/shop/files/Glutathione.pdf?v=8665758955717062204,,1
+ipamorelin,,10mg,IN278,99.92%,99.92%,1,10mg,10.29mg,.29mg,Pass,,,HPLC-UV,2026-05-19,https://simmsresearch.com/cdn/shop/files/Ipamorelin_8018046b-a758-426b-95dd-9be6b321497c.pdf?v=14154372552299118501,,1
+kpv,,10mg,KV298,99.61%,99.61%,1,10mg,11.65mg,1.65,Not Tested,,,HPLC-UV,2025-08-05,https://simmsresearch.com/cdn/shop/files/KPV_7402ed68-3940-4a8a-a684-5b780945fb01.pdf?v=12466673384552990970,,1
+melanotan-i,,10mg,M1266,99.47%,99.47%,1,10mg,11.03mg,1.03mg,Pass,,,HPLC-UV,2026-04-21,https://simmsresearch.com/cdn/shop/files/Melanotan_I.pdf?v=10501359795324353974,,1
+melanotan-ii,,10mg,M2186,99.29%,99.29%,1,10mg,10.43mg,.43mg,Pass,,,HPLC-UV,2026-04-21,https://simmsresearch.com/cdn/shop/files/Melanotan_II.pdf?v=7121483688030521971,,1
+mots-c,,10mg,M0254,99.88,99.88,1,10mg,11.44mg,1.44mg,Not Tested,,,HPLC-UV,2026-03-21,https://simmsresearch.com/cdn/shop/files/MOTS-C_10mg_-_M0254_ebf34e80-b304-4c70-aefb-bfcf7db64ba6.pdf?v=12532074813294101917,,1
+nad,,500mg,N254,99.58,99.58,1,500mg,511.38mg,11.38mg,Not Tested,,,HPLC,2026-03-21,https://simmsresearch.com/cdn/shop/files/NAD_500mg_-_N254_962f1ae8-4c0b-4bfb-b7d1-fcaa79426e24.pdf?v=8901036291430777841,,1
+selank,,10mg,SL154,99.17,99.17,1,10mg,11.65mg,1.65mg,Not Tested,,,HPLC,2026-02-13,https://simmsresearch.com/cdn/shop/files/Selank_10mg_-_SL154_fb33f650-c7dd-4c17-8356-327765cdf620.pdf?v=11935089522787909848,,1
+semax,,SEMAX 10mg,S104,99.52,99.52,1,SEMAX 10mg,11.65,1.65,Not Tested,,,HPLC,2026-02-13,https://simmsresearch.com/cdn/shop/files/Semax_10mg_-_S104_09a47613-7ff1-4795-8c8f-041dcaba9812.pdf?v=16480090994762635979,,1
+thymosin-alpha-1,,10mg,T1358,99.34%,99.34%,1,10mg,11.64mg,1.64mg,Pass,,,HPLC-UV,2026-02-24,https://simmsresearch.com/cdn/shop/files/Thymosin-Alpha.pdf?v=17571183044784763341,,1

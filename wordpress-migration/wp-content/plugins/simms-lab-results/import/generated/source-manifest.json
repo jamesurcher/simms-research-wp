@@ -1,0 +1,12 @@
+{
+  "fetched_at": "2026-06-17T03:10:03.941Z",
+  "sources": {
+    "products": "https://simmsresearch.com/products.json?limit=250",
+    "lab_results": "https://simmsresearch.com/pages/lab-results"
+  },
+  "counts": {
+    "products": 15,
+    "product_rows": 17,
+    "coa_rows": 19
+  }
+}

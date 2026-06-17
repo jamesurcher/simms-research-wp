@@ -35,6 +35,9 @@ final class Simms_Lab_Results_Post_Types {
 
 	private static function register_product_meta(): void {
 		$keys = array(
+			'_simms_shopify_handle',
+			'_simms_source_image_urls',
+			'_simms_source_gallery_image_urls',
 			'_simms_cas',
 			'_simms_formula',
 			'_simms_molecular_weight',
