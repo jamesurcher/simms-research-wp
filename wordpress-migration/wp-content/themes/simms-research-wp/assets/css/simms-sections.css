@@ -236,7 +236,7 @@
    PRODUCT LIST  (homepage "Popular Products")
    ============================================================ */
 .home-products { padding-block: 100px 48px; background: var(--color-background); }
-.home-products__inner { width: 90%; max-width: 1600px; margin-inline: auto; }
+.home-products__inner { width: 90%; max-width: 1520px; margin-inline: auto; }
 .home-products__head { text-align: center; margin-block-end: 2.5rem; }
 .home-products__eyebrow {
   font-family: var(--font-body--family); font-size: 0.875rem; letter-spacing: -0.01em;
@@ -670,7 +670,7 @@
    SHOP / COLLECTION ARCHIVE
    ============================================================ */
 .shop-page { background: var(--color-background); padding-block: 56px 96px; }
-.shop-page__head { width: 90%; max-width: 1600px; margin-inline: auto; text-align: center; margin-block-end: 3rem; }
+.shop-page__head { width: 90%; max-width: 1704px; margin-inline: auto; text-align: left; margin-block-end: 2rem; }
 .shop-page__eyebrow {
   font-family: var(--font-mono--family); font-size: 0.6875rem; font-weight: 500;
   letter-spacing: 0.18em; text-transform: uppercase; color: rgb(var(--color-foreground-rgb) / 0.5); margin: 0 0 1rem;
@@ -681,11 +681,11 @@
 }
 .shop-page__sub {
   font-family: var(--font-body--family); font-size: clamp(0.9375rem, 1.2vw, 1.0625rem); line-height: 1.55;
-  color: rgb(var(--color-foreground-rgb) / 0.62); max-width: 56ch; margin: 1rem auto 0;
+  color: rgb(var(--color-foreground-rgb) / 0.62); max-width: 56ch; margin: 1rem 0 0;
 }
-.shop-page__inner { width: 90%; max-width: 1600px; margin-inline: auto; }
+.shop-page__inner { width: 90%; max-width: 1704px; margin-inline: auto; }
 .shop-page__inner ul.products {
-  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 36px 20px;
+  display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 36px 20px;
   list-style: none; margin: 0; padding: 0;
 }
 .shop-page__empty { text-align: center; font-family: var(--font-body--family); color: rgb(var(--color-foreground-rgb) / 0.6); }
@@ -697,6 +697,7 @@
   font-family: var(--font-mono--family); font-size: 0.8125rem; color: var(--color-foreground);
 }
 .woocommerce-pagination .current { background: var(--color-foreground); color: var(--color-background); border-color: var(--color-foreground); }
+@media (max-width: 1280px) { .shop-page__inner ul.products { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 @media (max-width: 989px) { .shop-page__inner ul.products { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .shop-page__inner ul.products { grid-template-columns: 1fr; } }
 

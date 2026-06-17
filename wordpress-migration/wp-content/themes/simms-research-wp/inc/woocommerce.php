@@ -40,6 +40,31 @@ add_filter(
 );
 
 add_filter(
+	'loop_shop_per_page',
+	function (): int {
+		return 20;
+	}
+);
+
+add_action(
+	'pre_get_posts',
+	function ( WP_Query $query ): void {
+		if ( is_admin() || ! $query->is_main_query() || ! ( is_shop() || is_product_taxonomy() ) ) {
+			return;
+		}
+
+		$meta_query   = (array) $query->get( 'meta_query' );
+		$meta_query[] = array(
+			'key'     => '_price',
+			'value'   => '',
+			'compare' => '!=',
+		);
+
+		$query->set( 'meta_query', $meta_query );
+	}
+);
+
+add_filter(
 	'woocommerce_output_related_products_args',
 	function ( array $args ): array {
 		$args['posts_per_page'] = 4;

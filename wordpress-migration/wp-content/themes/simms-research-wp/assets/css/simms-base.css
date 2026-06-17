@@ -260,26 +260,41 @@ h2 {
 
 .products {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 36px 20px;
   margin: 28px 0 0;
   padding: 0;
   list-style: none;
 }
 
+.woocommerce ul.products::before,
+.woocommerce ul.products::after { display: none; content: none; }
+
+.woocommerce ul.products li.product.simms-product-card,
+ul.products li.product.simms-product-card,
 .simms-product-card {
   list-style: none;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+  min-width: 0;
+  height: 100%;
+  float: none;
+  clear: none;
+  margin: 0;
+  padding: 0;
 }
 
 .simms-product-card__image {
   display: block;
   overflow: hidden;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 5;
   border-radius: 16px;
   background: var(--simms-mist);
 }
 
 .simms-product-card__image img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -306,6 +321,36 @@ h2 {
 .simms-product-card__price {
   margin: 8px 0 18px;
   font-weight: 500;
+}
+
+.simms-product-card__button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 56px;
+  margin-block-start: auto;
+  border: 1.5px solid rgb(var(--color-foreground-rgb) / 0.82);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-foreground);
+  font-family: var(--font-mono--family);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.simms-product-card__button:hover,
+.simms-product-card__button:focus-visible {
+  border-color: var(--color-foreground);
+  background: var(--color-foreground);
+  color: var(--color-background);
 }
 
 .simms-lab-page__hero {
@@ -517,4 +562,3 @@ h2 {
     grid-template-columns: 1fr;
   }
 }
-
