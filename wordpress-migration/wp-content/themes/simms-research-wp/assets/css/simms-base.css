@@ -447,11 +447,37 @@ ul.products li.product.simms-product-card,
 
 .simms-lab-card__rows li {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "id   coa"
+    "meta meta";
+  column-gap: 12px;
+  row-gap: 6px;
   align-items: center;
   font-family: var(--simms-font-mono);
   font-size: 0.85rem;
+}
+
+.simms-lab-card__rows li > span:first-child {
+  grid-area: id;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.simms-lab-card__rows li > span:nth-child(2) {
+  grid-area: meta;
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+  color: var(--simms-green);
+}
+
+.simms-lab-card__rows li > span:nth-child(2) time {
+  color: var(--simms-muted);
 }
 
 .simms-pill {
@@ -468,6 +494,7 @@ ul.products li.product.simms-product-card,
 }
 
 .simms-lab-card__coa {
+  grid-area: coa;
   justify-self: end;
   padding: 6px 12px;
   border: 1px solid rgb(10 10 10 / 0.16);
