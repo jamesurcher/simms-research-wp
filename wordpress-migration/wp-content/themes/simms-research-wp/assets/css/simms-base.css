@@ -89,6 +89,12 @@
 .color-scheme-2 { --color-background:#121212; --color-background-rgb:18 18 18; --color-foreground:#f1f4f0; --color-foreground-rgb:241 244 240; --color-foreground-heading:#f1f4f0; --color-primary:#f0f9ff; background:var(--color-background); color:var(--color-foreground); }
 .color-scheme-3 { --color-background:#f7f7f7; --color-background-rgb:247 247 247; --color-foreground:#1c2329; --color-foreground-rgb:28 35 41; --color-foreground-heading:#1c2329; --color-primary:#f2f3f1; background:var(--color-background); color:var(--color-foreground); }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   background: var(--simms-paper);

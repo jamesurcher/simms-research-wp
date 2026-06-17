@@ -106,11 +106,99 @@
   color: var(--color-foreground); cursor: pointer;
 }
 .site-header__toggle svg { width: 24px; height: 24px; }
+html.simms-nav-open { overflow: hidden; }
 @media (max-width: 989px) {
   .site-header__inner { grid-template-columns: auto 1fr auto; }
-  .site-nav { display: none; }
   .site-header__toggle { display: inline-flex; }
   .site-header__brand { justify-self: center; }
+  .site-nav { display: none; }
+}
+
+/* ============================================================
+   MOBILE NAV DRAWER (1:1 with simmsresearch.com menu)
+   Rendered as a <body> sibling, NOT inside <header> — the header's
+   backdrop-filter would otherwise become the containing block for
+   this fixed element and trap it inside the 76px header.
+   ============================================================ */
+.mobile-nav {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  visibility: hidden;
+}
+html.simms-nav-open .mobile-nav { visibility: visible; }
+.mobile-nav__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.45);
+  opacity: 0;
+  transition: opacity 320ms ease;
+}
+html.simms-nav-open .mobile-nav__backdrop { opacity: 1; }
+.mobile-nav__panel {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(92vw, 420px);
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 4.5rem 1.75rem 2rem;
+  background: var(--color-background);
+  box-shadow: 0 0 60px rgb(0 0 0 / 0.18);
+  overflow-y: auto;
+  transform: translateX(-100%);
+  transition: transform 320ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+html.simms-nav-open .mobile-nav__panel { transform: translateX(0); }
+.mobile-nav__close {
+  position: absolute;
+  inset-block-start: 1.5rem;
+  inset-inline-start: 1.5rem;
+  display: inline-flex;
+  background: none; border: 0; padding: 0.25rem;
+  color: var(--color-foreground); cursor: pointer;
+}
+.mobile-nav__close svg { width: 22px; height: 22px; }
+.mobile-nav__menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.mobile-nav__menu li { margin: 0; }
+.mobile-nav__menu a {
+  display: block;
+  padding: 0.55rem 0;
+  font-family: var(--font-heading--family);
+  font-size: 1.875rem;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-foreground-heading);
+  text-decoration: none;
+}
+.mobile-nav__menu a:hover { color: var(--color-primary); }
+.mobile-nav__featured { margin-block-start: auto; padding-block-start: 2rem; }
+.mobile-nav__featured-list {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; gap: 14px;
+  overflow-x: auto; scrollbar-width: none;
+}
+.mobile-nav__featured-list::-webkit-scrollbar { display: none; }
+.mobile-nav__featured-item { flex: 0 0 44%; }
+.mobile-nav__featured-link { display: block; text-decoration: none; color: var(--color-foreground); }
+.mobile-nav__featured-thumb {
+  aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden;
+  background: rgb(var(--color-foreground-rgb) / 0.04); margin-block-end: 0.5rem;
+}
+.mobile-nav__featured-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mobile-nav__featured-title { font-size: 0.8125rem; font-weight: 500; margin: 0; line-height: 1.3; color: var(--color-foreground-heading); }
+.mobile-nav__featured-price { font-size: 0.8125rem; margin: 0.15rem 0 0; color: rgb(var(--color-foreground-rgb) / 0.6); }
+@media (min-width: 990px) {
+  .mobile-nav { display: none; }
 }
 
 /* ============================================================
@@ -270,7 +358,23 @@
   list-style: none; margin: 0; padding: 0;
 }
 @media (max-width: 989px) { .home-products__grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-@media (max-width: 560px) { .home-products__grid { grid-template-columns: 1fr; } }
+/* Mobile: horizontal swipe carousel (1:1 with Shopify carousel_on_mobile). */
+@media (max-width: 749px) {
+  .home-products__grid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .home-products__grid::-webkit-scrollbar { display: none; }
+  .home-products__grid > li {
+    flex: 0 0 86%;
+    scroll-snap-align: start;
+  }
+}
 
 /* ============================================================
    PROCESS STEPS  (sections/process-steps.liquid; __surface merged in)
@@ -361,7 +465,7 @@
 .process-steps__cta:hover .process-steps__cta-arrow { transform: translateX(2px); }
 @media (max-width: 989px) { .process-steps__grid { grid-template-columns: 1fr; gap: 1rem; } }
 @media (max-width: 749px) {
-  .process-steps__inner { width: 100%; padding-inline: 1.25rem; }
+  .process-steps__inner { width: 100%; padding-inline: 1.25rem; box-sizing: border-box; }
   .process-steps__hero { text-align: left; margin-block-end: 2.5rem; }
   .process-steps__subhead { margin-inline: 0; }
   .process-steps__card { padding: 1.75rem 1.5rem 2rem; }

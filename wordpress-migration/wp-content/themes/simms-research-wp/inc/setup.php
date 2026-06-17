@@ -56,6 +56,14 @@ add_action(
 			true
 		);
 
+		wp_enqueue_script(
+			'simms-site-header',
+			SIMMS_THEME_URI . '/assets/js/site-header.js',
+			array(),
+			SIMMS_THEME_VERSION,
+			true
+		);
+
 		if ( function_exists( 'WC' ) ) {
 			wp_enqueue_script(
 				'simms-cart-drawer',
