@@ -61,7 +61,7 @@ get_header();
 			array(
 				'post_type'      => 'product',
 				'post_status'    => 'publish',
-				'post_name__in'  => array( 'bpc-157', 'mots-c', 'nad', 'semax', 'selank', 'ghk-cu', 'thymosin-alpha-1', 'ipamorelin' ),
+				'post_name__in'  => array( 'bpc-157', 'mots-c', 'nad', 'glp-3-rt', 'tesamorelin', 'ghk-cu', 'semax', 'selank' ),
 				'posts_per_page' => 8,
 				'orderby'        => 'post_name__in',
 				'meta_query'     => array(
