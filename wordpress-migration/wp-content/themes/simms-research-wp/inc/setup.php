@@ -90,6 +90,13 @@ add_action(
 		$request_path = trim( (string) $request_path, '/' );
 
 		if ( is_page_template( 'page-lab-results.php' ) || is_page( 'lab-results' ) || 'lab-results' === $request_path ) {
+			wp_enqueue_style(
+				'simms-lab-results',
+				SIMMS_THEME_URI . '/assets/css/simms-lab-results.css',
+				array( 'simms-base' ),
+				SIMMS_THEME_VERSION
+			);
+
 			wp_enqueue_script(
 				'simms-lab-results',
 				SIMMS_THEME_URI . '/assets/js/lab-results.js',
