@@ -605,6 +605,11 @@ html.simms-nav-open .mobile-nav__panel { transform: translateX(0); }
   .precision-verify__pillars, .precision-verify__stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .precision-verify__pillar:nth-child(2n), .precision-verify__stat:nth-child(2n) { border-inline-end: none; padding-inline-end: 0; }
   .precision-verify__pillar:nth-child(-n+2), .precision-verify__stat:nth-child(-n+2) { border-block-end: 1px solid rgb(var(--color-foreground-rgb) / 0.12); }
+  /* In the 2-col tablet grid, the left column (1st, 3rd) must be flush-left;
+     only the right column (2nd, 4th) carries the gutter. Overrides the
+     :not(:first-child) indent that otherwise pushes the 3rd item right. */
+  .precision-verify__pillar:nth-child(odd), .precision-verify__stat:nth-child(odd) { padding-inline-start: 0; }
+  .precision-verify__pillar:nth-child(even), .precision-verify__stat:nth-child(even) { padding-inline-start: 1.5rem; }
 }
 @media (max-width: 749px) {
   .precision-verify__inner { width: 100%; padding-inline: 1.25rem; }
