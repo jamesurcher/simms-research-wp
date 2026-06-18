@@ -104,6 +104,7 @@ function simms_cart_drawer_fragments(): array {
 
 function simms_cart_drawer_response(): void {
 	if ( function_exists( 'WC' ) && WC()->cart ) {
+		simms_maybe_apply_goaffpro_coupon();
 		WC()->cart->calculate_totals();
 	}
 
@@ -136,6 +137,126 @@ function simms_cart_drawer_verify_request(): bool {
 
 	return true;
 }
+
+function simms_restore_wc_notices( array $notices ): void {
+	if ( ! function_exists( 'wc_clear_notices' ) || ! function_exists( 'wc_add_notice' ) ) {
+		return;
+	}
+
+	wc_clear_notices();
+
+	foreach ( $notices as $type => $messages ) {
+		foreach ( (array) $messages as $notice ) {
+			if ( is_array( $notice ) ) {
+				$message = isset( $notice['notice'] ) ? (string) $notice['notice'] : '';
+				$data    = isset( $notice['data'] ) && is_array( $notice['data'] ) ? $notice['data'] : array();
+			} else {
+				$message = (string) $notice;
+				$data    = array();
+			}
+
+			if ( '' !== $message ) {
+				wc_add_notice( $message, (string) $type, $data );
+			}
+		}
+	}
+}
+
+function simms_apply_coupon_to_cart( string $coupon_code, bool $silent = false ): bool {
+	if ( '' === $coupon_code || ! function_exists( 'WC' ) || ! WC()->cart ) {
+		return false;
+	}
+
+	if ( ! function_exists( 'wc_coupons_enabled' ) || ! wc_coupons_enabled() ) {
+		return false;
+	}
+
+	if ( WC()->cart->has_discount( $coupon_code ) ) {
+		return true;
+	}
+
+	$existing_notices = $silent && function_exists( 'wc_get_notices' ) ? wc_get_notices() : array();
+	$applied          = WC()->cart->apply_coupon( $coupon_code );
+
+	if ( $applied || WC()->cart->has_discount( $coupon_code ) ) {
+		return true;
+	}
+
+	if ( $silent ) {
+		simms_restore_wc_notices( $existing_notices );
+	}
+
+	return false;
+}
+
+function simms_goaffpro_coupon_from_cookie(): string {
+	foreach ( array( 'dcode', 'discount_code' ) as $cookie_name ) {
+		if ( empty( $_COOKIE[ $cookie_name ] ) ) {
+			continue;
+		}
+
+		$coupon_code = wc_format_coupon_code( sanitize_text_field( wp_unslash( $_COOKIE[ $cookie_name ] ) ) );
+
+		if ( '' !== $coupon_code ) {
+			return $coupon_code;
+		}
+	}
+
+	return '';
+}
+
+function simms_removed_goaffpro_coupon(): string {
+	if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+		return '';
+	}
+
+	return (string) WC()->session->get( 'simms_removed_goaffpro_coupon', '' );
+}
+
+function simms_set_removed_goaffpro_coupon( string $coupon_code ): void {
+	if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+		return;
+	}
+
+	WC()->session->set( 'simms_removed_goaffpro_coupon', $coupon_code );
+}
+
+function simms_clear_removed_goaffpro_coupon( string $coupon_code ): void {
+	if ( '' === $coupon_code || ! function_exists( 'WC' ) || ! WC()->session ) {
+		return;
+	}
+
+	if ( simms_removed_goaffpro_coupon() === $coupon_code ) {
+		WC()->session->__unset( 'simms_removed_goaffpro_coupon' );
+	}
+}
+
+function simms_maybe_apply_goaffpro_coupon(): void {
+	if ( is_admin() && ! wp_doing_ajax() ) {
+		return;
+	}
+
+	if ( ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {
+		return;
+	}
+
+	$coupon_code = simms_goaffpro_coupon_from_cookie();
+
+	if ( '' === $coupon_code ) {
+		return;
+	}
+
+	if ( simms_removed_goaffpro_coupon() === $coupon_code ) {
+		return;
+	}
+
+	if ( simms_apply_coupon_to_cart( $coupon_code, true ) ) {
+		simms_clear_removed_goaffpro_coupon( $coupon_code );
+	}
+}
+
+add_action( 'woocommerce_cart_loaded_from_session', 'simms_maybe_apply_goaffpro_coupon', 20 );
+add_action( 'woocommerce_add_to_cart', 'simms_maybe_apply_goaffpro_coupon', 20 );
 
 add_filter(
 	'woocommerce_add_to_cart_fragments',
@@ -241,7 +362,11 @@ add_action(
 			simms_cart_drawer_error_response();
 		}
 
-		WC()->cart->apply_coupon( $coupon_code );
+		if ( ! simms_apply_coupon_to_cart( $coupon_code ) ) {
+			simms_cart_drawer_error_response();
+		}
+
+		simms_clear_removed_goaffpro_coupon( $coupon_code );
 		simms_cart_drawer_response();
 	}
 );
@@ -261,6 +386,7 @@ add_action(
 
 		if ( '' !== $coupon_code ) {
 			WC()->cart->remove_coupon( $coupon_code );
+			simms_set_removed_goaffpro_coupon( $coupon_code );
 		}
 
 		simms_cart_drawer_response();

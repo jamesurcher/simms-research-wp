@@ -73,6 +73,14 @@ add_action(
 				true
 			);
 
+			wp_enqueue_script(
+				'simms-affiliate-discount',
+				SIMMS_THEME_URI . '/assets/js/affiliate-discount.js',
+				array( 'simms-cart-drawer' ),
+				SIMMS_THEME_VERSION,
+				true
+			);
+
 			wp_localize_script(
 				'simms-cart-drawer',
 				'simmsCartDrawer',
