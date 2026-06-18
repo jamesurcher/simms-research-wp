@@ -20,9 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php
 $announcements = array(
-	__( 'Free Shipping On Orders $200+', 'simms-research' ),
+	__( 'FREE SHIPPING ON ORDERS $200+', 'simms-research' ),
 	__( 'US-Based | Third-Party Tested', 'simms-research' ),
-	__( 'For Research Use Only', 'simms-research' ),
+	__( 'FOR RESEARCH USE ONLY', 'simms-research' ),
 );
 ?>
 <div class="announcement-bar" data-simms-announcement data-interval="5000">
@@ -33,13 +33,14 @@ $announcements = array(
 	</div>
 </div>
 
-<header class="site-header">
+<header class="site-header<?php echo is_front_page() ? ' site-header--home' : ''; ?>">
 	<div class="site-header__inner">
 		<button class="site-header__toggle" type="button" aria-label="<?php esc_attr_e( 'Open menu', 'simms-research' ); ?>" aria-expanded="false" aria-controls="simms-mobile-nav" data-simms-nav-toggle>
 			<?php echo simms_inline_icon( 'menu' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</button>
 		<a class="site-header__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Simms Research home', 'simms-research' ); ?>">
-			<img src="<?php echo esc_url( SIMMS_THEME_URI . '/assets/images/simms-logo.png' ); ?>" alt="Simms Research" width="800" height="200">
+			<img class="site-header__logo site-header__logo--default" src="<?php echo esc_url( SIMMS_THEME_URI . '/assets/images/simms-logo.png' ); ?>" alt="Simms Research" width="800" height="200">
+			<img class="site-header__logo site-header__logo--inverse" src="<?php echo esc_url( SIMMS_THEME_URI . '/assets/images/simms-logo-inverse.png' ); ?>" alt="" width="800" height="200" aria-hidden="true">
 		</a>
 		<nav class="site-nav" aria-label="<?php esc_attr_e( 'Primary', 'simms-research' ); ?>">
 			<?php

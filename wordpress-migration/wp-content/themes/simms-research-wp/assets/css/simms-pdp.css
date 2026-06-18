@@ -11,7 +11,8 @@
   box-sizing: border-box;
 }
 
-.pdp__main {
+.pdp__main,
+.pdp__post-grid {
   width: 84%;
   max-width: 1390px;
   margin-inline: auto;
@@ -23,8 +24,13 @@
 }
 
 .pdp__media,
-.pdp__details {
+.pdp__details,
+.pdp__coa {
   min-width: 0;
+}
+
+.pdp__media {
+  align-self: stretch;
 }
 
 .pdp__gallery {
@@ -598,8 +604,12 @@
   text-align: left;
 }
 
-.pdp__coa {
+.pdp__post-grid {
   margin-block-start: 2rem;
+}
+
+.pdp__coa {
+  grid-column: 1;
 }
 
 .pdp__coa-card[hidden] {
@@ -972,7 +982,8 @@
     padding-block-start: 24px;
   }
 
-  .pdp__main {
+  .pdp__main,
+  .pdp__post-grid {
     width: 100%;
     grid-template-columns: 1fr;
     gap: 2rem;

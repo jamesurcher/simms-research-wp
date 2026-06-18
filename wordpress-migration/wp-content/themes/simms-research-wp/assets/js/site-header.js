@@ -3,8 +3,19 @@
  */
 ( function () {
 	var root = document.documentElement;
+	var header = document.querySelector( '.site-header' );
 	var toggle = document.querySelector( '[data-simms-nav-toggle]' );
 	var nav = document.getElementById( 'simms-mobile-nav' );
+
+	if ( header ) {
+		var updateHeaderState = function () {
+			header.classList.toggle( 'is-scrolled', window.scrollY > 2 );
+		};
+
+		updateHeaderState();
+		window.addEventListener( 'scroll', updateHeaderState, { passive: true } );
+		window.addEventListener( 'resize', updateHeaderState );
+	}
 
 	if ( ! toggle || ! nav ) {
 		return;

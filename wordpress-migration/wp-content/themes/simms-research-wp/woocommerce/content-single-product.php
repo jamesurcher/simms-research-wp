@@ -300,85 +300,6 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 				<?php woocommerce_show_product_sale_flash(); ?>
 				<?php woocommerce_show_product_images(); ?>
 			</div>
-
-			<?php if ( ! empty( $batch_cards ) ) : ?>
-				<div class="pdp__coa" data-pdp-coa-list>
-					<?php foreach ( $batch_cards as $batch_key => $batch_card ) : ?>
-						<batch-verification class="batch-verification pdp__coa-card<?php echo $batch_key === $default_batch_key ? ' is-active' : ''; ?>" data-pdp-coa-key="<?php echo esc_attr( $batch_key ); ?>"<?php echo $batch_key === $default_batch_key ? '' : ' hidden'; ?>>
-							<details class="batch-verification__panel" open>
-								<summary class="batch-verification__summary">
-									<span class="batch-verification__summary-main">
-										<span class="batch-verification__status-dot" aria-hidden="true"></span>
-										<span class="batch-verification__title"><?php esc_html_e( 'Certificate of Analysis', 'simms-research' ); ?></span>
-									</span>
-									<?php if ( '' !== $batch_card['purity_pill'] ) : ?>
-										<span class="batch-verification__purity-pill"><?php echo esc_html( $batch_card['purity_pill'] ); ?></span>
-									<?php endif; ?>
-									<span class="batch-verification__chevron" aria-hidden="true"></span>
-								</summary>
-								<div class="batch-verification__body">
-									<dl class="batch-verification__metrics">
-										<?php if ( '' !== $batch_card['avg_purity'] ) : ?>
-											<div class="batch-verification__metric">
-												<dt><?php esc_html_e( 'Avg Purity', 'simms-research' ); ?></dt>
-												<dd class="batch-verification__value"><?php echo esc_html( $batch_card['avg_purity'] ); ?></dd>
-											</div>
-										<?php endif; ?>
-										<?php if ( '' !== $batch_card['labeled_content'] ) : ?>
-											<div class="batch-verification__metric">
-												<dt><?php esc_html_e( 'Labeled Content', 'simms-research' ); ?></dt>
-												<dd><?php echo esc_html( $batch_card['labeled_content'] ); ?></dd>
-											</div>
-										<?php endif; ?>
-										<?php if ( '' !== (string) $batch_card['vials_tested'] ) : ?>
-											<div class="batch-verification__metric">
-												<dt><?php esc_html_e( 'Vials Tested', 'simms-research' ); ?></dt>
-												<dd><?php echo esc_html( (string) $batch_card['vials_tested'] ); ?></dd>
-											</div>
-										<?php endif; ?>
-										<?php if ( '' !== $batch_card['net_content'] ) : ?>
-											<div class="batch-verification__metric">
-												<dt><?php esc_html_e( 'Net Content', 'simms-research' ); ?></dt>
-												<dd class="batch-verification__value">
-													<?php echo esc_html( $batch_card['net_content'] ); ?>
-													<?php if ( '' !== $batch_card['net_delta'] ) : ?>
-														<span class="batch-verification__delta<?php echo esc_attr( $batch_card['net_delta_class'] ); ?>"><?php echo esc_html( $batch_card['net_delta'] ); ?></span>
-													<?php endif; ?>
-												</dd>
-											</div>
-										<?php endif; ?>
-										<?php if ( '' !== $batch_card['endotoxins'] ) : ?>
-											<div class="batch-verification__metric">
-												<dt><?php esc_html_e( 'Endotoxins', 'simms-research' ); ?></dt>
-												<dd class="<?php echo str_contains( strtolower( $batch_card['endotoxins'] ), 'pass' ) ? 'batch-verification__value--verified' : ''; ?>"><?php echo esc_html( $batch_card['endotoxins'] ); ?></dd>
-											</div>
-										<?php endif; ?>
-										<?php if ( '' !== $batch_card['method'] ) : ?>
-											<div class="batch-verification__metric">
-												<dt><?php esc_html_e( 'Confirmation Method', 'simms-research' ); ?></dt>
-												<dd><?php echo esc_html( $batch_card['method'] ); ?></dd>
-											</div>
-										<?php endif; ?>
-										<?php if ( '' !== $batch_card['tested_at'] ) : ?>
-											<div class="batch-verification__metric">
-												<dt><?php esc_html_e( 'Last Tested', 'simms-research' ); ?></dt>
-												<dd><?php echo esc_html( $batch_card['tested_at'] ); ?></dd>
-											</div>
-										<?php endif; ?>
-									</dl>
-									<?php if ( '' !== $batch_card['coa_url'] ) : ?>
-										<a class="batch-verification__button" href="<?php echo esc_url( $batch_card['coa_url'] ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'View Full COA', 'simms-research' ); ?></a>
-									<?php endif; ?>
-									<div class="batch-verification__footer">
-										<span aria-hidden="true"></span>
-										<p><?php echo esc_html( $batch_card['verification'] ); ?></p>
-									</div>
-								</div>
-							</details>
-						</batch-verification>
-					<?php endforeach; ?>
-				</div>
-			<?php endif; ?>
 		</div>
 
 		<div class="pdp__details">
@@ -499,6 +420,87 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 			<?php get_template_part( 'template-parts/product-research-details', null, array( 'product' => $product ) ); ?>
 		</div>
 	</div>
+
+	<?php if ( ! empty( $batch_cards ) ) : ?>
+		<div class="pdp__post-grid">
+			<div class="pdp__coa" data-pdp-coa-list>
+				<?php foreach ( $batch_cards as $batch_key => $batch_card ) : ?>
+					<batch-verification class="batch-verification pdp__coa-card<?php echo $batch_key === $default_batch_key ? ' is-active' : ''; ?>" data-pdp-coa-key="<?php echo esc_attr( $batch_key ); ?>"<?php echo $batch_key === $default_batch_key ? '' : ' hidden'; ?>>
+						<details class="batch-verification__panel" open>
+							<summary class="batch-verification__summary">
+								<span class="batch-verification__summary-main">
+									<span class="batch-verification__status-dot" aria-hidden="true"></span>
+									<span class="batch-verification__title"><?php esc_html_e( 'Certificate of Analysis', 'simms-research' ); ?></span>
+								</span>
+								<?php if ( '' !== $batch_card['purity_pill'] ) : ?>
+									<span class="batch-verification__purity-pill"><?php echo esc_html( $batch_card['purity_pill'] ); ?></span>
+								<?php endif; ?>
+								<span class="batch-verification__chevron" aria-hidden="true"></span>
+							</summary>
+							<div class="batch-verification__body">
+								<dl class="batch-verification__metrics">
+									<?php if ( '' !== $batch_card['avg_purity'] ) : ?>
+										<div class="batch-verification__metric">
+											<dt><?php esc_html_e( 'Avg Purity', 'simms-research' ); ?></dt>
+											<dd class="batch-verification__value"><?php echo esc_html( $batch_card['avg_purity'] ); ?></dd>
+										</div>
+									<?php endif; ?>
+									<?php if ( '' !== $batch_card['labeled_content'] ) : ?>
+										<div class="batch-verification__metric">
+											<dt><?php esc_html_e( 'Labeled Content', 'simms-research' ); ?></dt>
+											<dd><?php echo esc_html( $batch_card['labeled_content'] ); ?></dd>
+										</div>
+									<?php endif; ?>
+									<?php if ( '' !== (string) $batch_card['vials_tested'] ) : ?>
+										<div class="batch-verification__metric">
+											<dt><?php esc_html_e( 'Vials Tested', 'simms-research' ); ?></dt>
+											<dd><?php echo esc_html( (string) $batch_card['vials_tested'] ); ?></dd>
+										</div>
+									<?php endif; ?>
+									<?php if ( '' !== $batch_card['net_content'] ) : ?>
+										<div class="batch-verification__metric">
+											<dt><?php esc_html_e( 'Net Content', 'simms-research' ); ?></dt>
+											<dd class="batch-verification__value">
+												<?php echo esc_html( $batch_card['net_content'] ); ?>
+												<?php if ( '' !== $batch_card['net_delta'] ) : ?>
+													<span class="batch-verification__delta<?php echo esc_attr( $batch_card['net_delta_class'] ); ?>"><?php echo esc_html( $batch_card['net_delta'] ); ?></span>
+												<?php endif; ?>
+											</dd>
+										</div>
+									<?php endif; ?>
+									<?php if ( '' !== $batch_card['endotoxins'] ) : ?>
+										<div class="batch-verification__metric">
+											<dt><?php esc_html_e( 'Endotoxins', 'simms-research' ); ?></dt>
+											<dd class="<?php echo str_contains( strtolower( $batch_card['endotoxins'] ), 'pass' ) ? 'batch-verification__value--verified' : ''; ?>"><?php echo esc_html( $batch_card['endotoxins'] ); ?></dd>
+										</div>
+									<?php endif; ?>
+									<?php if ( '' !== $batch_card['method'] ) : ?>
+										<div class="batch-verification__metric">
+											<dt><?php esc_html_e( 'Confirmation Method', 'simms-research' ); ?></dt>
+											<dd><?php echo esc_html( $batch_card['method'] ); ?></dd>
+										</div>
+									<?php endif; ?>
+									<?php if ( '' !== $batch_card['tested_at'] ) : ?>
+										<div class="batch-verification__metric">
+											<dt><?php esc_html_e( 'Last Tested', 'simms-research' ); ?></dt>
+											<dd><?php echo esc_html( $batch_card['tested_at'] ); ?></dd>
+										</div>
+									<?php endif; ?>
+								</dl>
+								<?php if ( '' !== $batch_card['coa_url'] ) : ?>
+									<a class="batch-verification__button" href="<?php echo esc_url( $batch_card['coa_url'] ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'View Full COA', 'simms-research' ); ?></a>
+								<?php endif; ?>
+								<div class="batch-verification__footer">
+									<span aria-hidden="true"></span>
+									<p><?php echo esc_html( $batch_card['verification'] ); ?></p>
+								</div>
+							</div>
+						</details>
+					</batch-verification>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	<?php endif; ?>
 
 	<section class="pdp__benefits" aria-label="<?php esc_attr_e( 'Store benefits', 'simms-research' ); ?>">
 		<div class="pdp__benefits-inner">

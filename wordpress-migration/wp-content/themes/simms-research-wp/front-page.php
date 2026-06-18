@@ -27,7 +27,7 @@ get_header();
 </section>
 
 <!-- ============ TRUST STRIP ============ -->
-<section class="trust-strip color-scheme-1">
+<section class="trust-strip section section--page-width color-scheme-1">
 	<div class="trust-strip__inner">
 		<div class="trust-strip__grid">
 			<?php
@@ -50,7 +50,7 @@ get_header();
 </section>
 
 <!-- ============ POPULAR PRODUCTS ============ -->
-<section class="home-products color-scheme-1">
+<section class="home-products section section--page-width color-scheme-1">
 	<div class="home-products__inner">
 		<div class="home-products__head">
 			<p class="home-products__eyebrow"><?php esc_html_e( 'New Arrivals', 'simms-research' ); ?></p>
@@ -89,7 +89,7 @@ get_header();
 </section>
 
 <!-- ============ PROCESS STEPS ============ -->
-<section class="process-steps color-scheme-1">
+<section class="process-steps section section--page-width color-scheme-1">
 	<div class="process-steps__inner">
 		<header class="process-steps__hero">
 			<p class="process-steps__eyebrow"><?php esc_html_e( 'Simple process', 'simms-research' ); ?></p>
@@ -128,7 +128,7 @@ get_header();
 </section>
 
 <!-- ============ PRECISION VERIFY ============ -->
-<section class="precision-verify color-scheme-1">
+<section class="precision-verify section section--page-width color-scheme-1">
 	<div class="precision-verify__inner">
 		<header class="precision-verify__hero">
 			<div class="precision-verify__hero-left">
@@ -176,7 +176,7 @@ get_header();
 </section>
 
 <!-- ============ FAQ ============ -->
-<section class="faq-accordion color-scheme-1">
+<section class="faq-accordion section section--page-width color-scheme-1">
 	<div class="faq-accordion__inner">
 		<header class="faq-accordion__hero">
 			<p class="faq-accordion__eyebrow"><?php esc_html_e( 'FAQ', 'simms-research' ); ?></p>
@@ -215,7 +215,7 @@ get_header();
 </section>
 
 <!-- ============ CTA RESEARCH ============ -->
-<section class="cta-research">
+<section class="cta-research section section--page-width">
 	<div class="cta-research__inner">
 		<div class="cta-research__card">
 			<div class="cta-research__glow" aria-hidden="true"></div>
@@ -255,7 +255,7 @@ get_header();
 </section>
 
 <!-- ============ NEWSLETTER ============ -->
-<section class="newsletter-research color-scheme-1">
+<section class="newsletter-research section section--page-width color-scheme-1">
 	<div class="newsletter-research__inner">
 		<div class="newsletter-research__copy">
 			<p class="newsletter-research__eyebrow"><?php esc_html_e( 'Research updates', 'simms-research' ); ?></p>
