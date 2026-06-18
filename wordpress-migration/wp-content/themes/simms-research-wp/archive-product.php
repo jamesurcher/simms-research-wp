@@ -12,7 +12,7 @@ get_header();
 <div class="shop-page color-scheme-1">
 	<header class="shop-page__head">
 		<p class="shop-page__eyebrow"><?php esc_html_e( 'Research Catalog', 'simms-research' ); ?></p>
-		<h1 class="shop-page__title"><?php woocommerce_page_title(); ?></h1>
+		<h1 class="shop-page__title"><?php if ( is_shop() ) { esc_html_e( 'Products', 'simms-research' ); } else { woocommerce_page_title(); } ?></h1>
 		<p class="shop-page__sub"><?php esc_html_e( 'Every compound independently third-party tested · 99%+ purity · COA on every batch.', 'simms-research' ); ?></p>
 	</header>
 

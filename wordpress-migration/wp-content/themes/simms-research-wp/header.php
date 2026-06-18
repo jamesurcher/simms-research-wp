@@ -69,7 +69,6 @@ $simms_is_checkout = function_exists( 'is_checkout' ) && is_checkout();
 		<?php endif; ?>
 		<?php if ( ! $simms_is_checkout ) : ?>
 			<div class="site-header__actions">
-				<a href="<?php echo esc_url( home_url( '/search/' ) ); ?>" aria-label="<?php esc_attr_e( 'Search', 'simms-research' ); ?>"><?php echo simms_inline_icon( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
 				<a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url() ); ?>" aria-label="<?php esc_attr_e( 'Account', 'simms-research' ); ?>"><?php echo simms_inline_icon( 'account' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
 				<a class="site-header__cart" href="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>" aria-label="<?php esc_attr_e( 'Cart', 'simms-research' ); ?>" aria-haspopup="dialog" aria-controls="simms-cart-drawer" data-simms-cart-open>
 					<?php echo simms_inline_icon( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>

@@ -328,6 +328,12 @@ ul.products li.product.simms-product-card,
   padding: 0;
 }
 
+/* The card's display:flex overrides the default [hidden] rule, so the
+   collection-filter search couldn't visually hide non-matching cards. */
+.simms-product-card[hidden] {
+  display: none !important;
+}
+
 .simms-product-card__image {
   display: block;
   overflow: hidden;

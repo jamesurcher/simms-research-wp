@@ -875,7 +875,7 @@ html.simms-nav-open .mobile-nav__panel { transform: translateX(0); }
    SHOP / COLLECTION ARCHIVE
    ============================================================ */
 .shop-page { background: var(--color-background); padding-block: 56px 96px; }
-.shop-page__head { width: 90%; max-width: 1704px; margin-inline: auto; text-align: left; margin-block-end: 2rem; }
+.shop-page__head { width: 85%; max-width: 1600px; margin-inline: auto; text-align: left; margin-block-end: 2rem; }
 .shop-page__eyebrow {
   font-family: var(--font-mono--family); font-size: 0.6875rem; font-weight: 500;
   letter-spacing: 0.18em; text-transform: uppercase; color: rgb(var(--color-foreground-rgb) / 0.5); margin: 0 0 1rem;
@@ -890,7 +890,7 @@ html.simms-nav-open .mobile-nav__panel { transform: translateX(0); }
 }
 /* Inline collection search + sort — ported 1:1 from the Shopify storefront. */
 .shop-page .collection-filter {
-  display: block; width: 90%; max-width: 1704px; margin-inline: auto; margin-block-end: 1.75rem;
+  display: block; width: 85%; max-width: 1600px; margin-inline: auto; margin-block-end: 1.75rem;
 }
 .collection-filter__inner { width: 100%; margin-inline: auto; }
 .collection-filter__row { display: flex; gap: 0.5rem; align-items: stretch; width: 100%; }
@@ -940,7 +940,7 @@ html.simms-nav-open .mobile-nav__panel { transform: translateX(0); }
   .collection-filter__sort select { min-width: 0; width: 100%; }
 }
 
-.shop-page__inner { width: 90%; max-width: 1704px; margin-inline: auto; }
+.shop-page__inner { width: 85%; max-width: 1600px; margin-inline: auto; }
 .shop-page__inner ul.products {
   display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 36px 20px;
   list-style: none; margin: 0; padding: 0;
