@@ -32,29 +32,6 @@ add_filter(
 	}
 );
 
-// WooCommerce Blocks reads this option when building checkout field metadata.
-// Keep phone visible and required so the label renders as "Phone", not optional.
-add_action(
-	'init',
-	function (): void {
-		if ( 'required' !== get_option( 'woocommerce_checkout_phone_field' ) ) {
-			update_option( 'woocommerce_checkout_phone_field', 'required' );
-		}
-	},
-	5
-);
-
-add_filter(
-	'woocommerce_checkout_fields',
-	function ( array $fields ): array {
-		if ( isset( $fields['billing']['billing_phone'] ) ) {
-			$fields['billing']['billing_phone']['required'] = true;
-		}
-
-		return $fields;
-	}
-);
-
 add_filter(
 	'loop_shop_columns',
 	function (): int {
