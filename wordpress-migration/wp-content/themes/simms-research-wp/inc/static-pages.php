@@ -24,6 +24,7 @@ function simms_static_page_templates(): array {
 		'partners'         => 'page-partners.php',
 		'privacy-policy'       => 'page-privacy-policy.php',
 		'refund-return'        => 'page-refund-return.php',
+		'refund-returns'       => 'page-refund-return.php',
 		'shipping-policy'      => 'page-shipping-policy.php',
 		'terms-and-conditions' => 'page-terms-conditions.php',
 		'terms-conditions'     => 'page-terms-conditions.php',
@@ -36,13 +37,22 @@ add_action(
 		$path = simms_static_page_request_path();
 		$policy_redirects = array(
 			'policies/privacy-policy'   => 'privacy-policy',
-			'policies/refund-policy'    => 'refund-return',
+			'policies/refund-policy'    => 'refund-returns',
 			'policies/shipping-policy'  => 'shipping-policy',
 			'policies/terms-of-service' => 'terms-and-conditions',
+		);
+		$page_redirects = array(
+			'refund-return'       => 'refund-returns',
+			'pages/refund-return' => 'refund-returns',
 		);
 
 		if ( isset( $policy_redirects[ $path ] ) ) {
 			wp_safe_redirect( home_url( '/' . $policy_redirects[ $path ] . '/' ), 301 );
+			exit;
+		}
+
+		if ( isset( $page_redirects[ $path ] ) ) {
+			wp_safe_redirect( home_url( '/' . $page_redirects[ $path ] . '/' ), 301 );
 			exit;
 		}
 
