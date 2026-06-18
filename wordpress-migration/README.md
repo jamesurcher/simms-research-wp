@@ -9,7 +9,8 @@ It is intentionally isolated from the live Shopify theme files. Nothing in this 
 - `wp-content/themes/simms-research-wp/` - starter custom WordPress theme.
 - `wp-content/plugins/simms-lab-results/` - starter plugin for COA/lab-result records.
 - `docs/` - migration plan, data model, component map, and QA checklist.
-- `import/` - CSV schemas for products and COA batches.
+- `import/` - CSV schemas and notes for products and COA batches.
+- `wp-content/plugins/simms-lab-results/import/manual/` - hand-audited migration CSVs that need to be available to WP-CLI inside WordPress.
 - `redirects/` - starter Shopify-to-WordPress redirect map.
 
 ## Target Stack
@@ -44,5 +45,4 @@ Then activate:
 
 ## Current Limits
 
-This starter does not include Shopify product exports, media exports, order/customer migration, payment gateway configuration, or production hosting configuration. Those require store/admin/server access.
-
+This starter does not include order/customer migration, payment gateway configuration, or production hosting configuration. Those require store/admin/server access.

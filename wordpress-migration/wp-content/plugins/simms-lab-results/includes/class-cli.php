@@ -8,6 +8,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 final class Simms_Lab_Results_CLI {
+	private const SHOPIFY_FILE_BASE_URL = 'https://vyxebq-j8.myshopify.com/cdn/shop/files';
+
 	/**
 	 * Import WooCommerce products from the public product CSV.
 	 *
@@ -115,7 +117,7 @@ final class Simms_Lab_Results_CLI {
 		foreach ( $rows as $row ) {
 			$handle     = $row['shopify_product_handle'] ?? '';
 			$batch_id   = $this->clean_batch_id( $row['batch_id'] ?? '' );
-			$product_id = $this->find_product_id( $handle, $row['wp_product_id'] ?? '' );
+			$product_id = $this->find_product_id( $handle, $row['wp_product_id'] ?? '', $row );
 
 			if ( ! $batch_id ) {
 				$stats['skipped']++;
@@ -142,6 +144,7 @@ final class Simms_Lab_Results_CLI {
 				continue;
 			}
 
+			$this->stamp_product_handle( $product_id, $handle );
 			$this->import_coa_batch( $existing_id, $product_id, $batch_id, $row );
 		}
 
@@ -306,7 +309,8 @@ final class Simms_Lab_Results_CLI {
 			'_simms_sterility'         => sanitize_text_field( $row['sterility'] ?? '' ),
 			'_simms_test_type'         => sanitize_text_field( $row['test_type'] ?? '' ),
 			'_simms_tested_at'         => sanitize_text_field( $row['tested_at'] ?? '' ),
-			'_simms_coa_url'           => esc_url_raw( $row['coa_url'] ?? '' ),
+			'_simms_coa_url'           => esc_url_raw( $this->normalize_coa_url( $row['coa_url'] ?? '', $row['coa_file_path'] ?? '' ) ),
+			'_simms_coa_file_path'     => sanitize_text_field( $row['coa_file_path'] ?? '' ),
 			'_simms_is_current'        => $this->truthy( $row['is_current'] ?? '' ) ? '1' : '0',
 		);
 
@@ -371,35 +375,61 @@ final class Simms_Lab_Results_CLI {
 		return $groups;
 	}
 
-	private function find_product_id( string $handle, string $explicit_id = '' ): int {
+	private function find_product_id( string $handle, string $explicit_id = '', array $row = array() ): int {
 		$explicit_id = absint( $explicit_id );
 		if ( $explicit_id && 'product' === get_post_type( $explicit_id ) ) {
 			return $explicit_id;
 		}
 
 		$handle = sanitize_title( $handle );
-		if ( ! $handle ) {
-			return 0;
+
+		foreach ( array( 'wp_product_slug', 'wordpress_product_slug', 'product_slug' ) as $slug_key ) {
+			$slug = sanitize_title( $row[ $slug_key ] ?? '' );
+			if ( '' === $slug ) {
+				continue;
+			}
+
+			$post = get_page_by_path( $slug, OBJECT, 'product' );
+			if ( $post ) {
+				return absint( $post->ID );
+			}
 		}
 
-		$ids = get_posts(
-			array(
-				'post_type'      => 'product',
-				'post_status'    => 'any',
-				'fields'         => 'ids',
-				'posts_per_page' => 1,
-				'meta_key'       => '_simms_shopify_handle',
-				'meta_value'     => $handle,
-			)
-		);
+		if ( $handle ) {
+			$ids = get_posts(
+				array(
+					'post_type'      => 'product',
+					'post_status'    => 'any',
+					'fields'         => 'ids',
+					'posts_per_page' => 1,
+					'meta_key'       => '_simms_shopify_handle',
+					'meta_value'     => $handle,
+				)
+			);
 
-		if ( $ids ) {
-			return absint( $ids[0] );
+			if ( $ids ) {
+				return absint( $ids[0] );
+			}
+
+			$post = get_page_by_path( $handle, OBJECT, 'product' );
+			if ( $post ) {
+				return absint( $post->ID );
+			}
 		}
 
-		$post = get_page_by_path( $handle, OBJECT, 'product' );
+		foreach ( array( 'product_title', 'shopify_product_title' ) as $title_key ) {
+			$title = trim( (string) ( $row[ $title_key ] ?? '' ) );
+			if ( '' === $title ) {
+				continue;
+			}
 
-		return $post ? absint( $post->ID ) : 0;
+			$post = get_page_by_title( $title, OBJECT, 'product' );
+			if ( $post ) {
+				return absint( $post->ID );
+			}
+		}
+
+		return 0;
 	}
 
 	private function find_variation_id( int $product_id, array $row ): int {
@@ -458,7 +488,73 @@ final class Simms_Lab_Results_CLI {
 			)
 		);
 
-		return $ids ? absint( $ids[0] ) : 0;
+		if ( $ids ) {
+			return absint( $ids[0] );
+		}
+
+		$ids = get_posts(
+			array(
+				'post_type'      => 'simms_coa_batch',
+				'post_status'    => 'any',
+				'fields'         => 'ids',
+				'posts_per_page' => 2,
+				'meta_key'       => '_simms_batch_id',
+				'meta_value'     => $batch_id,
+			)
+		);
+
+		return 1 === count( $ids ) ? absint( $ids[0] ) : 0;
+	}
+
+	private function normalize_coa_url( string $url, string $file_path = '' ): string {
+		$url       = trim( $url );
+		$file_path = trim( $file_path );
+
+		if ( '' === $url && '' !== $file_path ) {
+			if ( preg_match( '#^https?://#i', $file_path ) ) {
+				$url = $file_path;
+			} else {
+				$url = trailingslashit( self::SHOPIFY_FILE_BASE_URL ) . str_replace( '%2F', '/', rawurlencode( ltrim( $file_path, '/' ) ) );
+			}
+		}
+
+		if ( '' === $url ) {
+			return '';
+		}
+
+		if ( str_starts_with( $url, '//' ) ) {
+			$url = 'https:' . $url;
+		}
+
+		if ( str_starts_with( $url, '/cdn/shop/files/' ) ) {
+			$url = 'https://vyxebq-j8.myshopify.com' . $url;
+		}
+
+		$parts = wp_parse_url( $url );
+		if ( ! is_array( $parts ) ) {
+			return $url;
+		}
+
+		$path = $parts['path'] ?? '';
+		if ( str_starts_with( $path, '/cdn/shop/files/' ) && 'vyxebq-j8.myshopify.com' !== strtolower( (string) ( $parts['host'] ?? '' ) ) ) {
+			$query = isset( $parts['query'] ) && '' !== $parts['query'] ? '?' . $parts['query'] : '';
+
+			return 'https://vyxebq-j8.myshopify.com' . $path . $query;
+		}
+
+		return $url;
+	}
+
+	private function stamp_product_handle( int $product_id, string $handle ): void {
+		$handle = sanitize_title( $handle );
+
+		if ( ! $product_id || '' === $handle ) {
+			return;
+		}
+
+		if ( '' === get_post_meta( $product_id, '_simms_shopify_handle', true ) ) {
+			update_post_meta( $product_id, '_simms_shopify_handle', $handle );
+		}
 	}
 
 	private function set_sku_safely( WC_Product $product, string $sku, array &$stats, string $context ): void {

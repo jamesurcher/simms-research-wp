@@ -39,6 +39,7 @@ final class Simms_Lab_Results_Meta_Boxes {
 		'_simms_test_type'         => array( 'Test Type', 'text' ),
 		'_simms_tested_at'         => array( 'Tested At', 'date' ),
 		'_simms_coa_url'           => array( 'COA URL', 'url' ),
+		'_simms_coa_file_path'     => array( 'COA File Path', 'text' ),
 		'_simms_coa_file_id'       => array( 'COA File Attachment ID', 'number' ),
 	);
 

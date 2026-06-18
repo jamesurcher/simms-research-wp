@@ -79,6 +79,7 @@ final class Simms_Lab_Results_Post_Types {
 			'_simms_test_type',
 			'_simms_tested_at',
 			'_simms_coa_url',
+			'_simms_coa_file_path',
 		);
 
 		foreach ( $string_keys as $key ) {

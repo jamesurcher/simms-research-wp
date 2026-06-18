@@ -1,10 +1,23 @@
 # Public Source Product and COA Import
 
-This import path uses the public Shopify storefront as the source of truth:
+This import path uses the original Shopify storefront as the source of truth. After the
+domain cutover, use the permanent Shopify fallback host, not `simmsresearch.com`, for
+storefront source data:
 
-- Products, variants, pricing, availability, descriptions, and image URLs: `https://simmsresearch.com/products.json?limit=250`
-- COA batch rows and PDF URLs: `https://simmsresearch.com/pages/lab-results`
-- Product technical specs: each public PDP at `https://simmsresearch.com/products/{handle}`
+- Products, variants, pricing, availability, descriptions, and image URLs: `https://vyxebq-j8.myshopify.com/products.json?limit=250`
+- Public COA batch rows and PDF URLs: `https://vyxebq-j8.myshopify.com/pages/lab-results`
+- Product technical specs: each public PDP at `https://vyxebq-j8.myshopify.com/products/{handle}`
+
+The public storefront page currently exposes only the active public subset of COAs.
+For the full migration set, including draft/unlisted/suspended Shopify products, use:
+
+```text
+wordpress-migration/wp-content/plugins/simms-lab-results/import/manual/coa-batches-shopify-metaobjects.csv
+```
+
+That file is transcribed from the Shopify Admin `COA Batch` metaobject table and maps
+product-linked metaobjects back to WordPress product slugs where Shopify handles and
+WordPress slugs differ.
 
 ## Generate CSVs
 
@@ -64,6 +77,13 @@ Run COA dry-run:
 ```sh
 docker exec -u www-data -e HOME=/tmp wordpress-migration-wordpress-1 \
   wp simms import coa wp-content/plugins/simms-lab-results/import/generated/coa-batches-public.csv --dry-run
+```
+
+Run full Shopify metaobject COA dry-run:
+
+```sh
+docker exec -u www-data -e HOME=/tmp wordpress-migration-wordpress-1 \
+  wp simms import coa wp-content/plugins/simms-lab-results/import/manual/coa-batches-shopify-metaobjects.csv --dry-run
 ```
 
 Remove `--dry-run` only after the dry-run counts look right.

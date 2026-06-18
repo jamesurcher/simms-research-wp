@@ -50,8 +50,13 @@ Registered as the custom post type `simms_coa_batch`.
 | `_simms_test_type` | `coa_batch.test_type` |
 | `_simms_tested_at` | `coa_batch.tested_at` |
 | `_simms_coa_url` | `coa_batch.coa_url` or exported Shopify file URL |
+| `_simms_coa_file_path` | Original Shopify file name/path used to rebuild CDN URLs |
 | `_simms_coa_file_id` | Imported WordPress media attachment ID |
 | `_simms_is_current` | `coa_batch.is_current` |
+
+COA import rows may also include `wp_product_slug` when the Shopify handle does not
+match the WordPress product slug, for example Shopify handle `wolverine` mapping to
+WordPress slug `bpc-157-tb-500-wolverine`.
 
 ## Global Settings
 
@@ -65,4 +70,3 @@ These should live in WordPress options or Customizer fields.
 | Tier 3 quantity/discount | `settings.volume_tier_3_qty`, `settings.volume_tier_3_pct` |
 | TOS gate background | `settings.tos_gate_background` |
 | TOS gate overlay | `settings.tos_gate_overlay_opacity` |
-

@@ -3,9 +3,9 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const PRODUCT_INDEX_URL = 'https://simmsresearch.com/products.json?limit=250';
-const LAB_RESULTS_URL = 'https://simmsresearch.com/pages/lab-results';
-const SHOP_BASE_URL = 'https://simmsresearch.com';
+const SHOP_BASE_URL = 'https://vyxebq-j8.myshopify.com';
+const PRODUCT_INDEX_URL = `${SHOP_BASE_URL}/products.json?limit=250`;
+const LAB_RESULTS_URL = `${SHOP_BASE_URL}/pages/lab-results`;
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const outputDir = path.resolve(
