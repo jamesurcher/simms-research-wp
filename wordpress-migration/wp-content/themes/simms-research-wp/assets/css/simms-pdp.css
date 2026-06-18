@@ -506,10 +506,15 @@
   line-height: 1;
 }
 
-.product-payment-row__item--venmo {
-  background: #3d95ce;
-  color: #fff;
-  font-size: 0.82rem;
+.product-payment-row__item {
+  min-width: 0;
+  padding-inline: 0.4rem;
+}
+
+.product-payment-row__brand {
+  display: block;
+  width: auto;
+  height: 15px;
 }
 
 .pdp .product-research-details {
@@ -1014,16 +1019,33 @@
     display: none;
   }
 
-  .pdp__variant-options,
-  .volume-discount-table__tiers,
-  .pdp__purchase-row,
-  .pdp__benefits-inner {
+  .pdp__variant-options {
     grid-template-columns: 1fr;
   }
 
+  /* Bundle & Save: keep the three tiers horizontal on mobile */
+  .volume-discount-table__tiers {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+  .volume-discount-table__tier { min-height: 66px; padding: 0.65rem 0.3rem; }
+  .volume-discount-table__pct { font-size: 0.9rem; }
+  .volume-discount-table__qty { font-size: 0.68rem; }
+
+  /* Quantity (1/3) + Add to cart (2/3) share one line */
   .pdp__purchase-row {
+    grid-template-columns: 1fr 2fr;
     margin-block-start: -0.5rem;
   }
+
+  /* Trust badges: keep the three benefits horizontal on mobile */
+  .pdp__benefits-inner {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .pdp__benefit-icon { width: 2rem; height: 2rem; margin-block-end: 0.45rem; }
+  .pdp__benefit strong { font-size: 0.8125rem; }
+  .pdp__benefit span:last-child { font-size: 0.6875rem; }
 
   .pdp__quantity-control {
     min-height: 54px;
@@ -1085,7 +1107,7 @@
   }
 
   .pdp__related-grid.products {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .pdp-sticky-cart {

@@ -412,8 +412,18 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 			<div class="product-payment-row">
 				<span class="product-payment-row__label"><?php esc_html_e( 'We accept', 'simms-research' ); ?></span>
 				<ul class="product-payment-row__list" role="list" aria-label="<?php esc_attr_e( 'Accepted payment methods', 'simms-research' ); ?>">
-					<li class="product-payment-row__item product-payment-row__item--paypal">PayPal</li>
-					<li class="product-payment-row__item product-payment-row__item--venmo">V</li>
+					<li class="product-payment-row__item" aria-label="Visa">
+						<svg class="product-payment-row__brand" viewBox="0 0 40 13" role="img" aria-hidden="true"><text x="20" y="11" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" font-style="italic" fill="#1434CB" letter-spacing="0.5">VISA</text></svg>
+					</li>
+					<li class="product-payment-row__item" aria-label="Mastercard">
+						<svg class="product-payment-row__brand" viewBox="0 0 34 22" role="img" aria-hidden="true"><circle cx="13.5" cy="11" r="9" fill="#EB001B"/><circle cx="20.5" cy="11" r="9" fill="#F79E1B"/><path d="M17 4.2a9 9 0 0 0 0 13.6 9 9 0 0 0 0-13.6z" fill="#FF5F00"/></svg>
+					</li>
+					<li class="product-payment-row__item" aria-label="American Express">
+						<svg class="product-payment-row__brand" viewBox="0 0 40 24" role="img" aria-hidden="true"><rect width="40" height="24" rx="3" fill="#1F72CD"/><text x="20" y="15" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="8" font-weight="700" fill="#ffffff" letter-spacing="0.3">AMEX</text></svg>
+					</li>
+					<li class="product-payment-row__item" aria-label="Discover">
+						<svg class="product-payment-row__brand" viewBox="0 0 62 13" role="img" aria-hidden="true"><text x="0" y="11" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#1A1A1A">DISC</text><circle cx="44" cy="7.5" r="5.5" fill="#F76E11"/><text x="51" y="11" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#1A1A1A">VER</text></svg>
+					</li>
 				</ul>
 			</div>
 
@@ -525,7 +535,7 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 	<?php if ( ! empty( $related_ids ) ) : ?>
 		<section class="pdp__related">
 			<div class="pdp__related-inner">
-				<h2><?php esc_html_e( 'You may also like', 'simms-research' ); ?></h2>
+				<h2><?php esc_html_e( 'Frequently researched together', 'simms-research' ); ?></h2>
 				<ul class="products pdp__related-grid">
 					<?php
 					foreach ( array_slice( $related_ids, 0, 4 ) as $related_id ) {
