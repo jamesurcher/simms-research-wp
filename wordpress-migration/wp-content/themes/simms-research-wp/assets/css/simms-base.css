@@ -354,16 +354,18 @@ ul.products li.product.simms-product-card,
   margin: 0;
   font-family: var(--simms-font-body);
   font-size: 1.05rem;
+  font-weight: 400;
   line-height: 1.2;
 }
 
 .simms-product-card__title a {
+  font-weight: 400;
   text-decoration: none;
 }
 
 .simms-product-card__price {
   margin: 8px 0 18px;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 .simms-product-card__button {

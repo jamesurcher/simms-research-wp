@@ -15,7 +15,7 @@ add_action(
 		add_theme_support( 'responsive-embeds' );
 		add_theme_support( 'html5', array( 'search-form', 'comment-form', 'gallery', 'caption', 'style', 'script' ) );
 		add_theme_support( 'woocommerce' );
-		add_theme_support( 'wc-product-gallery-zoom' );
+		// Zoom-on-hover removed to match the static Shopify product image.
 		add_theme_support( 'wc-product-gallery-lightbox' );
 		add_theme_support( 'wc-product-gallery-slider' );
 
@@ -92,6 +92,16 @@ add_action(
 				)
 			);
 
+		}
+
+		if ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() ) ) {
+			wp_enqueue_script(
+				'simms-collection-filter',
+				SIMMS_THEME_URI . '/assets/js/collection-filter.js',
+				array(),
+				SIMMS_THEME_VERSION,
+				true
+			);
 		}
 
 		$request_path = isset( $_SERVER['REQUEST_URI'] ) ? wp_parse_url( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), PHP_URL_PATH ) : '';

@@ -398,3 +398,63 @@ add_action(
 		do_action( 'wp_ajax_simms_cart_drawer_remove_coupon' );
 	}
 );
+
+/**
+ * Rename the block-checkout step titles to match the Shopify storefront
+ * (Contact / Delivery / Shipping method / Payment). The block titles are
+ * rendered client-side, so we override the i18n strings before React mounts.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function (): void {
+		if ( ! function_exists( 'is_checkout' ) || ! ( is_checkout() || is_cart() ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'wp-i18n' );
+
+		$overrides = array(
+			'Contact information' => array( 'Contact' ),
+			'Shipping address'    => array( 'Delivery' ),
+			'Shipping options'    => array( 'Shipping method' ),
+			'Payment options'     => array( 'Payment' ),
+		);
+
+		$js = '( function () { if ( window.wp && wp.i18n && wp.i18n.setLocaleData ) { wp.i18n.setLocaleData( ' . wp_json_encode( $overrides ) . ', "woocommerce" ); } } )();';
+
+		wp_add_inline_script( 'wp-i18n', $js, 'after' );
+	},
+	20
+);
+
+/**
+ * Append the Shopify-style policy links beneath the checkout form
+ * (Shipping · Privacy policy · Terms of service).
+ */
+add_filter(
+	'the_content',
+	function ( string $content ): string {
+		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+			return $content;
+		}
+
+		if ( function_exists( 'is_order_received_page' ) && is_order_received_page() ) {
+			return $content;
+		}
+
+		$links = array(
+			__( 'Shipping', 'simms-research' )         => '/shipping-policy/',
+			__( 'Privacy policy', 'simms-research' )   => '/privacy-policy/',
+			__( 'Terms of service', 'simms-research' ) => '/terms-conditions/',
+		);
+
+		$html = '<div class="simms-checkout-policies"><div class="simms-checkout-policies__inner">';
+		foreach ( $links as $label => $path ) {
+			$html .= '<a href="' . esc_url( home_url( $path ) ) . '">' . esc_html( $label ) . '</a>';
+		}
+		$html .= '</div></div>';
+
+		return $content . $html;
+	},
+	20
+);

@@ -19,53 +19,68 @@ if ( ! defined( 'ABSPATH' ) ) {
 <a class="skip-link screen-reader-text" href="#main"><?php esc_html_e( 'Skip to content', 'simms-research' ); ?></a>
 
 <?php
-$announcements = array(
-	__( 'FREE SHIPPING ON ORDERS $200+', 'simms-research' ),
-	__( 'US-Based | Third-Party Tested', 'simms-research' ),
-	__( 'FOR RESEARCH USE ONLY', 'simms-research' ),
-);
+// Shopify-style focused checkout chrome: drop the announcement bar + nav,
+// leaving a centered logo and the cart only.
+$simms_is_checkout = function_exists( 'is_checkout' ) && is_checkout();
 ?>
-<div class="announcement-bar" data-simms-announcement data-interval="5000">
-	<div class="announcement-bar__track" aria-live="polite">
-		<?php foreach ( $announcements as $i => $message ) : ?>
-			<span class="announcement-bar__item<?php echo 0 === $i ? ' is-active' : ''; ?>"<?php echo 0 === $i ? '' : ' aria-hidden="true"'; ?>><?php echo esc_html( $message ); ?></span>
-		<?php endforeach; ?>
-	</div>
-</div>
 
-<header class="site-header<?php echo is_front_page() ? ' site-header--home' : ''; ?>">
+<?php if ( ! $simms_is_checkout ) : ?>
+	<?php
+	$announcements = array(
+		__( 'FREE SHIPPING ON ORDERS $200+', 'simms-research' ),
+		__( 'US-Based | Third-Party Tested', 'simms-research' ),
+		__( 'FOR RESEARCH USE ONLY', 'simms-research' ),
+	);
+	?>
+	<div class="announcement-bar" data-simms-announcement data-interval="5000">
+		<div class="announcement-bar__track" aria-live="polite">
+			<?php foreach ( $announcements as $i => $message ) : ?>
+				<span class="announcement-bar__item<?php echo 0 === $i ? ' is-active' : ''; ?>"<?php echo 0 === $i ? '' : ' aria-hidden="true"'; ?>><?php echo esc_html( $message ); ?></span>
+			<?php endforeach; ?>
+		</div>
+	</div>
+<?php endif; ?>
+
+<header class="site-header<?php echo is_front_page() ? ' site-header--home' : ''; ?><?php echo $simms_is_checkout ? ' site-header--checkout' : ''; ?>">
 	<div class="site-header__inner">
-		<button class="site-header__toggle" type="button" aria-label="<?php esc_attr_e( 'Open menu', 'simms-research' ); ?>" aria-expanded="false" aria-controls="simms-mobile-nav" data-simms-nav-toggle>
-			<?php echo simms_inline_icon( 'menu' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-		</button>
+		<?php if ( ! $simms_is_checkout ) : ?>
+			<button class="site-header__toggle" type="button" aria-label="<?php esc_attr_e( 'Open menu', 'simms-research' ); ?>" aria-expanded="false" aria-controls="simms-mobile-nav" data-simms-nav-toggle>
+				<?php echo simms_inline_icon( 'menu' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</button>
+		<?php endif; ?>
 		<a class="site-header__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Simms Research home', 'simms-research' ); ?>">
 			<img class="site-header__logo site-header__logo--default" src="<?php echo esc_url( SIMMS_THEME_URI . '/assets/images/simms-logo.png' ); ?>" alt="Simms Research" width="800" height="200">
 			<img class="site-header__logo site-header__logo--inverse" src="<?php echo esc_url( SIMMS_THEME_URI . '/assets/images/simms-logo-inverse.png' ); ?>" alt="" width="800" height="200" aria-hidden="true">
 		</a>
-		<nav class="site-nav" aria-label="<?php esc_attr_e( 'Primary', 'simms-research' ); ?>">
-			<?php
-			wp_nav_menu(
-				array(
-					'theme_location' => 'primary',
-					'container'      => false,
-					'items_wrap'     => '<ul>%3$s</ul>',
-					'fallback_cb'    => false,
-					'depth'          => 1,
-				)
-			);
-			?>
-		</nav>
-		<div class="site-header__actions">
-			<a href="<?php echo esc_url( home_url( '/search/' ) ); ?>" aria-label="<?php esc_attr_e( 'Search', 'simms-research' ); ?>"><?php echo simms_inline_icon( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
-			<a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url() ); ?>" aria-label="<?php esc_attr_e( 'Account', 'simms-research' ); ?>"><?php echo simms_inline_icon( 'account' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
-			<a class="site-header__cart" href="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>" aria-label="<?php esc_attr_e( 'Cart', 'simms-research' ); ?>" aria-haspopup="dialog" aria-controls="simms-cart-drawer" data-simms-cart-open>
-				<?php echo simms_inline_icon( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				<?php echo simms_cart_count_markup(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-			</a>
-		</div>
+		<?php if ( ! $simms_is_checkout ) : ?>
+			<nav class="site-nav" aria-label="<?php esc_attr_e( 'Primary', 'simms-research' ); ?>">
+				<?php
+				wp_nav_menu(
+					array(
+						'theme_location' => 'primary',
+						'container'      => false,
+						'items_wrap'     => '<ul>%3$s</ul>',
+						'fallback_cb'    => false,
+						'depth'          => 1,
+					)
+				);
+				?>
+			</nav>
+		<?php endif; ?>
+		<?php if ( ! $simms_is_checkout ) : ?>
+			<div class="site-header__actions">
+				<a href="<?php echo esc_url( home_url( '/search/' ) ); ?>" aria-label="<?php esc_attr_e( 'Search', 'simms-research' ); ?>"><?php echo simms_inline_icon( 'search' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
+				<a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url() ); ?>" aria-label="<?php esc_attr_e( 'Account', 'simms-research' ); ?>"><?php echo simms_inline_icon( 'account' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
+				<a class="site-header__cart" href="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>" aria-label="<?php esc_attr_e( 'Cart', 'simms-research' ); ?>" aria-haspopup="dialog" aria-controls="simms-cart-drawer" data-simms-cart-open>
+					<?php echo simms_inline_icon( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php echo simms_cart_count_markup(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</a>
+			</div>
+		<?php endif; ?>
 	</div>
 </header>
 
+<?php if ( ! $simms_is_checkout ) : ?>
 <?php
 $simms_drawer_products = new WP_Query(
 	array(
@@ -131,5 +146,6 @@ $simms_drawer_products = new WP_Query(
 		<?php endif; ?>
 	</div>
 </div>
+<?php endif; ?>
 
 <main id="main" class="site-main">

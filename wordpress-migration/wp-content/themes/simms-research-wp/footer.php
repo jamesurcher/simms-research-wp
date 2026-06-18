@@ -8,6 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 </main>
+<?php if ( ! ( function_exists( 'is_checkout' ) && is_checkout() ) ) : ?>
 <footer class="site-footer">
 	<div class="site-footer__top">
 		<div class="site-footer__brand">
@@ -74,6 +75,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 </footer>
+<?php endif; ?>
 <?php get_template_part( 'template-parts/cart-drawer' ); ?>
 <?php wp_footer(); ?>
 </body>
