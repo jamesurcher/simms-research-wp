@@ -3368,10 +3368,11 @@ body.simms-cart-drawer-open { overflow: hidden; }
 .simms-cart-discount__applied li { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
 .simms-cart-shipping { display: grid; gap: 0.5rem; margin-block-end: 18px; }
 .simms-cart-shipping__label {
-  display: flex; justify-content: space-between; gap: 1rem;
+  display: flex; justify-content: space-between; gap: 0.5rem;
   color: rgb(var(--color-foreground-rgb) / 0.64);
-  font-family: var(--font-mono--family); font-size: 0.72rem; line-height: 1.3;
+  font-family: var(--font-mono--family); font-size: 0.64rem; line-height: 1.3;
 }
+.simms-cart-shipping__label span { white-space: nowrap; }
 .simms-cart-shipping__track {
   height: 9px; overflow: hidden; border-radius: 999px;
   background: rgb(var(--color-foreground-rgb) / 0.1);
