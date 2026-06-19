@@ -412,6 +412,9 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 			<div class="product-payment-row">
 				<span class="product-payment-row__label"><?php esc_html_e( 'We accept', 'simms-research' ); ?></span>
 				<ul class="product-payment-row__list" role="list" aria-label="<?php esc_attr_e( 'Accepted payment methods', 'simms-research' ); ?>">
+					<li class="product-payment-row__item" aria-label="PayPal">
+						<svg class="product-payment-row__brand" viewBox="0 0 18 18" role="img" aria-hidden="true"><path fill="#003087" d="M4.85 2.1h5.28c2.58 0 4.08 1.3 3.72 3.65-.41 2.58-2.14 4.12-4.93 4.12H7.58l-.7 4.48H3.75L4.85 2.1Zm3.18 2.55-.33 2.14h1.26c.78 0 1.31-.39 1.43-1.07.11-.68-.28-1.07-1.06-1.07H8.03Z"/><path fill="#179BD7" d="M6.9 4.75h4.88c2.38 0 3.77 1.2 3.43 3.37-.38 2.4-1.98 3.82-4.57 3.82H9.38l-.6 3.96H5.82L6.9 4.75Zm2.93 2.45-.3 1.95h1.12c.72 0 1.21-.36 1.32-.97.1-.62-.26-.98-.98-.98H9.83Z"/></svg>
+					</li>
 					<li class="product-payment-row__item" aria-label="Visa">
 						<svg class="product-payment-row__brand" viewBox="0 0 40 13" role="img" aria-hidden="true"><text x="20" y="11" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" font-style="italic" fill="#1434CB" letter-spacing="0.5">VISA</text></svg>
 					</li>
@@ -422,7 +425,7 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 						<svg class="product-payment-row__brand" viewBox="0 0 40 24" role="img" aria-hidden="true"><rect width="40" height="24" rx="3" fill="#1F72CD"/><text x="20" y="15" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="8" font-weight="700" fill="#ffffff" letter-spacing="0.3">AMEX</text></svg>
 					</li>
 					<li class="product-payment-row__item" aria-label="Discover">
-						<svg class="product-payment-row__brand" viewBox="0 0 62 13" role="img" aria-hidden="true"><text x="0" y="11" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#1A1A1A">DISC</text><circle cx="44" cy="7.5" r="5.5" fill="#F76E11"/><text x="51" y="11" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" fill="#1A1A1A">VER</text></svg>
+						<svg class="product-payment-row__brand" viewBox="0 0 30 13" role="img" aria-hidden="true"><text x="15" y="8.9" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="4.9" font-weight="700" fill="#F76E11" letter-spacing="0">DISCOVER</text></svg>
 					</li>
 				</ul>
 			</div>

@@ -17,7 +17,7 @@
   max-width: 1390px;
   margin-inline: auto;
   display: grid;
-  grid-template-columns: minmax(420px, 645px) minmax(420px, 598px);
+  grid-template-columns: minmax(336px, 516px) minmax(420px, 530px);
   justify-content: center;
   gap: clamp(48px, 8.6vw, 172px);
   align-items: start;
