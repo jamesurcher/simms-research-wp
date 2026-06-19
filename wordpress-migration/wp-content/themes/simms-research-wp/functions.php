@@ -7,13 +7,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SIMMS_THEME_VERSION', '0.1.40' );
+define( 'SIMMS_THEME_VERSION', '0.1.41' );
 define( 'SIMMS_THEME_DIR', get_template_directory() );
 define( 'SIMMS_THEME_URI', get_template_directory_uri() );
 
 require SIMMS_THEME_DIR . '/inc/setup.php';
 require SIMMS_THEME_DIR . '/inc/helpers.php';
 require SIMMS_THEME_DIR . '/inc/woocommerce.php';
+require SIMMS_THEME_DIR . '/inc/account-auth.php';
 require SIMMS_THEME_DIR . '/inc/contact-form.php';
 require SIMMS_THEME_DIR . '/inc/robots.php';
 require SIMMS_THEME_DIR . '/inc/search.php';

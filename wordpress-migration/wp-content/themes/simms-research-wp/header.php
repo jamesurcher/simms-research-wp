@@ -22,9 +22,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Shopify-style focused checkout chrome: drop the announcement bar + nav,
 // leaving a centered logo and the cart only.
 $simms_is_checkout = function_exists( 'is_checkout' ) && is_checkout();
+// Reuse the same focused chrome on the logged-out account gate: centered logo,
+// no announcement bar, nav or cart (matches the Shopify-style sign-in screen).
+$simms_is_auth     = function_exists( 'is_account_page' ) && is_account_page() && ! is_user_logged_in();
+$simms_focused     = $simms_is_checkout || $simms_is_auth;
 ?>
 
-<?php if ( ! $simms_is_checkout ) : ?>
+<?php if ( ! $simms_focused ) : ?>
 	<?php
 	$announcements = array(
 		__( 'FREE SHIPPING ON ORDERS $200+', 'simms-research' ),
@@ -41,9 +45,9 @@ $simms_is_checkout = function_exists( 'is_checkout' ) && is_checkout();
 	</div>
 <?php endif; ?>
 
-<header class="site-header<?php echo is_front_page() ? ' site-header--home' : ''; ?><?php echo $simms_is_checkout ? ' site-header--checkout' : ''; ?>">
+<header class="site-header<?php echo is_front_page() ? ' site-header--home' : ''; ?><?php echo $simms_is_checkout ? ' site-header--checkout' : ''; ?><?php echo $simms_is_auth ? ' site-header--auth' : ''; ?>">
 	<div class="site-header__inner">
-		<?php if ( ! $simms_is_checkout ) : ?>
+		<?php if ( ! $simms_focused ) : ?>
 			<button class="site-header__toggle" type="button" aria-label="<?php esc_attr_e( 'Open menu', 'simms-research' ); ?>" aria-expanded="false" aria-controls="simms-mobile-nav" data-simms-nav-toggle>
 				<?php echo simms_inline_icon( 'menu' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</button>
@@ -52,7 +56,7 @@ $simms_is_checkout = function_exists( 'is_checkout' ) && is_checkout();
 			<img class="site-header__logo site-header__logo--default" src="<?php echo esc_url( SIMMS_THEME_URI . '/assets/images/simms-logo.png' ); ?>" alt="Simms Research" width="800" height="200">
 			<img class="site-header__logo site-header__logo--inverse" src="<?php echo esc_url( SIMMS_THEME_URI . '/assets/images/simms-logo-inverse.png' ); ?>" alt="" width="800" height="200" aria-hidden="true">
 		</a>
-		<?php if ( ! $simms_is_checkout ) : ?>
+		<?php if ( ! $simms_focused ) : ?>
 			<nav class="site-nav" aria-label="<?php esc_attr_e( 'Primary', 'simms-research' ); ?>">
 				<?php
 				wp_nav_menu(
@@ -67,7 +71,7 @@ $simms_is_checkout = function_exists( 'is_checkout' ) && is_checkout();
 				?>
 			</nav>
 		<?php endif; ?>
-		<?php if ( ! $simms_is_checkout ) : ?>
+		<?php if ( ! $simms_focused ) : ?>
 			<div class="site-header__actions">
 				<a href="<?php echo esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url() ); ?>" aria-label="<?php esc_attr_e( 'Account', 'simms-research' ); ?>"><?php echo simms_inline_icon( 'account' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></a>
 				<a class="site-header__cart" href="<?php echo esc_url( function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ) ); ?>" aria-label="<?php esc_attr_e( 'Cart', 'simms-research' ); ?>" aria-haspopup="dialog" aria-controls="simms-cart-drawer" data-simms-cart-open>
@@ -79,7 +83,7 @@ $simms_is_checkout = function_exists( 'is_checkout' ) && is_checkout();
 	</div>
 </header>
 
-<?php if ( ! $simms_is_checkout ) : ?>
+<?php if ( ! $simms_focused ) : ?>
 <?php
 $simms_drawer_products = new WP_Query(
 	array(

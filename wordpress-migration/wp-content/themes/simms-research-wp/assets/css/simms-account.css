@@ -1,0 +1,305 @@
+/* ============================================================
+   ACCOUNT — passwordless OTP gate + branded dashboard
+   Loaded only on the My Account page (see inc/account-auth.php).
+   ============================================================ */
+
+/* ---------- Focused chrome (logged-out gate) ----------
+   header.php adds .site-header--auth and drops the nav/cart, leaving a
+   centered logo (matches the Shopify-style sign-in mockup). */
+.site-header--auth .site-header__inner { justify-content: center; }
+.site-header--auth .site-header__brand { margin-inline: auto; }
+
+/* ---------- Sign-in gate ---------- */
+.woocommerce-account:not(.logged-in) main { padding: 0; }
+
+.simms-auth {
+  max-width: 27rem;
+  margin-inline: auto;
+  padding-block: clamp(3rem, 12vh, 9rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 55vh;
+}
+
+.simms-auth__title {
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-size: 2rem;
+  line-height: var(--line-height--body-tight);
+  letter-spacing: var(--letter-spacing--heading-tight);
+  color: var(--color-foreground-heading);
+  margin: 0 0 0.5rem;
+}
+
+.simms-auth__subtitle {
+  font-family: var(--font-body--family);
+  font-size: 1rem;
+  color: rgb(var(--color-foreground-rgb) / 0.6);
+  margin: 0 0 1.5rem;
+}
+
+.simms-auth__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.simms-auth__input {
+  width: 100%;
+  height: 56px;
+  padding: 0 56px 0 16px;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.18);
+  border-radius: var(--style-border-radius-buttons-primary);
+  font-family: var(--font-body--family);
+  font-size: 1rem;
+  color: var(--color-foreground);
+  background: var(--color-background);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.simms-auth__input:focus {
+  outline: none;
+  border-color: var(--color-foreground);
+  box-shadow: 0 0 0 1px var(--color-foreground);
+}
+
+.simms-auth__submit {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-foreground);
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.simms-auth__submit:hover { background: var(--color-foreground); color: var(--color-background); }
+.simms-auth__submit svg { width: 20px; height: 20px; }
+
+.simms-auth__legal {
+  margin: 1.25rem 0 0;
+  font-size: 0.8125rem;
+  color: rgb(var(--color-foreground-rgb) / 0.55);
+}
+
+.simms-auth__legal a { color: inherit; text-decoration: underline; }
+
+/* Code step */
+.simms-auth__code {
+  width: 100%;
+  height: 64px;
+  text-align: center;
+  font-family: var(--font-mono--family);
+  font-size: 1.6rem;
+  letter-spacing: 0.5em;
+  text-indent: 0.5em;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.18);
+  border-radius: var(--style-border-radius-buttons-primary);
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+.simms-auth__code:focus {
+  outline: none;
+  border-color: var(--color-foreground);
+  box-shadow: 0 0 0 1px var(--color-foreground);
+}
+
+.simms-auth__verify { width: 100%; margin-top: 1rem; }
+.simms-auth__email-target { color: var(--color-foreground); font-weight: 500; }
+
+.simms-auth__resend {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+.simms-auth__link {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-body--family);
+  font-size: 0.875rem;
+  color: rgb(var(--color-foreground-rgb) / 0.6);
+  text-decoration: underline;
+}
+
+.simms-auth__link:hover { color: var(--color-foreground); }
+.simms-auth__link[disabled] { opacity: 0.5; cursor: default; text-decoration: none; }
+
+.simms-auth__alert {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--style-border-radius-buttons-primary);
+  background: #fdeaea;
+  color: #8a1c1c;
+  font-size: 0.875rem;
+  font-family: var(--font-body--family);
+}
+
+.simms-auth__alert[hidden] { display: none; }
+
+/* Step visibility (toggled by data-active-step on .simms-auth) */
+.simms-auth[data-active-step="1"] .simms-auth__step--code { display: none; }
+.simms-auth[data-active-step="2"] .simms-auth__step--email { display: none; }
+
+/* ---------- Logged-in dashboard ---------- */
+.woocommerce-account.logged-in .woocommerce {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+  max-width: var(--narrow-page-width);
+  margin-inline: auto;
+}
+
+.simms-account-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.simms-account-nav li a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  font-family: var(--font-body--family);
+  font-size: 0.95rem;
+  color: rgb(var(--color-foreground-rgb) / 0.7);
+  text-decoration: none;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.simms-account-nav li a:hover {
+  background: rgb(var(--color-foreground-rgb) / 0.05);
+  color: var(--color-foreground);
+}
+
+.simms-account-nav li.is-active a {
+  background: var(--color-foreground);
+  color: var(--color-background);
+}
+
+.simms-account-nav__icon { display: inline-flex; width: 18px; height: 18px; }
+.simms-account-nav__icon svg { width: 18px; height: 18px; }
+
+.simms-account-dashboard__greeting {
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  letter-spacing: var(--letter-spacing--heading-tight);
+  margin: 0 0 0.5rem;
+}
+
+.simms-account-dashboard__intro {
+  color: rgb(var(--color-foreground-rgb) / 0.6);
+  margin: 0 0 2rem;
+}
+
+.simms-account-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.simms-account-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 1.25rem;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.12);
+  border-radius: var(--style-border-radius-buttons-primary);
+  text-decoration: none;
+  color: var(--color-foreground);
+  transition: border-color 140ms ease;
+}
+
+.simms-account-card:hover { border-color: var(--color-foreground); }
+.simms-account-card__icon { width: 22px; height: 22px; margin-bottom: 0.25rem; }
+.simms-account-card__icon svg { width: 22px; height: 22px; }
+.simms-account-card__title { font-weight: 500; font-family: var(--font-subheading--family); }
+.simms-account-card__desc { font-size: 0.85rem; color: rgb(var(--color-foreground-rgb) / 0.55); }
+
+.simms-account-dashboard__logout { margin-top: 2rem; }
+.simms-account-dashboard__logout a { color: rgb(var(--color-foreground-rgb) / 0.6); text-decoration: underline; }
+
+/* ---------- Default Woo subpages (orders / addresses / account details) ---------- */
+.woocommerce-account.logged-in .woocommerce-MyAccount-content { font-family: var(--font-body--family); }
+.woocommerce-account.logged-in .woocommerce-MyAccount-content a:not(.button) { color: var(--color-foreground); }
+
+.woocommerce-account.logged-in .woocommerce-MyAccount-content .button,
+.woocommerce-account.logged-in .woocommerce-MyAccount-content button[type="submit"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 22px;
+  border: 0;
+  border-radius: var(--style-border-radius-buttons-primary);
+  background: var(--color-foreground);
+  color: var(--color-background);
+  font-family: var(--font-body--family);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: opacity 140ms ease;
+}
+
+.woocommerce-account.logged-in .woocommerce-MyAccount-content .button:hover,
+.woocommerce-account.logged-in .woocommerce-MyAccount-content button[type="submit"]:hover { opacity: 0.88; }
+
+.woocommerce-account.logged-in .woocommerce-MyAccount-content input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]),
+.woocommerce-account.logged-in .woocommerce-MyAccount-content select {
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.18);
+  border-radius: var(--style-border-radius-buttons-primary);
+  font-family: var(--font-body--family);
+  font-size: 0.95rem;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+.woocommerce-account.logged-in .woocommerce-MyAccount-content input:focus,
+.woocommerce-account.logged-in .woocommerce-MyAccount-content select:focus {
+  outline: none;
+  border-color: var(--color-foreground);
+  box-shadow: 0 0 0 1px var(--color-foreground);
+}
+
+.woocommerce-account.logged-in .shop_table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.woocommerce-account.logged-in .shop_table th,
+.woocommerce-account.logged-in .shop_table td {
+  padding: 0.85rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid rgb(var(--color-foreground-rgb) / 0.1);
+  font-size: 0.9rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .woocommerce-account.logged-in .woocommerce { grid-template-columns: 1fr; }
+  .simms-account-nav ul { flex-direction: row; flex-wrap: wrap; gap: 0.5rem; }
+  .simms-account-nav li a { padding: 0.5rem 0.75rem; }
+}
