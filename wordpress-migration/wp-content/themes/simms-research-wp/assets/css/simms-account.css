@@ -9,6 +9,10 @@
 .site-header--auth .site-header__inner { justify-content: center; }
 .site-header--auth .site-header__brand { margin-inline: auto; }
 
+/* Drop the oversized default page/endpoint title (My account, Orders, Addresses…).
+   Mirrors the checkout treatment — the gate and dashboard provide their own headings. */
+.woocommerce-account .simms-entry > h1 { display: none; }
+
 /* ---------- Sign-in gate ---------- */
 .woocommerce-account:not(.logged-in) main { padding: 0; }
 
