@@ -20,8 +20,8 @@ $remaining         = max( 0, $shipping_threshold - $qualifying_total );
 $progress          = $shipping_threshold > 0 ? min( 100, ( $qualifying_total / $shipping_threshold ) * 100 ) : 0;
 $applied_coupons   = $cart->get_applied_coupons();
 ?>
-<div class="simms-cart-drawer__header">
-	<h2 id="simms-cart-drawer-title"><?php esc_html_e( 'Cart', 'simms-research' ); ?></h2>
+<div class="simms-cart-drawer__header<?php echo empty( $cart_items ) ? ' simms-cart-drawer__header--empty' : ''; ?>">
+	<h2<?php echo empty( $cart_items ) ? '' : ' id="simms-cart-drawer-title"'; ?>><?php esc_html_e( 'Cart', 'simms-research' ); ?></h2>
 	<span class="simms-cart-drawer__count" data-simms-cart-heading-count><?php echo esc_html( (string) $cart_count ); ?></span>
 	<button class="simms-cart-drawer__close" type="button" aria-label="<?php esc_attr_e( 'Close cart', 'simms-research' ); ?>" data-simms-cart-close>
 		<?php echo simms_inline_icon( 'close' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
@@ -32,9 +32,26 @@ $applied_coupons   = $cart->get_applied_coupons();
 
 <?php if ( empty( $cart_items ) ) : ?>
 	<div class="simms-cart-drawer__empty">
-		<p class="simms-cart-drawer__empty-title"><?php esc_html_e( 'Your cart is empty.', 'simms-research' ); ?></p>
-		<p><?php esc_html_e( 'Add research compounds to review them here before checkout.', 'simms-research' ); ?></p>
-		<a class="simms-cart-drawer__checkout" href="<?php echo esc_url( home_url( '/shop/' ) ); ?>"><?php esc_html_e( 'Shop products', 'simms-research' ); ?></a>
+		<h2 id="simms-cart-drawer-title" class="simms-cart-drawer__empty-title"><?php esc_html_e( 'Your cart is empty', 'simms-research' ); ?></h2>
+		<?php if ( ! is_user_logged_in() ) : ?>
+			<p class="simms-cart-drawer__empty-login">
+				<?php
+				printf(
+					wp_kses(
+						/* translators: %s: account login URL. */
+						__( 'Have an account? <a href="%s">Log in</a> to check out faster.', 'simms-research' ),
+						array(
+							'a' => array(
+								'href' => array(),
+							),
+						)
+					),
+					esc_url( function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'myaccount' ) : wp_login_url() )
+				);
+				?>
+			</p>
+		<?php endif; ?>
+		<a class="simms-cart-drawer__checkout" href="<?php echo esc_url( home_url( '/shop/' ) ); ?>"><?php esc_html_e( 'Continue shopping', 'simms-research' ); ?></a>
 	</div>
 <?php else : ?>
 	<div class="simms-cart-drawer__items">
