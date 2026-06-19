@@ -256,6 +256,18 @@
 
 /* ---------- Default Woo subpages (orders / addresses / account details) ---------- */
 .woocommerce-account.logged-in .woocommerce-MyAccount-content { font-family: var(--font-body--family); }
+
+/* Tame the oversized default section headings (Billing/Shipping address titles,
+   edit-address form headers) to a sensible account-page scale. */
+.woocommerce-account.logged-in .woocommerce-MyAccount-content h2,
+.woocommerce-account.logged-in .woocommerce-MyAccount-content h3 {
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  font-size: 1.3rem;
+  line-height: var(--line-height--body-tight);
+  letter-spacing: var(--letter-spacing--heading-tight);
+  margin: 0 0 0.75rem;
+}
 .woocommerce-account.logged-in .woocommerce-MyAccount-content a:not(.button) { color: var(--color-foreground); }
 
 .woocommerce-account.logged-in .woocommerce-MyAccount-content .button,

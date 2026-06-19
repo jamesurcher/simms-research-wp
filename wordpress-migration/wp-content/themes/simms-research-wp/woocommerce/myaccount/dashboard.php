@@ -10,9 +10,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$simms_user = wp_get_current_user();
-$simms_name = $simms_user->first_name ? $simms_user->first_name : $simms_user->display_name;
-
 $simms_cards = array(
 	array(
 		'url'   => wc_get_endpoint_url( 'orders' ),
@@ -36,12 +33,6 @@ $simms_cards = array(
 ?>
 
 <div class="simms-account-dashboard">
-	<h1 class="simms-account-dashboard__greeting">
-		<?php
-		/* translators: %s: customer first name */
-		printf( esc_html__( 'Hello, %s', 'simms-research' ), esc_html( $simms_name ) );
-		?>
-	</h1>
 	<p class="simms-account-dashboard__intro">
 		<?php esc_html_e( 'Manage your orders, addresses, and account details.', 'simms-research' ); ?>
 	</p>

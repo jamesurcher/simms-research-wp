@@ -239,17 +239,25 @@ function simms_account_is_privileged( WP_User $user ): bool {
 function simms_account_create_customer( string $email ): int|WP_Error {
 	if ( function_exists( 'wc_create_new_customer' ) ) {
 		// Auto-generates username + a random password the customer never uses.
-		return wc_create_new_customer( $email );
+		$user_id = wc_create_new_customer( $email );
+	} else {
+		$user_id = wp_insert_user(
+			array(
+				'user_login' => $email,
+				'user_email' => $email,
+				'user_pass'  => wp_generate_password( 24, true ),
+				'role'       => 'customer',
+			)
+		);
 	}
 
-	return wp_insert_user(
-		array(
-			'user_login' => $email,
-			'user_email' => $email,
-			'user_pass'  => wp_generate_password( 24, true ),
-			'role'       => 'customer',
-		)
-	);
+	// OTP customers never use a password, so clear WooCommerce's "temporary
+	// password" nag that would otherwise show on the account dashboard.
+	if ( ! is_wp_error( $user_id ) ) {
+		delete_user_meta( $user_id, 'default_password_nag' );
+	}
+
+	return $user_id;
 }
 
 function simms_account_login_user( WP_User $user ): void {
