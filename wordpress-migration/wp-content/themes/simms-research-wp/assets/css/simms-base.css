@@ -394,14 +394,11 @@ ul.products li.product.simms-product-card,
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
-  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
 }
 
-.simms-product-card__button:hover,
 .simms-product-card__button:focus-visible {
-  border-color: var(--color-foreground);
-  background: var(--color-foreground);
-  color: var(--color-background);
+  outline: 2px solid var(--color-foreground);
+  outline-offset: 3px;
 }
 
 .simms-lab-page__hero {
