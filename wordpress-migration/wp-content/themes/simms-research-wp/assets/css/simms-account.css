@@ -165,6 +165,16 @@
   margin-inline: auto;
 }
 
+/* WooCommerce's woocommerce-layout.css floats the nav (width:30%) and content
+   (width:65%). As grid items those percentages resolve against the grid tracks,
+   collapsing the 240px nav to ~72px (labels wrap, rows balloon). Neutralise so
+   the grid above owns the two-column layout. */
+.woocommerce-account.logged-in .woocommerce-MyAccount-navigation,
+.woocommerce-account.logged-in .woocommerce-MyAccount-content {
+  float: none;
+  width: auto;
+}
+
 .simms-account-nav ul {
   list-style: none;
   margin: 0;
