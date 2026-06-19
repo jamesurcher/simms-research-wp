@@ -817,7 +817,10 @@ html.simms-nav-open .mobile-nav__panel { transform: translateX(0); }
   display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.2fr; gap: 3rem;
   padding-block: 80px 56px;
 }
-.site-footer__brand img { height: 34px; width: auto; display: block; margin-block-end: 1.25rem; }
+/* Logo PNG carries ~151/800 of transparent padding on its left edge; pull it
+   back so the visible glyph aligns flush-left with the tagline/CTAs below.
+   Offset scales with the 34px render height: 34 * 4 * (151/800) ≈ 25.67px. */
+.site-footer__brand img { height: 34px; width: auto; display: block; margin-block-end: 1.25rem; margin-inline-start: -25.67px; }
 .site-footer__tagline { font-family: var(--font-body--family); font-size: 0.9375rem; line-height: 1.6; color: rgb(236 230 223 / 0.66); max-width: 34ch; margin: 0 0 1.75rem; }
 .site-footer__ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-block-end: 1.5rem; }
 .site-footer__cta {
