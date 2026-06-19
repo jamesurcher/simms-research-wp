@@ -3265,10 +3265,11 @@ body.simms-cart-drawer-open { overflow: hidden; }
 }
 .simms-cart-drawer__close {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 58px; height: 58px; border: 2px solid var(--color-foreground);
+  width: 44px; height: 44px; border: 0;
   border-radius: 999px; background: transparent; color: var(--color-foreground);
-  cursor: pointer;
+  cursor: pointer; transition: opacity 160ms ease;
 }
+.simms-cart-drawer__close:hover { opacity: 0.7; }
 .simms-cart-drawer__close svg { width: 16px; height: 16px; }
 .simms-cart-drawer__notices { padding-inline: 26px; color: var(--color-foreground); }
 .simms-cart-drawer__notices:empty { display: none; }
