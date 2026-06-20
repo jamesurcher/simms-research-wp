@@ -322,8 +322,9 @@
     letter-spacing: 0.14em;
   }
 
-  .tos-gate__actions {
-    grid-template-columns: 1fr;
+  .tos-gate__btn {
+    padding: 1rem 0.75rem;
+    letter-spacing: 0.08em;
   }
 }
 
