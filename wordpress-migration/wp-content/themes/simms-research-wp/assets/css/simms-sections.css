@@ -2017,6 +2017,14 @@ body.woocommerce-checkout .simms-entry > h1 { display: none; }
   .simms-checkout-policies { width: 100%; padding: 22px 16px 40px; }
   .simms-checkout-policies__inner { max-width: none; margin: 0; }
 }
+/* Explicit Terms / age (21+) / research-use consent checkbox.
+   The consent text is long, so pin the box to the top-left and let the text
+   (with its Terms/Privacy links) wrap cleanly — important on narrow/mobile widths. */
+.wc-block-checkout__terms .wc-block-components-checkbox { align-items: flex-start; }
+.wc-block-checkout__terms .wc-block-components-checkbox__label { line-height: 1.45; }
+.wc-block-checkout__terms .wc-block-components-checkbox__input,
+.wc-block-checkout__terms .wc-block-components-checkbox__mark { margin-top: 1px; flex: 0 0 auto; }
+.wc-block-checkout__terms a { text-decoration: underline; text-underline-offset: 2px; }
 
 /* ============================================================
    LAB RESULTS — hero icon enhancements (1:1 with source)
