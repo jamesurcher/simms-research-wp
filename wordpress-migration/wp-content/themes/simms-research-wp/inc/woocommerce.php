@@ -149,6 +149,24 @@ function simms_cart_drawer_verify_request(): bool {
 	return true;
 }
 
+/**
+ * Mint a fresh cart-drawer nonce for the current session.
+ *
+ * The nonce is localized into every page, so when a document is served from a
+ * full-page cache the embedded nonce can belong to a different session and
+ * WooCommerce rejects cart AJAX with "-1". admin-ajax is never cached, so the
+ * drawer script calls this to rebind the nonce to the live session.
+ */
+function simms_cart_drawer_send_nonce(): void {
+	nocache_headers();
+
+	wp_send_json_success(
+		array(
+			'nonce' => wp_create_nonce( 'simms_cart_drawer' ),
+		)
+	);
+}
+
 function simms_restore_wc_notices( array $notices ): void {
 	if ( ! function_exists( 'wc_clear_notices' ) || ! function_exists( 'wc_add_notice' ) ) {
 		return;
@@ -289,6 +307,15 @@ add_action(
 		simms_cart_drawer_verify_request();
 		simms_cart_drawer_response();
 	}
+);
+
+add_action(
+	'wp_ajax_simms_cart_drawer_nonce',
+	'simms_cart_drawer_send_nonce'
+);
+add_action(
+	'wp_ajax_nopriv_simms_cart_drawer_nonce',
+	'simms_cart_drawer_send_nonce'
 );
 
 add_action(

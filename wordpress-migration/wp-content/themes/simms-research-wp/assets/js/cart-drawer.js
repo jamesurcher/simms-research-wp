@@ -104,6 +104,52 @@
     });
   }
 
+  function parsePayload(text) {
+    try {
+      const value = JSON.parse(text);
+      return value && typeof value === 'object' ? value : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function sendCart(action, data) {
+    data.set('action', action);
+    data.set('nonce', config.nonce);
+
+    return fetch(config.ajaxUrl, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: data,
+    });
+  }
+
+  // Mint a nonce bound to the live session. admin-ajax is never cached, so this
+  // recovers from a stale nonce that was baked into a full-page-cached document.
+  async function refreshNonce() {
+    try {
+      const data = new FormData();
+      data.set('action', 'simms_cart_drawer_nonce');
+
+      const response = await fetch(config.ajaxUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: data,
+      });
+      const payload = parsePayload(await response.text());
+      const nonce = payload && payload.success ? payload.data?.nonce : null;
+
+      if (nonce) {
+        config.nonce = nonce;
+        return true;
+      }
+    } catch (error) {
+      // Fall back to the existing nonce.
+    }
+
+    return false;
+  }
+
   async function postCart(action, data = new FormData()) {
     if (!(data instanceof FormData)) {
       const formData = new FormData();
@@ -111,18 +157,34 @@
       data = formData;
     }
 
-    data.set('action', action);
-    data.set('nonce', config.nonce);
-
     setBusy(true);
 
     try {
-      const response = await fetch(config.ajaxUrl, {
-        method: 'POST',
-        credentials: 'same-origin',
-        body: data,
-      });
-      const payload = await response.json();
+      let response = await sendCart(action, data);
+      let payload = parsePayload(await response.text());
+
+      // A bad nonce makes WooCommerce reply with "-1"/403, which is not a JSON
+      // object. That is what breaks add-to-cart on the homepage with an empty
+      // cart: the page is served from full-page cache with a stale nonce, while
+      // a non-empty cart bypasses the cache and renders a fresh one. Rebind the
+      // nonce to the live session and retry the request once. The rejected
+      // request dies before WooCommerce touches the cart, so this never
+      // double-adds.
+      if (!payload && (await refreshNonce())) {
+        response = await sendCart(action, data);
+        payload = parsePayload(await response.text());
+      }
+
+      if (!payload) {
+        renderNotices(
+          '<div class="woocommerce-error" role="alert">' +
+            (config.errorText || 'Something went wrong. Please refresh and try again.') +
+            '</div>'
+        );
+        openDrawer();
+        return { success: false };
+      }
+
       const body = payload.data || {};
 
       replaceFragments(body.fragments);

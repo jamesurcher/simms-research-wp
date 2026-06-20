@@ -89,6 +89,7 @@ add_action(
 					'nonce'       => wp_create_nonce( 'simms_cart_drawer' ),
 					'cartUrl'     => function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/cart/' ),
 					'checkoutUrl' => function_exists( 'wc_get_checkout_url' ) ? wc_get_checkout_url() : home_url( '/checkout/' ),
+					'errorText'   => esc_html__( 'Something went wrong. Please refresh and try again.', 'simms-research' ),
 				)
 			);
 
