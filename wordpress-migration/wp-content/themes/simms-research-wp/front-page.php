@@ -13,7 +13,19 @@ get_header();
 <!-- ============ HERO ============ -->
 <section class="hero color-scheme-2">
 	<div class="hero__media">
-		<img src="<?php echo esc_url( SIMMS_THEME_URI . '/assets/images/hero.png' ); ?>" alt="" fetchpriority="high">
+		<?php $simms_hero_base = SIMMS_THEME_URI . '/assets/images/'; ?>
+		<picture>
+			<source
+				type="image/webp"
+				srcset="<?php echo esc_url( $simms_hero_base . 'hero-800.webp' ); ?> 800w, <?php echo esc_url( $simms_hero_base . 'hero-1600.webp' ); ?> 1600w"
+				sizes="100vw">
+			<img
+				src="<?php echo esc_url( $simms_hero_base . 'hero-1600.jpg' ); ?>"
+				srcset="<?php echo esc_url( $simms_hero_base . 'hero-800.jpg' ); ?> 800w, <?php echo esc_url( $simms_hero_base . 'hero-1600.jpg' ); ?> 1600w"
+				sizes="100vw"
+				width="1600" height="895"
+				alt="" fetchpriority="high" decoding="async">
+		</picture>
 	</div>
 	<div class="hero__inner">
 		<p class="hero__eyebrow"><?php esc_html_e( 'Premium Research-Grade Peptides', 'simms-research' ); ?></p>

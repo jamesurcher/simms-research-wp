@@ -31,6 +31,27 @@ add_action(
 	}
 );
 
+// Preload the LCP hero image on the front page so it starts downloading as soon
+// as the <head> is parsed, instead of waiting for the <picture> in the body.
+// Paired with fetchpriority="high" on the hero <img>.
+add_action(
+	'wp_head',
+	function () {
+		if ( ! is_front_page() ) {
+			return;
+		}
+		$base  = SIMMS_THEME_URI . '/assets/images/';
+		$w800  = esc_url( $base . 'hero-800.webp' );
+		$w1600 = esc_url( $base . 'hero-1600.webp' );
+		printf(
+			'<link rel="preload" as="image" type="image/webp" href="%1$s" imagesrcset="%2$s 800w, %1$s 1600w" imagesizes="100vw" fetchpriority="high">' . "\n",
+			$w1600,
+			$w800
+		);
+	},
+	2
+);
+
 add_action(
 	'wp_enqueue_scripts',
 	function () {

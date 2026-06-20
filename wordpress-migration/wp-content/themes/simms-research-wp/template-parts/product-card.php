@@ -35,7 +35,25 @@ if ( ! $product->is_purchasable() || ! $product->is_in_stock() ) {
 		// Use the ratio-preserving WooCommerce single size (3:4) rather than the
 		// square 'simms-product-card' crop, which zoomed in and removed the
 		// product photo's built-in breathing room.
-		echo $product->get_image( 'woocommerce_single' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		//
+		// Perf: WooCommerce's default sizes is "(max-width: 600px) 100vw, 600px",
+		// which makes retina screens request the full-size PNG (~1.5MB each) for
+		// every card. Override sizes with the real grid column widths so the
+		// browser picks a ~300-768px derivative, and lazy-load everything past the
+		// first row to stop the first-load image waterfall.
+		// Request-global counter (a static here would reset on each
+		// get_template_part() include, which re-runs the file in a fresh scope).
+		$simms_card_index = isset( $GLOBALS['simms_card_index'] ) ? (int) $GLOBALS['simms_card_index'] : 0;
+		$GLOBALS['simms_card_index'] = $simms_card_index + 1;
+
+		$simms_card_attr  = array(
+			'sizes' => '(max-width: 749px) 70vw, (max-width: 989px) 45vw, (max-width: 1500px) 24vw, 360px',
+		);
+		$simms_above_fold = is_front_page() || ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() ) );
+		if ( ! $simms_above_fold || $simms_card_index >= 4 ) {
+			$simms_card_attr['loading'] = 'lazy';
+		}
+		echo $product->get_image( 'woocommerce_single', $simms_card_attr ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 	</a>
 	<?php if ( ! empty( $spec_parts ) ) : ?>
