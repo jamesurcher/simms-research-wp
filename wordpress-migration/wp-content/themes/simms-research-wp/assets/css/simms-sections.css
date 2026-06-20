@@ -158,7 +158,14 @@
 .site-header__toggle svg { width: 20px; height: 20px; }
 html.simms-nav-open { overflow: hidden; }
 @media (max-width: 989px) {
-  .site-header__inner { grid-template-columns: auto 1fr auto; }
+  /* Equal side columns (1fr ... 1fr) so the centre column — and the logo in it —
+     is pinned to the true viewport centre regardless of how wide the toggle vs.
+     the account/cart actions are. `auto ... auto` let the unequal icon clusters
+     shift the logo off-centre. */
+  .site-header__inner { grid-template-columns: 1fr auto 1fr; }
+  /* Focused checkout / auth chrome keeps its own single-element layout. */
+  .site-header--checkout .site-header__inner,
+  .site-header--auth .site-header__inner { grid-template-columns: auto 1fr auto; }
   .site-header__toggle { display: inline-flex; }
   .site-header__brand { justify-self: center; }
   .site-nav { display: none; }
