@@ -3455,14 +3455,9 @@ body.simms-cart-drawer-open { overflow: hidden; }
   background: rgb(255 255 255 / 0.24);
 }
 .simms-product-card__button.is-loading { pointer-events: none; opacity: 0.62; }
-/* Optimistic tap acknowledgement: the button inverts (fill) the instant it is
-   tapped, before the add request returns. The fill is held while the class is
-   present (~450ms, set in JS); the scale press is layered on when motion is
-   allowed. */
+/* Optimistic tap acknowledgement: a quick press the instant the button is
+   tapped, before the add request returns. */
 .simms-product-card__button.is-tapped {
-  background: var(--color-foreground);
-  color: var(--color-background);
-  border-color: var(--color-foreground);
   animation: simms-card-tap 0.45s ease;
 }
 @keyframes simms-card-tap {
