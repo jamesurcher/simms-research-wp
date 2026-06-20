@@ -3455,6 +3455,21 @@ body.simms-cart-drawer-open { overflow: hidden; }
   background: rgb(255 255 255 / 0.24);
 }
 .simms-product-card__button.is-loading { pointer-events: none; opacity: 0.62; }
+/* Optimistic tap acknowledgement: the button inverts (fill) the instant it is
+   tapped, before the add request returns. The fill is held while the class is
+   present (~450ms, set in JS); the scale press is layered on when motion is
+   allowed. */
+.simms-product-card__button.is-tapped {
+  background: var(--color-foreground);
+  color: var(--color-background);
+  border-color: var(--color-foreground);
+  animation: simms-card-tap 0.45s ease;
+}
+@keyframes simms-card-tap {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
 @keyframes simms-cart-bump {
   0%   { transform: scale(1); }
   30%  { transform: scale(1.28); }
@@ -3464,6 +3479,7 @@ body.simms-cart-drawer-open { overflow: hidden; }
 .site-header__cart.is-bumped { animation: simms-cart-bump 0.45s ease; transform-origin: center; }
 @media (prefers-reduced-motion: reduce) {
   .site-header__cart.is-bumped { animation: none; }
+  .simms-product-card__button.is-tapped { animation: none; }
 }
 @media (max-width: 560px) {
   .simms-cart-drawer__panel { width: 100vw; }

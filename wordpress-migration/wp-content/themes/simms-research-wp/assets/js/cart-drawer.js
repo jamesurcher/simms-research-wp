@@ -76,6 +76,19 @@
     });
   }
 
+  // Quick affirmative pulse on the tapped add-to-cart button so the user sees
+  // their tap register immediately, before the cart request comes back.
+  function flashTap(button) {
+    if (!button) {
+      return;
+    }
+
+    button.classList.remove('is-tapped');
+    void button.offsetWidth; // restart the animation on a rapid re-tap
+    button.classList.add('is-tapped');
+    setTimeout(() => button.classList.remove('is-tapped'), 450);
+  }
+
   function renderNotices(notices) {
     const target = document.querySelector(selectors.notices);
 
@@ -224,15 +237,15 @@
     formData.append('product_id', productId);
     formData.append('quantity', button.dataset.quantity || '1');
 
-    setButtonLoading(button, true);
+    // Instant, optimistic acknowledgement that the tap landed — fired before the
+    // request resolves so the press reads as a tap, not a hold. The add runs in
+    // the background; the header cart bump confirms it actually landed, and the
+    // module-level `pending` flag blocks double-taps for the full round trip.
+    flashTap(button);
 
-    try {
-      const payload = await postCart('simms_cart_drawer_add', formData);
-      if (payload?.success) {
-        bumpCart();
-      }
-    } finally {
-      setButtonLoading(button, false);
+    const payload = await postCart('simms_cart_drawer_add', formData);
+    if (payload?.success) {
+      bumpCart();
     }
   }
 
