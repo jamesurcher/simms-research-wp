@@ -2025,6 +2025,24 @@ body.woocommerce-checkout .simms-entry > h1 { display: none; }
 .wc-block-checkout__terms .wc-block-components-checkbox__input,
 .wc-block-checkout__terms .wc-block-components-checkbox__mark { margin-top: 1px; flex: 0 0 auto; }
 .wc-block-checkout__terms a { text-decoration: underline; text-underline-offset: 2px; }
+/* Single-column checkout: WooCommerce relocates the order summary into the actions
+   area (between the terms checkbox and Place Order), which strands the consent
+   checkbox above the summary. Re-order the stacked flow to read
+   summary → consent checkbox → Place Order, so the checkbox sits right above the
+   button as it does on desktop. `display:contents` promotes the actions block's
+   children — the relocated summary, the notices, and the button row — into the
+   form's flex flow so `order` can slot the terms checkbox between them. Pure CSS
+   (no DOM move), so it can't fight the block checkout's React rendering. Above the
+   summary-relocation width the summary slot is absent, so this harmlessly
+   collapses to terms → button. */
+@media (max-width: 990px) {
+  .wc-block-checkout__form { display: flex; flex-direction: column; }
+  .wc-block-checkout__actions { display: contents; }
+  .wc-block-checkout__terms { order: 1; }
+  .wc-block-checkout__actions > .wc-block-checkout__actions_row,
+  .wc-block-checkout__actions > .wc-block-components-notices,
+  .wc-block-checkout__actions > .wc-block-components-notices__snackbar { order: 2; }
+}
 
 /* ============================================================
    LAB RESULTS — hero icon enhancements (1:1 with source)
