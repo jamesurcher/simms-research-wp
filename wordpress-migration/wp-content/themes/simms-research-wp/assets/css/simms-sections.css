@@ -347,6 +347,9 @@ html.simms-nav-open .mobile-nav__panel { transform: translateX(0); }
   padding-inline-start: 5px;
 }
 .hero__buttons { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-block-start: auto; }
+/* Font size for the two hero CTAs ("Shop Now" / "View Lab Results") only.
+   Scoped here so it doesn't touch site-wide .btn buttons. Change the value below. */
+.hero__buttons .btn { font-size: .85rem; }
 @media (max-width: 749px) {
   .hero__inner { align-items: flex-start; text-align: left; padding-block: 24px 64px; }
   .hero__subtitle { margin-inline: 0; }
