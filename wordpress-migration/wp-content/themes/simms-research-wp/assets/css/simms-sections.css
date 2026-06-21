@@ -1970,6 +1970,14 @@ body.woocommerce-order-received {
   color: inherit; font-weight: 500;
 }
 .simms-total-savings__value { color: inherit; font-weight: 500; }
+/* Checkout only: the ExperimentalOrderMeta slot zeroes its children's inline
+   padding (.slot-wrapper > * > * { padding:16px 0 }), so the savings row sits
+   16px wider than the sidebar's Total row. Restore the 16px the sidebar gives
+   .wc-block-components-totals-item so label/value align with the Total. Scoped
+   to the checkout sidebar — /cart aligns via its container inset, not here. */
+.wc-block-checkout__sidebar .slot-wrapper .simms-total-savings {
+  padding-inline: 16px;
+}
 
 /* ---- Shopify-style checkout polish (theme-side; gateways handled separately) ---- */
 /* Shopify two-pane checkout: white form hugging the divider on the left,

@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SIMMS_THEME_VERSION', '0.1.60' );
+define( 'SIMMS_THEME_VERSION', '0.1.61' );
 define( 'SIMMS_THEME_DIR', get_template_directory() );
 define( 'SIMMS_THEME_URI', get_template_directory_uri() );
 
