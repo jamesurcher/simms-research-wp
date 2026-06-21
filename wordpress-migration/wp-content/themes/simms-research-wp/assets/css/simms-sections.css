@@ -3406,6 +3406,39 @@ body.simms-cart-drawer-open { overflow: hidden; }
   font-size: 0.85rem;
 }
 .simms-cart-discount__applied li { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.simms-cart-discounts {
+  display: grid; gap: 0.5rem; margin: 0 0 14px; padding: 0; list-style: none;
+}
+.simms-cart-discounts__item {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+  padding: 8px 12px; border-radius: 8px;
+  background: rgb(61 155 88 / 0.1); color: #2f7d46;
+}
+.simms-cart-discounts__label { display: inline-flex; align-items: center; gap: 0.45rem; min-width: 0; }
+.simms-cart-discounts__icon { display: inline-flex; flex: 0 0 auto; }
+.simms-cart-discounts__icon svg { width: 15px; height: 15px; }
+.simms-cart-discounts__code {
+  font-family: var(--font-mono--family); font-size: 0.72rem; letter-spacing: 0.04em;
+  text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.simms-cart-discounts__remove {
+  display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+  width: 18px; height: 18px; padding: 0; border: 0; border-radius: 999px;
+  background: transparent; color: inherit; cursor: pointer; opacity: 0.65;
+}
+.simms-cart-discounts__remove:hover { opacity: 1; }
+.simms-cart-discounts__remove svg { width: 11px; height: 11px; }
+.simms-cart-discounts__value {
+  font-family: var(--font-mono--family); font-size: 0.85rem; font-weight: 500; white-space: nowrap;
+}
+.simms-cart-discounts__item--auto { padding-block: 9px; }
+.simms-cart-item__save {
+  display: inline-block; margin-block-start: 5px;
+  padding: 1px 7px; border-radius: 999px;
+  background: rgb(61 155 88 / 0.12); color: #2f7d46;
+  font-family: var(--font-mono--family); font-size: 0.6rem; font-weight: 500;
+  letter-spacing: 0.05em; text-transform: uppercase;
+}
 .simms-cart-shipping { display: grid; gap: 0.5rem; margin-block-end: 18px; }
 .simms-cart-shipping__label {
   display: flex; justify-content: space-between; gap: 0.5rem;

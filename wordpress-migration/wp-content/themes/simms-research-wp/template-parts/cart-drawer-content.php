@@ -19,6 +19,7 @@ $qualifying_total  = (float) $cart->get_cart_contents_total();
 $remaining         = max( 0, $shipping_threshold - $qualifying_total );
 $progress          = $shipping_threshold > 0 ? min( 100, ( $qualifying_total / $shipping_threshold ) * 100 ) : 0;
 $applied_coupons   = $cart->get_applied_coupons();
+$volume_savings_total = 0.0;
 ?>
 <div class="simms-cart-drawer__header<?php echo empty( $cart_items ) ? ' simms-cart-drawer__header--empty' : ''; ?>">
 	<h2<?php echo empty( $cart_items ) ? '' : ' id="simms-cart-drawer-title"'; ?>><?php esc_html_e( 'Cart', 'simms-research' ); ?></h2>
@@ -69,7 +70,19 @@ $applied_coupons   = $cart->get_applied_coupons();
 			$thumbnail         = $product->get_image( 'woocommerce_thumbnail' );
 			$line_subtotal     = (float) $cart_item['line_subtotal'] + (float) $cart_item['line_subtotal_tax'];
 			$line_total        = (float) $cart_item['line_total'] + (float) $cart_item['line_tax'];
-			$has_discount      = $line_subtotal > $line_total;
+
+			// The volume discount (Discount Rules / Flycart) lowers the unit price at
+			// source, so line_subtotal already reflects it and WC reports no native
+			// discount. Recover the pre-discount line from the untouched regular/sale
+			// price to show the saving and the tier %. get_price() carries the
+			// volume-discounted unit price.
+			$base_unit         = '' !== (string) $product->get_sale_price() ? (float) $product->get_sale_price() : (float) $product->get_regular_price();
+			$current_unit      = (float) $product->get_price();
+			$volume_pct        = ( $base_unit > 0 && $base_unit > $current_unit ) ? (int) round( ( $base_unit - $current_unit ) / $base_unit * 100 ) : 0;
+			$base_line         = $base_unit > 0 ? (float) wc_get_price_to_display( $product, array( 'qty' => (int) $cart_item['quantity'], 'price' => $base_unit ) ) : $line_subtotal;
+			$was_line          = max( $base_line, $line_subtotal );
+			$has_discount      = $was_line > $line_total + 0.01;
+			$volume_savings_total += max( 0.0, $base_line - $line_subtotal );
 			$meta_parts        = array();
 
 			foreach ( (array) ( $cart_item['variation'] ?? array() ) as $attribute_name => $attribute_value ) {
@@ -116,11 +129,14 @@ $applied_coupons   = $cart->get_applied_coupons();
 							<?php if ( ! empty( $meta_parts ) ) : ?>
 								<p class="simms-cart-item__meta"><?php echo esc_html( implode( ' · ', $meta_parts ) ); ?></p>
 							<?php endif; ?>
+							<?php if ( $volume_pct > 0 ) : ?>
+								<span class="simms-cart-item__save"><?php echo esc_html( sprintf( __( '%d%% off', 'simms-research' ), $volume_pct ) ); ?></span>
+							<?php endif; ?>
 						</div>
 						<div class="simms-cart-item__price">
 							<?php echo wp_kses_post( wc_price( $line_total ) ); ?>
 							<?php if ( $has_discount ) : ?>
-								<del><?php echo wp_kses_post( wc_price( $line_subtotal ) ); ?></del>
+								<del><?php echo wp_kses_post( wc_price( $was_line ) ); ?></del>
 							<?php endif; ?>
 						</div>
 					</div>
@@ -141,9 +157,38 @@ $applied_coupons   = $cart->get_applied_coupons();
 	</div>
 
 	<div class="simms-cart-drawer__summary">
+		<?php if ( ! empty( $applied_coupons ) || $volume_savings_total > 0 ) : ?>
+			<ul class="simms-cart-discounts" aria-label="<?php esc_attr_e( 'Applied discounts', 'simms-research' ); ?>">
+				<?php if ( $volume_savings_total > 0 ) : ?>
+					<li class="simms-cart-discounts__item simms-cart-discounts__item--auto">
+						<span class="simms-cart-discounts__label">
+							<span class="simms-cart-discounts__icon" aria-hidden="true"><?php echo simms_inline_icon( 'discount' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+							<span class="simms-cart-discounts__code"><?php esc_html_e( 'Volume discount', 'simms-research' ); ?></span>
+						</span>
+						<span class="simms-cart-discounts__value">&minus;<?php echo wp_kses_post( wc_price( $volume_savings_total ) ); ?></span>
+					</li>
+				<?php endif; ?>
+				<?php
+				foreach ( $applied_coupons as $coupon_code ) :
+					$coupon_amount = (float) $cart->get_coupon_discount_amount( $coupon_code, $cart->display_cart_ex_tax );
+					?>
+					<li class="simms-cart-discounts__item">
+						<span class="simms-cart-discounts__label">
+							<span class="simms-cart-discounts__icon" aria-hidden="true"><?php echo simms_inline_icon( 'discount' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+							<span class="simms-cart-discounts__code"><?php echo esc_html( wc_format_coupon_code( $coupon_code ) ); ?></span>
+							<button type="button" class="simms-cart-discounts__remove" data-simms-remove-coupon="<?php echo esc_attr( $coupon_code ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Remove discount %s', 'simms-research' ), wc_format_coupon_code( $coupon_code ) ) ); ?>">
+								<?php echo simms_inline_icon( 'close' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+							</button>
+						</span>
+						<span class="simms-cart-discounts__value">&minus;<?php echo wp_kses_post( wc_price( $coupon_amount ) ); ?></span>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		<?php endif; ?>
+
 		<details class="simms-cart-discount">
 			<summary>
-				<span><?php esc_html_e( 'Discount', 'simms-research' ); ?></span>
+				<span><?php esc_html_e( 'Add discount code', 'simms-research' ); ?></span>
 				<span aria-hidden="true">+</span>
 			</summary>
 			<form class="simms-cart-discount__form" data-simms-cart-coupon>
@@ -151,16 +196,6 @@ $applied_coupons   = $cart->get_applied_coupons();
 				<input id="simms-cart-coupon" type="text" name="coupon_code" placeholder="<?php esc_attr_e( 'Discount code', 'simms-research' ); ?>" autocomplete="off">
 				<button type="submit"><?php esc_html_e( 'Apply', 'simms-research' ); ?></button>
 			</form>
-			<?php if ( ! empty( $applied_coupons ) ) : ?>
-				<ul class="simms-cart-discount__applied">
-					<?php foreach ( $applied_coupons as $coupon_code ) : ?>
-						<li>
-							<span><?php echo esc_html( wc_format_coupon_code( $coupon_code ) ); ?></span>
-							<button type="button" data-simms-remove-coupon="<?php echo esc_attr( $coupon_code ); ?>"><?php esc_html_e( 'Remove', 'simms-research' ); ?></button>
-						</li>
-					<?php endforeach; ?>
-				</ul>
-			<?php endif; ?>
 		</details>
 
 		<div class="simms-cart-shipping">
