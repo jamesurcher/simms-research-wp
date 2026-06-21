@@ -84,6 +84,47 @@ add_filter(
 	}
 );
 
+/**
+ * In the cart/checkout blocks show the product's dosage as the line-item
+ * description instead of the full marketing short description, matching the
+ * Shopify cart's compact "10mg" line.
+ *
+ * Scoped to two contexts so the PDP and other front-end uses are untouched:
+ *   1. Live Store API requests (the block's React re-fetch on mutations) —
+ *      WC()->is_store_api_request().
+ *   2. The server-side hydration WooCommerce runs while rendering the cart /
+ *      checkout page (Cart.php hydrate_api_request). That internal request
+ *      keeps REQUEST_URI = /cart/, so is_store_api_request() is false there;
+ *      is_cart()/is_checkout() are true, so they cover first paint.
+ */
+add_filter(
+	'woocommerce_product_get_short_description',
+	function ( $short_description, $product ) {
+		if ( ! function_exists( 'WC' ) ) {
+			return $short_description;
+		}
+
+		$is_block_cart_context = WC()->is_store_api_request();
+
+		if ( ! $is_block_cart_context && function_exists( 'is_cart' ) ) {
+			$is_block_cart_context = is_cart() || is_checkout();
+		}
+
+		if ( ! $is_block_cart_context ) {
+			return $short_description;
+		}
+
+		if ( ! $product instanceof WC_Product || ! function_exists( 'simms_product_dosage_summary' ) ) {
+			return $short_description;
+		}
+
+		// Dosage when known, otherwise drop the marketing paragraph entirely.
+		return simms_product_dosage_summary( $product );
+	},
+	10,
+	2
+);
+
 function simms_cart_count_markup(): string {
 	if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
 		return '<span class="site-header__cart-count" data-simms-cart-count hidden>0</span>';
@@ -474,6 +515,17 @@ add_action(
 		$js = '( function () { if ( window.wp && wp.i18n && wp.i18n.setLocaleData ) { wp.i18n.setLocaleData( ' . wp_json_encode( $overrides ) . ', "woocommerce" ); } } )();';
 
 		wp_add_inline_script( 'wp-i18n', $js, 'after' );
+
+		// Combined "Total savings" line below the Cart/Checkout block Total
+		// (product/volume discount + coupons), shown the way Shopify does it.
+		// Scope 'woocommerce-checkout' covers both block contexts.
+		wp_enqueue_script(
+			'simms-cart-total-savings',
+			SIMMS_THEME_URI . '/assets/js/cart-total-savings.js',
+			array( 'wp-element', 'wp-plugins', 'wp-data', 'wc-blocks-checkout' ),
+			SIMMS_THEME_VERSION,
+			true
+		);
 	},
 	20
 );

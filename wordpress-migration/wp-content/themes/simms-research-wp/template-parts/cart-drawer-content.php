@@ -78,7 +78,6 @@ $volume_savings_total = 0.0;
 			// volume-discounted unit price.
 			$base_unit         = '' !== (string) $product->get_sale_price() ? (float) $product->get_sale_price() : (float) $product->get_regular_price();
 			$current_unit      = (float) $product->get_price();
-			$volume_pct        = ( $base_unit > 0 && $base_unit > $current_unit ) ? (int) round( ( $base_unit - $current_unit ) / $base_unit * 100 ) : 0;
 			$base_line         = $base_unit > 0 ? (float) wc_get_price_to_display( $product, array( 'qty' => (int) $cart_item['quantity'], 'price' => $base_unit ) ) : $line_subtotal;
 			$was_line          = max( $base_line, $line_subtotal );
 			$has_discount      = $was_line > $line_total + 0.01;
@@ -128,9 +127,6 @@ $volume_savings_total = 0.0;
 							</h3>
 							<?php if ( ! empty( $meta_parts ) ) : ?>
 								<p class="simms-cart-item__meta"><?php echo esc_html( implode( ' · ', $meta_parts ) ); ?></p>
-							<?php endif; ?>
-							<?php if ( $volume_pct > 0 ) : ?>
-								<span class="simms-cart-item__save"><?php echo esc_html( sprintf( __( '%d%% off', 'simms-research' ), $volume_pct ) ); ?></span>
 							<?php endif; ?>
 						</div>
 						<div class="simms-cart-item__price">

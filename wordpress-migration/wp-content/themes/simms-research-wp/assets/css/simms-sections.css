@@ -1926,6 +1926,51 @@ body.woocommerce-order-received {
 /* Empty-cart state */
 .wc-block-cart__empty-cart__title, .cart-empty { font-family: var(--font-heading--family); }
 
+/* ---- /cart block line-item + summary polish (mirrors the cart drawer) ---- */
+/* Product title -> heading font, matching the drawer's item title. */
+.wc-block-cart .wc-block-cart-item__product .wc-block-components-product-name {
+  font-family: var(--font-heading--family); font-weight: 500;
+}
+/* Dosage line (filtered in for the block) -> muted + compact, like the drawer meta. */
+.wc-block-cart .wc-block-components-product-metadata__description,
+.wc-block-cart .wc-block-components-product-metadata__description p {
+  margin: 0; color: rgb(var(--color-foreground-rgb) / 0.62);
+  font-size: 0.875rem; line-height: 1.35;
+}
+/* Discounted unit price (cart + checkout summary): mute the struck original,
+   clean the discounted value. */
+.wc-block-cart .wc-block-components-product-price__regular,
+.wc-block-checkout .wc-block-components-product-price__regular {
+  color: rgb(var(--color-foreground-rgb) / 0.4);
+}
+.wc-block-cart .wc-block-components-product-price__value.is-discounted,
+.wc-block-checkout .wc-block-components-product-price__value.is-discounted {
+  text-decoration: none; font-weight: 500; color: var(--color-foreground);
+}
+/* Per-line saving badge hidden (cart + checkout). Like Shopify, each line shows
+   only the struck price; savings roll up into the single "Total savings" line.
+   A per-item "% off" / "Save $X" badge reads as a clean discount the stacked
+   affiliate coupon (10% of the already-discounted price) makes untrue. */
+.wc-block-cart .wc-block-components-sale-badge,
+.wc-block-checkout .wc-block-components-sale-badge { display: none; }
+/* Quantity stepper -> rounded, consistent with the drawer stepper. */
+.wc-block-cart .wc-block-components-quantity-selector { border-radius: 8px; }
+/* Summary -> Shopify-style card (cart only; checkout keeps its two-pane layout). */
+.wc-block-cart .wp-block-woocommerce-cart-order-summary-block {
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.1);
+  border-radius: 12px; padding: 20px 24px; background: var(--color-background);
+}
+/* Combined "Total savings" summary below the Total (cart-total-savings.js) ->
+   brand green, informational. Sits below the Total via ExperimentalOrderMeta,
+   so it is a "you saved $X" figure, not part of the subtotal->total math. */
+.simms-total-savings {
+  margin-block-start: 6px; padding-block-start: 2px; color: #2f7d46;
+}
+.simms-total-savings .wc-block-components-totals-item__label {
+  color: inherit; font-weight: 500;
+}
+.simms-total-savings__value { color: inherit; font-weight: 500; }
+
 /* ---- Shopify-style checkout polish (theme-side; gateways handled separately) ---- */
 /* Shopify two-pane checkout: white form hugging the divider on the left,
    gray order summary bleeding to the right viewport edge (full height via a
@@ -3432,13 +3477,6 @@ body.simms-cart-drawer-open { overflow: hidden; }
   font-family: var(--font-mono--family); font-size: 0.85rem; font-weight: 500; white-space: nowrap;
 }
 .simms-cart-discounts__item--auto { padding-block: 9px; }
-.simms-cart-item__save {
-  display: inline-block; margin-block-start: 5px;
-  padding: 1px 7px; border-radius: 999px;
-  background: rgb(61 155 88 / 0.12); color: #2f7d46;
-  font-family: var(--font-mono--family); font-size: 0.6rem; font-weight: 500;
-  letter-spacing: 0.05em; text-transform: uppercase;
-}
 .simms-cart-shipping { display: grid; gap: 0.5rem; margin-block-end: 18px; }
 .simms-cart-shipping__label {
   display: flex; justify-content: space-between; gap: 0.5rem;
