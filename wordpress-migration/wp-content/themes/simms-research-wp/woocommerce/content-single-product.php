@@ -360,12 +360,12 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 							<button type="button" class="volume-discount-table__tier" data-pdp-bundle-tier="3" aria-pressed="false">
 								<span class="volume-discount-table__badge volume-discount-table__badge--popular"><?php esc_html_e( 'Most Popular', 'simms-research' ); ?></span>
 								<span class="volume-discount-table__pct"><?php esc_html_e( '3+ vials', 'simms-research' ); ?></span>
-								<span class="volume-discount-table__qty"><?php esc_html_e( '5% off', 'simms-research' ); ?></span>
+								<span class="volume-discount-table__qty"><?php esc_html_e( '10% off', 'simms-research' ); ?></span>
 							</button>
 							<button type="button" class="volume-discount-table__tier" data-pdp-bundle-tier="6" aria-pressed="false">
 								<span class="volume-discount-table__badge volume-discount-table__badge--value"><?php esc_html_e( 'Best Value', 'simms-research' ); ?></span>
 								<span class="volume-discount-table__pct"><?php esc_html_e( '6+ vials', 'simms-research' ); ?></span>
-								<span class="volume-discount-table__qty"><?php esc_html_e( '10% off', 'simms-research' ); ?></span>
+								<span class="volume-discount-table__qty"><?php esc_html_e( '15% off', 'simms-research' ); ?></span>
 							</button>
 						</div>
 					</div>
