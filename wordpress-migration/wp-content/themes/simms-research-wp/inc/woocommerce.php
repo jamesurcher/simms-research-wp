@@ -343,6 +343,19 @@ add_action(
 			simms_cart_drawer_error_response();
 		}
 
+		// Express ("Pay with PayPal") is a buy-now for the viewed product, not an
+		// "add another". If the exact product/variation is already in the cart, skip
+		// the add so a second tap (or an earlier add-to-cart) can't duplicate the
+		// line, and go straight to checkout with the existing cart.
+		if ( ! empty( $_POST['express'] ) ) {
+			$existing_key = WC()->cart->find_product_in_cart( WC()->cart->generate_cart_id( $product_id, $variation_id, $variation ) );
+
+			if ( $existing_key ) {
+				do_action( 'woocommerce_ajax_added_to_cart', $product_id );
+				simms_cart_drawer_response();
+			}
+		}
+
 		$passed_validation = apply_filters( 'woocommerce_add_to_cart_validation', true, $product_id, $quantity, $variation_id, $variation );
 		$cart_item_key     = $passed_validation ? WC()->cart->add_to_cart( $product_id, $quantity, $variation_id, $variation ) : false;
 

@@ -131,6 +131,9 @@
     formData.delete('add-to-cart');
     formData.set('action', 'simms_cart_drawer_add');
     formData.set('nonce', config.nonce);
+    // Buy-now semantics: the server skips the add if this product is already in
+    // the cart, so clicking PayPal never duplicates a line.
+    formData.set('express', '1');
 
     button?.classList.add('is-loading');
     button?.setAttribute('aria-disabled', 'true');
