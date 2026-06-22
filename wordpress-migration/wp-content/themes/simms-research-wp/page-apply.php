@@ -16,7 +16,7 @@ $apply_url = get_permalink() ? get_permalink() : home_url( '/apply/' );
 	class="affiliate-application-page section section--page-width color-scheme-1"
 	style="--affiliate-application-padding-block-start: 48px; --affiliate-application-padding-block-end: 120px;"
 >
-	<div class="affiliate-application-page__inner">
+	<div class="affiliate-application-page__inner" data-simms-form-panel>
 		<a class="affiliate-application-page__back" href="<?php echo esc_url( home_url( '/partners/' ) ); ?>">
 			<span aria-hidden="true">&larr;</span>
 			<?php esc_html_e( 'Back to Affiliate Program', 'simms-research' ); ?>
@@ -30,21 +30,21 @@ $apply_url = get_permalink() ? get_permalink() : home_url( '/apply/' );
 			</div>
 		</header>
 
-		<?php if ( 'sent' === $status ) : ?>
-			<div class="affiliate-application-page__confirmation" role="status" aria-live="polite" tabindex="-1">
-				<span class="affiliate-application-page__confirmation-icon" aria-hidden="true">
-					<?php echo simms_inline_icon( 'checkmark' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				</span>
-				<div>
-					<h2 class="affiliate-application-page__confirmation-title"><?php esc_html_e( 'Application sent', 'simms-research' ); ?></h2>
-					<p><?php esc_html_e( 'We received your affiliate application and will review it shortly.', 'simms-research' ); ?></p>
-					<a class="button affiliate-application-page__confirmation-button" href="<?php echo esc_url( $apply_url ); ?>">
-						<?php esc_html_e( 'Submit another application', 'simms-research' ); ?>
-					</a>
-				</div>
+		<div class="affiliate-application-page__confirmation" role="status" aria-live="polite" tabindex="-1" data-simms-confirmation <?php echo 'sent' === $status ? '' : 'hidden'; ?>>
+			<span class="affiliate-application-page__confirmation-icon" aria-hidden="true">
+				<?php echo simms_inline_icon( 'checkmark' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</span>
+			<div>
+				<h2 class="affiliate-application-page__confirmation-title"><?php esc_html_e( 'Application sent', 'simms-research' ); ?></h2>
+				<p><?php esc_html_e( 'We received your affiliate application and will review it shortly.', 'simms-research' ); ?></p>
+				<a class="button affiliate-application-page__confirmation-button" href="<?php echo esc_url( $apply_url ); ?>">
+					<?php esc_html_e( 'Submit another application', 'simms-research' ); ?>
+				</a>
 			</div>
-		<?php else : ?>
-			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" id="AffiliateApplicationForm-wp" accept-charset="UTF-8" class="affiliate-application-page__form">
+		</div>
+
+		<div data-simms-form-area <?php echo 'sent' === $status ? 'hidden' : ''; ?>>
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" id="AffiliateApplicationForm-wp" accept-charset="UTF-8" class="affiliate-application-page__form" data-simms-form="affiliate">
 				<input type="hidden" name="action" value="simms_affiliate_application">
 				<input name="contact[id]" type="hidden" value="AffiliateApplicationForm-wp">
 				<input name="contact[tags]" type="hidden" value="affiliate-application">
@@ -52,12 +52,10 @@ $apply_url = get_permalink() ? get_permalink() : home_url( '/apply/' );
 				<input name="contact[Program]" type="hidden" value="Affiliate Program">
 				<?php wp_nonce_field( 'simms_affiliate_application', 'simms_affiliate_nonce' ); ?>
 
-				<?php if ( 'error' === $status ) : ?>
-					<div class="affiliate-application-page__message affiliate-application-page__message--error" tabindex="-1" autofocus>
-						<?php echo simms_inline_icon( 'error' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						<?php esc_html_e( 'Please check the required fields and try again.', 'simms-research' ); ?>
-					</div>
-				<?php endif; ?>
+				<div class="affiliate-application-page__message affiliate-application-page__message--error" role="alert" tabindex="-1" data-simms-error <?php echo 'error' === $status ? '' : 'hidden'; ?>>
+					<?php echo simms_inline_icon( 'error' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<span data-simms-error-text><?php esc_html_e( 'Please check the required fields and try again.', 'simms-research' ); ?></span>
+				</div>
 
 				<div class="affiliate-application-page__row">
 					<div class="affiliate-application-page__field">
@@ -203,7 +201,7 @@ $apply_url = get_permalink() ? get_permalink() : home_url( '/apply/' );
 					<?php esc_html_e( 'Submit Application', 'simms-research' ); ?>
 				</button>
 			</form>
-		<?php endif; ?>
+		</div>
 	</div>
 </section>
 <?php

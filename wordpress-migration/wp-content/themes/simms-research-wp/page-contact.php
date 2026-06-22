@@ -66,42 +66,40 @@ $contact_url = get_permalink() ? get_permalink() : home_url( '/contact/' );
 				</div>
 			</aside>
 
-			<div class="contact-page__form-panel">
-				<div class="contact-page__form-header">
-					<p class="contact-page__label"><?php esc_html_e( 'Send a Message', 'simms-research' ); ?></p>
-					<p><?php esc_html_e( 'Required fields are marked.', 'simms-research' ); ?></p>
+			<div class="contact-page__form-panel" data-simms-form-panel>
+				<div class="contact-page__confirmation" role="status" aria-live="polite" tabindex="-1" data-simms-confirmation <?php echo 'sent' === $status ? '' : 'hidden'; ?>>
+					<span class="contact-page__confirmation-icon" aria-hidden="true">
+						<svg viewBox="0 0 20 20" focusable="false" role="presentation">
+							<path fill="currentColor" d="M7.7 14.6 3.5 10.4l1.4-1.4 2.8 2.8 7.4-7.4 1.4 1.4-8.8 8.8Z" />
+						</svg>
+					</span>
+					<div>
+						<h2 class="contact-page__confirmation-title"><?php esc_html_e( 'Message sent', 'simms-research' ); ?></h2>
+						<p><?php esc_html_e( "Thanks for contacting us. We'll get back to you as soon as possible.", 'simms-research' ); ?></p>
+						<p><?php esc_html_e( 'We received your message and will route it to the right team.', 'simms-research' ); ?></p>
+						<a class="button contact-page__confirmation-button" href="<?php echo esc_url( $contact_url ); ?>">
+							<?php esc_html_e( 'Send another message', 'simms-research' ); ?>
+						</a>
+					</div>
 				</div>
 
-				<?php if ( 'sent' === $status ) : ?>
-					<div class="contact-page__confirmation" role="status" aria-live="polite" tabindex="-1">
-						<span class="contact-page__confirmation-icon" aria-hidden="true">
-							<svg viewBox="0 0 20 20" focusable="false" role="presentation">
-								<path fill="currentColor" d="M7.7 14.6 3.5 10.4l1.4-1.4 2.8 2.8 7.4-7.4 1.4 1.4-8.8 8.8Z" />
-							</svg>
-						</span>
-						<div>
-							<h2 class="contact-page__confirmation-title"><?php esc_html_e( 'Message sent', 'simms-research' ); ?></h2>
-							<p><?php esc_html_e( "Thanks for contacting us. We'll get back to you as soon as possible.", 'simms-research' ); ?></p>
-							<p><?php esc_html_e( 'We received your message and will route it to the right team.', 'simms-research' ); ?></p>
-							<a class="button contact-page__confirmation-button" href="<?php echo esc_url( $contact_url ); ?>">
-								<?php esc_html_e( 'Send another message', 'simms-research' ); ?>
-							</a>
-						</div>
+				<div data-simms-form-area <?php echo 'sent' === $status ? 'hidden' : ''; ?>>
+					<div class="contact-page__form-header">
+						<p class="contact-page__label"><?php esc_html_e( 'Send a Message', 'simms-research' ); ?></p>
+						<p><?php esc_html_e( 'Required fields are marked.', 'simms-research' ); ?></p>
 					</div>
-				<?php else : ?>
-					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" id="ContactPageForm-wp" accept-charset="UTF-8" class="contact-page__form">
+
+					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" id="ContactPageForm-wp" accept-charset="UTF-8" class="contact-page__form" data-simms-form="contact">
 						<input type="hidden" name="action" value="simms_contact">
 						<input name="contact[id]" type="hidden" value="ContactPageForm-wp">
 						<?php wp_nonce_field( 'simms_contact', 'simms_contact_nonce' ); ?>
 
-						<?php if ( 'error' === $status ) : ?>
-							<div class="contact-page__message contact-page__message--error" tabindex="-1" autofocus>
-								<svg viewBox="0 0 20 20" focusable="false" role="presentation">
-									<path fill="currentColor" d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm1 11H9v2h2v-2Zm0-8H9v6h2V5Z" />
-								</svg>
-								<?php esc_html_e( 'Please check your email and message, then try again.', 'simms-research' ); ?>
-							</div>
-						<?php endif; ?>
+						<div class="contact-page__message contact-page__message--error" role="alert" tabindex="-1" data-simms-error <?php echo 'error' === $status ? '' : 'hidden'; ?>>
+							<svg viewBox="0 0 20 20" focusable="false" role="presentation">
+								<path fill="currentColor" d="M10 2a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm1 11H9v2h2v-2Zm0-8H9v6h2V5Z" />
+							</svg>
+							<span data-simms-error-text><?php esc_html_e( 'Please check your email and message, then try again.', 'simms-research' ); ?></span>
+						</div>
 
 						<div class="contact-page__row">
 							<div class="contact-page__field">
@@ -172,7 +170,7 @@ $contact_url = get_permalink() ? get_permalink() : home_url( '/contact/' );
 							<?php esc_html_e( 'Send Message', 'simms-research' ); ?>
 						</button>
 					</form>
-				<?php endif; ?>
+				</div>
 			</div>
 		</div>
 	</div>

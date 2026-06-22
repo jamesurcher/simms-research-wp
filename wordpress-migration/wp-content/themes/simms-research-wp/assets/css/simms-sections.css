@@ -2332,6 +2332,33 @@ body.woocommerce-checkout .simms-entry > h1 { display: none; }
   margin-block-start: 0.2rem;
   border-radius: 999px;
 }
+.contact-page__submit.is-loading,
+.affiliate-application-page__submit.is-loading {
+  pointer-events: none;
+  opacity: 0.72;
+}
+/* These blocks set their own display, which overrides the UA [hidden] rule on
+   source order — restore [hidden] so JS/no-JS state toggling actually hides them. */
+.contact-page__confirmation[hidden],
+.contact-page__message[hidden],
+.affiliate-application-page__confirmation[hidden],
+.affiliate-application-page__message[hidden] {
+  display: none;
+}
+.contact-page__submit.is-loading::before,
+.affiliate-application-page__submit.is-loading::before {
+  content: "";
+  width: 1.05em;
+  height: 1.05em;
+  margin-inline-end: 0.55em;
+  border: 2px solid currentColor;
+  border-block-start-color: transparent;
+  border-radius: 50%;
+  animation: simms-form-spin 0.7s linear infinite;
+}
+@keyframes simms-form-spin {
+  to { transform: rotate(360deg); }
+}
 .contact-page__message {
   display: flex;
   align-items: center;
