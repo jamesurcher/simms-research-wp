@@ -25,13 +25,14 @@
 	};
 
 	// Meta standard event -> PostHog event (funnel-friendly names).
+	// Purchase is intentionally omitted: order_completed is sent server-side
+	// (inc/tracking.php) so it can't be lost to ad-blockers or a closed tab.
 	var POSTHOG_EVENT = {
 		ViewContent: 'product_viewed',
 		Search: 'product_search',
 		AddToCart: 'add_to_cart',
 		InitiateCheckout: 'checkout_started',
-		AddPaymentInfo: 'payment_info_added',
-		Purchase: 'order_completed'
+		AddPaymentInfo: 'payment_info_added'
 	};
 
 	// Fire each pixel explicitly with trackSingle so both redundant pixels

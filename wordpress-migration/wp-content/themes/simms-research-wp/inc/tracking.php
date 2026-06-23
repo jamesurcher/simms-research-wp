@@ -259,8 +259,41 @@ function simms_tracking_cart_payload( string $event ): array {
 }
 
 /**
- * Purchase payload from the order on the order-received page. eventID is the
- * stable order id so a future Conversions API call can dedupe against it.
+ * Shared order -> tracking properties (content_ids are WC product/variation IDs).
+ */
+function simms_tracking_order_data( WC_Order $order ): array {
+	$ids      = array();
+	$contents = array();
+	$num      = 0;
+
+	foreach ( $order->get_items() as $item ) {
+		$id  = (string) ( $item->get_variation_id() ?: $item->get_product_id() );
+		$qty = (int) $item->get_quantity();
+
+		$ids[]      = $id;
+		$contents[] = array(
+			'id'         => $id,
+			'quantity'   => $qty,
+			'item_price' => $qty ? (float) ( $item->get_total() / $qty ) : 0.0,
+		);
+		$num       += $qty;
+	}
+
+	return array(
+		'content_ids'  => $ids,
+		'content_type' => 'product',
+		'contents'     => $contents,
+		'num_items'    => $num,
+		'value'        => (float) $order->get_total(),
+		'currency'     => $order->get_currency(),
+		'order_id'     => (string) $order->get_id(),
+	);
+}
+
+/**
+ * Purchase payload for the client-side Meta/TikTok pixels on the order-received
+ * page. (PostHog's purchase is sent server-side instead — see below.) eventID is
+ * the stable order id so a future Conversions API call can dedupe against it.
  */
 function simms_tracking_purchase_payload(): array {
 	$order_id = absint( get_query_var( 'order-received' ) );
@@ -280,35 +313,10 @@ function simms_tracking_purchase_payload(): array {
 		return array();
 	}
 
-	$ids      = array();
-	$contents = array();
-	$num      = 0;
-
-	foreach ( $order->get_items() as $item ) {
-		$id  = (string) ( $item->get_variation_id() ?: $item->get_product_id() );
-		$qty = (int) $item->get_quantity();
-
-		$ids[]      = $id;
-		$contents[] = array(
-			'id'         => $id,
-			'quantity'   => $qty,
-			'item_price' => $qty ? (float) ( $item->get_total() / $qty ) : 0.0,
-		);
-		$num       += $qty;
-	}
-
 	return array(
 		'event'   => 'Purchase',
 		'eventId' => 'order_' . $order->get_id(),
-		'data'    => array(
-			'content_ids'  => $ids,
-			'content_type' => 'product',
-			'contents'     => $contents,
-			'num_items'    => $num,
-			'value'        => (float) $order->get_total(),
-			'currency'     => $order->get_currency(),
-			'order_id'     => (string) $order->get_id(),
-		),
+		'data'    => simms_tracking_order_data( $order ),
 	);
 }
 
@@ -343,3 +351,127 @@ function simms_tracking_added_to_cart_payload( int $product_id, int $variation_i
 		'currency'     => function_exists( 'get_woocommerce_currency' ) ? get_woocommerce_currency() : 'USD',
 	);
 }
+
+/* -------------------------------------------------------------------------
+ * Phase 3 — server-side Purchase capture for PostHog.
+ *
+ * Client-side order_completed can be lost to ad-blockers or a closed tab, so
+ * PostHog's purchase is fired from the server on every order (authoritative
+ * conversion count / CVR / revenue). It is stitched to the shopper's PostHog
+ * person via the distinct_id in their first-party PostHog cookie, so the server
+ * purchase joins the same funnel journey as their client-side checkout_started.
+ *
+ * Loss-rate measurement: server order_completed = every order; the client
+ * $pageview on the order-received page = orders where the client pixel actually
+ * ran. The gap between them is the real client-side loss rate — i.e. the ceiling
+ * on what a reverse proxy (Phase 4) could recover.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * PostHog distinct_id (+ session id) for the current request, read from the
+ * first-party PostHog cookie so the server event attaches to the same person.
+ *
+ * @return array{distinct_id:string,session_id:string}
+ */
+function simms_posthog_identity(): array {
+	$cookie = 'ph_' . SIMMS_POSTHOG_TOKEN . '_posthog';
+	$raw    = isset( $_COOKIE[ $cookie ] ) ? wp_unslash( $_COOKIE[ $cookie ] ) : '';
+
+	if ( '' === $raw ) {
+		return array(
+			'distinct_id' => '',
+			'session_id'  => '',
+		);
+	}
+
+	$data = json_decode( (string) $raw, true );
+	if ( ! is_array( $data ) ) {
+		$data = json_decode( (string) rawurldecode( (string) $raw ), true );
+	}
+	if ( ! is_array( $data ) ) {
+		return array(
+			'distinct_id' => '',
+			'session_id'  => '',
+		);
+	}
+
+	$session_id = '';
+	if ( isset( $data['$sessionid'] ) && is_array( $data['$sessionid'] ) && isset( $data['$sessionid'][1] ) ) {
+		$session_id = sanitize_text_field( (string) $data['$sessionid'][1] );
+	}
+
+	return array(
+		'distinct_id' => isset( $data['distinct_id'] ) ? sanitize_text_field( (string) $data['distinct_id'] ) : '',
+		'session_id'  => $session_id,
+	);
+}
+
+/**
+ * Send one event to PostHog from the server. Blocking with a short timeout —
+ * ingestion is fast and we want the conversion reliably recorded.
+ */
+function simms_posthog_capture_server( string $event, string $distinct_id, array $properties, string $event_uuid = '' ): void {
+	if ( '' === SIMMS_POSTHOG_TOKEN || '' === $distinct_id ) {
+		return;
+	}
+
+	$body = array(
+		'api_key'     => SIMMS_POSTHOG_TOKEN,
+		'event'       => $event,
+		'distinct_id' => $distinct_id,
+		'properties'  => $properties,
+		'timestamp'   => gmdate( 'c' ),
+	);
+	if ( '' !== $event_uuid ) {
+		$body['uuid'] = $event_uuid;
+	}
+
+	wp_remote_post(
+		SIMMS_POSTHOG_HOST . '/capture/',
+		array(
+			'timeout'  => 3,
+			'blocking' => true,
+			'headers'  => array( 'Content-Type' => 'application/json' ),
+			'body'     => wp_json_encode( $body ),
+		)
+	);
+}
+
+/**
+ * Fire order_completed to PostHog server-side, once per order. Hooked to both the
+ * block (Store API) and classic checkout order-processed actions; the first arg
+ * is a WC_Order (Store API) or an order id (classic).
+ *
+ * @param int|WC_Order $order_or_id Order or order id.
+ */
+function simms_tracking_send_purchase_server( $order_or_id ): void {
+	if ( ! function_exists( 'wc_get_order' ) ) {
+		return;
+	}
+
+	$order = $order_or_id instanceof WC_Order ? $order_or_id : wc_get_order( $order_or_id );
+	if ( ! $order instanceof WC_Order ) {
+		return;
+	}
+
+	// Once per order (uuid also dedupes at PostHog as a backstop).
+	if ( 'yes' === $order->get_meta( '_simms_ph_purchase_sent' ) ) {
+		return;
+	}
+
+	$identity    = simms_posthog_identity();
+	$distinct_id = '' !== $identity['distinct_id'] ? $identity['distinct_id'] : ( 'wc_order_' . $order->get_id() );
+
+	$properties                   = simms_tracking_order_data( $order );
+	$properties['capture_method'] = 'server';
+	if ( '' !== $identity['session_id'] ) {
+		$properties['$session_id'] = $identity['session_id'];
+	}
+
+	simms_posthog_capture_server( 'order_completed', $distinct_id, $properties, 'order_' . $order->get_id() );
+
+	$order->update_meta_data( '_simms_ph_purchase_sent', 'yes' );
+	$order->save();
+}
+add_action( 'woocommerce_store_api_checkout_order_processed', 'simms_tracking_send_purchase_server', 20 );
+add_action( 'woocommerce_checkout_order_processed', 'simms_tracking_send_purchase_server', 20 );
