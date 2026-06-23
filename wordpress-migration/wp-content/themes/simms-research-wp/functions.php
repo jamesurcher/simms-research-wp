@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SIMMS_THEME_VERSION', '0.1.62' );
+define( 'SIMMS_THEME_VERSION', '0.1.63' );
 define( 'SIMMS_THEME_DIR', get_template_directory() );
 define( 'SIMMS_THEME_URI', get_template_directory_uri() );
 
@@ -23,3 +23,4 @@ require SIMMS_THEME_DIR . '/inc/collections.php';
 require SIMMS_THEME_DIR . '/inc/blog.php';
 require SIMMS_THEME_DIR . '/inc/static-pages.php';
 require SIMMS_THEME_DIR . '/inc/tos-gate.php';
+require SIMMS_THEME_DIR . '/inc/tracking.php';

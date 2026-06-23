@@ -226,6 +226,15 @@
     button.toggleAttribute('aria-disabled', isLoading);
   }
 
+  // Surface the just-added line so the tracking layer can fire AddToCart.
+  function notifyAdded(payload) {
+    const added = payload?.data?.added_item;
+
+    if (added) {
+      document.dispatchEvent(new CustomEvent('simms:added-to-cart', { detail: added }));
+    }
+  }
+
   async function addCardProduct(button) {
     const productId = button.getAttribute('data-product_id') || button.dataset.productId;
 
@@ -246,6 +255,7 @@
     const payload = await postCart('simms_cart_drawer_add', formData);
     if (payload?.success) {
       bumpCart();
+      notifyAdded(payload);
     }
   }
 
@@ -278,6 +288,7 @@
       const payload = await postCart('simms_cart_drawer_add', formData);
       if (payload?.success) {
         bumpCart();
+        notifyAdded(payload);
       }
     } finally {
       setButtonLoading(submitter, false);

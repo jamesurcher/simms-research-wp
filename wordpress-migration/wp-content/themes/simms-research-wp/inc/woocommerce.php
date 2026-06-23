@@ -154,17 +154,20 @@ function simms_cart_drawer_fragments(): array {
 	);
 }
 
-function simms_cart_drawer_response(): void {
+function simms_cart_drawer_response( array $extra = array() ): void {
 	if ( function_exists( 'WC' ) && WC()->cart ) {
 		simms_maybe_apply_goaffpro_coupon();
 		WC()->cart->calculate_totals();
 	}
 
 	wp_send_json_success(
-		array(
-			'fragments' => simms_cart_drawer_fragments(),
-			'notices'   => wc_print_notices( true ),
-			'count'     => function_exists( 'WC' ) && WC()->cart ? WC()->cart->get_cart_contents_count() : 0,
+		array_merge(
+			array(
+				'fragments' => simms_cart_drawer_fragments(),
+				'notices'   => wc_print_notices( true ),
+				'count'     => function_exists( 'WC' ) && WC()->cart ? WC()->cart->get_cart_contents_count() : 0,
+			),
+			$extra
 		)
 	);
 }
@@ -408,7 +411,12 @@ add_action(
 		}
 
 		do_action( 'woocommerce_ajax_added_to_cart', $product_id );
-		simms_cart_drawer_response();
+
+		$added_item = function_exists( 'simms_tracking_added_to_cart_payload' )
+			? simms_tracking_added_to_cart_payload( (int) $product_id, (int) $variation_id, (int) $quantity )
+			: array();
+
+		simms_cart_drawer_response( $added_item ? array( 'added_item' => $added_item ) : array() );
 	}
 );
 add_action(
