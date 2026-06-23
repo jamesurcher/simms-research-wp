@@ -24,6 +24,16 @@
 		Purchase: 'CompletePayment'
 	};
 
+	// Meta standard event -> PostHog event (funnel-friendly names).
+	var POSTHOG_EVENT = {
+		ViewContent: 'product_viewed',
+		Search: 'product_search',
+		AddToCart: 'add_to_cart',
+		InitiateCheckout: 'checkout_started',
+		AddPaymentInfo: 'payment_info_added',
+		Purchase: 'order_completed'
+	};
+
 	// Fire each pixel explicitly with trackSingle so both redundant pixels
 	// provably receive every event (mirrors the original Shopify custom pixel).
 	function metaTrack( event, data, eventId ) {
@@ -78,9 +88,33 @@
 		window.ttq.track( ttEvent, payload, eventId ? { event_id: eventId } : undefined );
 	}
 
+	function posthogTrack( event, data, eventId ) {
+		if ( ! window.posthog || typeof window.posthog.capture !== 'function' ) {
+			return;
+		}
+		var name = POSTHOG_EVENT[ event ];
+		if ( ! name ) {
+			return;
+		}
+
+		data = data || {};
+		window.posthog.capture( name, {
+			content_ids: data.content_ids,
+			content_name: data.content_name,
+			value: data.value,
+			currency: data.currency || cfg.currency,
+			num_items: data.num_items,
+			contents: data.contents,
+			order_id: data.order_id,
+			search_string: data.search_string,
+			event_ref: eventId
+		} );
+	}
+
 	function track( event, data, eventId ) {
 		metaTrack( event, data, eventId );
 		tiktokTrack( event, data, eventId );
+		posthogTrack( event, data, eventId );
 	}
 
 	// Page-load event: ViewContent / Search / InitiateCheckout / Purchase.
