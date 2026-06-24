@@ -71,7 +71,7 @@ get_header();
 					</section>
 					<section>
 						<h2 class="font-serif text-2xl font-semibold mb-4">7. Shipping</h2>
-						<p class="text-muted-foreground leading-relaxed mb-4">Orders placed before 1PM PST will ship the same day. Free shipping is available on orders over $250. All packages are shipped discreetly with tracking provided. International customers are responsible for any customs duties, taxes, or fees that may be assessed by their country.</p>
+						<p class="text-muted-foreground leading-relaxed mb-4">Orders placed before 2PM EST will ship the same day. Free shipping is available on orders over $250. All packages are shipped discreetly with tracking provided. International customers are responsible for any customs duties, taxes, or fees that may be assessed by their country.</p>
 					</section>
 					<section>
 						<h2 class="font-serif text-2xl font-semibold mb-4">8. Refunds and Returns</h2>
