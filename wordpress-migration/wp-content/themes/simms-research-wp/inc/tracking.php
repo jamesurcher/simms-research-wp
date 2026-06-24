@@ -454,7 +454,7 @@ function simms_tracking_send_purchase_server( $order_or_id ): void {
 		return;
 	}
 
-	// Once per order (uuid also dedupes at PostHog as a backstop).
+	// Once per order — the order-meta guard ensures we never double-send.
 	if ( 'yes' === $order->get_meta( '_simms_ph_purchase_sent' ) ) {
 		return;
 	}
@@ -468,7 +468,9 @@ function simms_tracking_send_purchase_server( $order_or_id ): void {
 		$properties['$session_id'] = $identity['session_id'];
 	}
 
-	simms_posthog_capture_server( 'order_completed', $distinct_id, $properties, 'order_' . $order->get_id() );
+	// NB: do not pass a custom event uuid — PostHog rejects non-UUID values (400);
+	// the order-meta guard above already prevents duplicates.
+	simms_posthog_capture_server( 'order_completed', $distinct_id, $properties );
 
 	$order->update_meta_data( '_simms_ph_purchase_sent', 'yes' );
 	$order->save();
