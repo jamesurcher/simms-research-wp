@@ -3397,7 +3397,10 @@ body.simms-cart-drawer-open { overflow: hidden; }
   font-size: 0.875rem;
 }
 .simms-cart-drawer__items {
-  flex: 1 1 auto; overflow: auto; padding: 0 26px 20px;
+  /* min-height:0 lets this flex child shrink below its content and scroll
+     internally; without it iOS Safari refuses to clip, so the last item's
+     controls bleed past the box and the reminder card overlaps them. */
+  flex: 1 1 auto; min-height: 0; overflow: auto; padding: 0 26px 20px;
 }
 .simms-cart-item {
   display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 1rem;
