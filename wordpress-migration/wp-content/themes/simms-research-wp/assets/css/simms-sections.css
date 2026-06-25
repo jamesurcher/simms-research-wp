@@ -1906,9 +1906,16 @@ body.woocommerce-order-received {
 .wc-block-cart__submit-button:hover,
 .wc-block-components-checkout-place-order-button:hover,
 .wc-block-components-button.contained:hover { opacity: 0.88; }
-/* Totals figures in mono for the lab texture */
-.wc-block-components-totals-item__value,
-.wc-block-components-order-summary-item__total-price { font-family: var(--font-mono--family); }
+/* Cart/checkout money figures -> body font, matching the cart drawer. */
+.wc-block-cart .wc-block-components-totals-item__value,
+.wc-block-cart .wc-block-components-order-summary-item__total-price,
+.wc-block-cart .wc-block-formatted-money-amount,
+.wc-block-cart .wc-block-components-formatted-money-amount,
+.wc-block-checkout .wc-block-components-totals-item__value,
+.wc-block-checkout .wc-block-components-order-summary-item__total-price,
+.wc-block-checkout .wc-block-components-order-summary__button-text-price,
+.wc-block-checkout .wc-block-formatted-money-amount,
+.wc-block-checkout .wc-block-components-formatted-money-amount { font-family: var(--font-body--family); }
 /* Links + selected accents → brand ink */
 .wc-block-cart a, .wc-block-checkout a,
 .wc-block-components-checkout-step__title { color: var(--color-foreground); }
