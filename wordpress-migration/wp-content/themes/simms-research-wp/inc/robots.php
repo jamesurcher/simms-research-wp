@@ -62,3 +62,35 @@ add_filter(
 	10,
 	2
 );
+
+/**
+ * Keep specific product pages out of search engines.
+ *
+ * Uses the core wp_robots filter so the directive merges into WordPress's
+ * single <meta name="robots"> tag instead of emitting a duplicate. Keyed by
+ * product slug for stability across environments. These pages stay crawlable
+ * in robots.txt (Allow: /product/) on purpose — crawlers must fetch the page
+ * to actually see this directive.
+ */
+add_filter(
+	'wp_robots',
+	function ( array $robots ): array {
+		$noindex_product_slugs = array(
+			'glp-3-rt',
+		);
+
+		if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+			return $robots;
+		}
+
+		$product = get_queried_object();
+
+		if ( $product instanceof WP_Post && in_array( $product->post_name, $noindex_product_slugs, true ) ) {
+			$robots['noindex'] = true;
+			$robots['follow']  = true;
+			unset( $robots['index'] );
+		}
+
+		return $robots;
+	}
+);
