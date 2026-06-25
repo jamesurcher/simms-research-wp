@@ -104,6 +104,8 @@
       return;
     }
 
+    const wasOpen = drawer()?.classList.contains('is-open');
+
     Object.entries(fragments).forEach(([selector, markup]) => {
       document.querySelectorAll(selector).forEach((node) => {
         const template = document.createElement('template');
@@ -115,6 +117,12 @@
         }
       });
     });
+
+    if (wasOpen) {
+      requestAnimationFrame(() => {
+        drawer()?.querySelector('.simms-cart-drawer__items')?.scrollTo({ top: 0, left: 0 });
+      });
+    }
   }
 
   function parsePayload(text) {
