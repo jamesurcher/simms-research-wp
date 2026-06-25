@@ -139,6 +139,85 @@ function simms_cart_count_markup(): string {
 	);
 }
 
+/**
+ * Resolve the reconstitution-solution product ("Research Water") used by the
+ * cart-drawer reminder. Resolved by slug so it survives ID drift between
+ * environments, and memoised for the request.
+ */
+function simms_recon_water_product(): ?WC_Product {
+	static $resolved = false;
+	static $product  = null;
+
+	if ( $resolved ) {
+		return $product;
+	}
+
+	$resolved = true;
+
+	$page = get_page_by_path( 'research-water', OBJECT, 'product' );
+
+	if ( $page instanceof WP_Post ) {
+		$candidate = wc_get_product( $page->ID );
+
+		if ( $candidate instanceof WC_Product ) {
+			$product = $candidate;
+		}
+	}
+
+	return $product;
+}
+
+/**
+ * Whether Research Water (or one of its variations) is already in the cart.
+ */
+function simms_cart_has_recon_water(): bool {
+	$product = simms_recon_water_product();
+
+	if ( ! $product || ! function_exists( 'WC' ) || ! WC()->cart ) {
+		return false;
+	}
+
+	$target = $product->get_id();
+
+	foreach ( WC()->cart->get_cart() as $cart_item ) {
+		if ( (int) ( $cart_item['product_id'] ?? 0 ) === $target || (int) ( $cart_item['variation_id'] ?? 0 ) === $target ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Build the cart-drawer reconstitution reminder, or null when it should not
+ * show — i.e. the cart is empty, the product is unavailable, or Research Water
+ * is already in the cart.
+ *
+ * @return array{product_id:int,url:string,image:string,price:string}|null
+ */
+function simms_cart_recon_water_addon(): ?array {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart || WC()->cart->is_empty() ) {
+		return null;
+	}
+
+	$product = simms_recon_water_product();
+
+	if ( ! $product || ! $product->is_purchasable() || ! $product->is_in_stock() ) {
+		return null;
+	}
+
+	if ( simms_cart_has_recon_water() ) {
+		return null;
+	}
+
+	return array(
+		'product_id' => $product->get_id(),
+		'url'        => $product->get_permalink(),
+		'image'      => $product->get_image( 'woocommerce_thumbnail' ),
+		'price'      => wc_price( wc_get_price_to_display( $product ) ),
+	);
+}
+
 function simms_cart_drawer_content_markup(): string {
 	ob_start();
 	get_template_part( 'template-parts/cart-drawer-content' );

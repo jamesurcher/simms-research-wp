@@ -152,6 +152,33 @@ $volume_savings_total = 0.0;
 		<?php endforeach; ?>
 	</div>
 
+	<?php
+	$recon_water = simms_cart_recon_water_addon();
+	if ( $recon_water ) :
+		?>
+		<aside class="simms-cart-addon" data-simms-cart-addon>
+			<a class="simms-cart-addon__image" href="<?php echo esc_url( $recon_water['url'] ); ?>" tabindex="-1">
+				<?php echo wp_kses_post( $recon_water['image'] ); ?>
+			</a>
+			<div class="simms-cart-addon__body">
+				<p class="simms-cart-addon__title"><?php esc_html_e( "Don't forget Research Water", 'simms-research' ); ?></p>
+				<p class="simms-cart-addon__meta">
+					<?php esc_html_e( 'Required for reconstitution', 'simms-research' ); ?>
+					<span aria-hidden="true">&middot;</span>
+					<span class="simms-cart-addon__price"><?php echo wp_kses_post( $recon_water['price'] ); ?></span>
+				</p>
+			</div>
+			<button
+				type="button"
+				class="simms-cart-addon__add"
+				data-simms-add-to-cart
+				data-product_id="<?php echo esc_attr( (string) $recon_water['product_id'] ); ?>"
+				data-quantity="1"
+				aria-label="<?php esc_attr_e( 'Add Research Water to your cart', 'simms-research' ); ?>"
+			>+ <?php esc_html_e( 'Add', 'simms-research' ); ?></button>
+		</aside>
+	<?php endif; ?>
+
 	<div class="simms-cart-drawer__summary">
 		<?php if ( ! empty( $applied_coupons ) || $volume_savings_total > 0 ) : ?>
 			<ul class="simms-cart-discounts" aria-label="<?php esc_attr_e( 'Applied discounts', 'simms-research' ); ?>">
