@@ -14,6 +14,64 @@
   const submitButton = root.querySelector('[data-pdp-submit]');
   const config = window.simmsCartDrawer || {};
 
+  function parsePayload(text) {
+    try {
+      const value = JSON.parse(text);
+      return value && typeof value === 'object' ? value : null;
+    } catch (_error) {
+      return null;
+    }
+  }
+
+  function sendCart(data) {
+    data.set('nonce', config.nonce);
+
+    return fetch(config.ajaxUrl, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: data,
+    });
+  }
+
+  async function refreshNonce() {
+    try {
+      const data = new FormData();
+      data.set('action', 'simms_cart_drawer_nonce');
+
+      const response = await fetch(config.ajaxUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        body: data,
+      });
+      const payload = parsePayload(await response.text());
+      const nonce = payload && payload.success ? payload.data?.nonce : null;
+
+      if (nonce) {
+        config.nonce = nonce;
+        return true;
+      }
+    } catch (_error) {
+      // Fall back to the localized nonce and regular product form submit.
+    }
+
+    return false;
+  }
+
+  async function postExpressAdd(data) {
+    let response = await sendCart(data);
+    let payload = parsePayload(await response.text());
+
+    // A stale WordPress nonce returns "-1"/403 instead of JSON. Rebind to the
+    // live WooCommerce session and retry once; the rejected request dies before
+    // the cart is touched, so this cannot double-add.
+    if (!payload && (await refreshNonce())) {
+      response = await sendCart(data);
+      payload = parsePayload(await response.text());
+    }
+
+    return payload;
+  }
+
   function setQuantity(value) {
     if (!quantityInput) return;
 
@@ -130,7 +188,6 @@
     }
     formData.delete('add-to-cart');
     formData.set('action', 'simms_cart_drawer_add');
-    formData.set('nonce', config.nonce);
     // Buy-now semantics: the server skips the add if this product is already in
     // the cart, so clicking PayPal never duplicates a line.
     formData.set('express', '1');
@@ -139,12 +196,7 @@
     button?.setAttribute('aria-disabled', 'true');
 
     try {
-      const response = await fetch(config.ajaxUrl, {
-        method: 'POST',
-        credentials: 'same-origin',
-        body: formData,
-      });
-      const payload = await response.json();
+      const payload = await postExpressAdd(formData);
 
       if (payload?.success) {
         window.location.href = config.checkoutUrl;
