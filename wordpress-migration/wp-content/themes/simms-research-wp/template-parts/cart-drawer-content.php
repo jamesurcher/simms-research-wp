@@ -161,7 +161,7 @@ $volume_savings_total = 0.0;
 				<?php echo wp_kses_post( $recon_water['image'] ); ?>
 			</div>
 			<div class="simms-cart-addon__body">
-				<p class="simms-cart-addon__title"><?php esc_html_e( "Don't forget Research Water", 'simms-research' ); ?></p>
+				<p class="simms-cart-addon__title"><?php esc_html_e( 'Add Research Water', 'simms-research' ); ?></p>
 				<p class="simms-cart-addon__meta">
 					<?php esc_html_e( 'Amount', 'simms-research' ); ?>
 					<span aria-hidden="true">&middot;</span>

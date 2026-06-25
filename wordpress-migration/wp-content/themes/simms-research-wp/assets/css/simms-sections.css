@@ -3470,7 +3470,7 @@ body.simms-cart-drawer-open { overflow: hidden; }
 .simms-cart-addon__image img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .simms-cart-addon__body { min-width: 0; }
 .simms-cart-addon__title {
-  margin: 0; font-family: var(--font-heading--family); font-size: 0.75rem;
+  margin: 0; font-family: var(--font-heading--family); font-size: 0.9375rem;
   font-weight: 500; line-height: 1.2; color: var(--color-foreground);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
