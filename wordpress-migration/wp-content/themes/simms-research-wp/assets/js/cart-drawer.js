@@ -14,6 +14,7 @@
     addToCart: '[data-simms-add-to-cart]',
     addon: '[data-simms-cart-addon]',
     addonDismiss: '[data-simms-cart-addon-dismiss]',
+    reconWaterItem: '[data-simms-cart-recon-water]',
     qtyButton: '[data-simms-cart-qty]',
     qtyInput: '[data-simms-cart-qty-input]',
     couponForm: '[data-simms-cart-coupon]',
@@ -126,6 +127,12 @@
     document.querySelectorAll(selectors.addon).forEach((addon) => addon.remove());
   }
 
+  function rememberAddonDismissedFromCart() {
+    if (document.querySelector(selectors.reconWaterItem)) {
+      setAddonDismissed();
+    }
+  }
+
   function dismissAddon(addon) {
     if (!addon) {
       return;
@@ -153,6 +160,8 @@
         }
       });
     });
+
+    rememberAddonDismissedFromCart();
 
     if (wasOpen) {
       requestAnimationFrame(() => {
@@ -449,5 +458,6 @@
     }
   });
 
+  rememberAddonDismissedFromCart();
   hideDismissedAddon();
 })();

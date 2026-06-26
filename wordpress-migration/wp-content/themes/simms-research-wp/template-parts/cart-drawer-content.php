@@ -20,6 +20,8 @@ $remaining         = max( 0, $shipping_threshold - $qualifying_total );
 $progress          = $shipping_threshold > 0 ? min( 100, ( $qualifying_total / $shipping_threshold ) * 100 ) : 0;
 $applied_coupons   = $cart->get_applied_coupons();
 $volume_savings_total = 0.0;
+$recon_water_product  = simms_recon_water_product();
+$recon_water_product_id = $recon_water_product instanceof WC_Product ? (int) $recon_water_product->get_id() : 0;
 ?>
 <div class="simms-cart-drawer__header<?php echo empty( $cart_items ) ? ' simms-cart-drawer__header--empty' : ''; ?>">
 	<h2<?php echo empty( $cart_items ) ? '' : ' id="simms-cart-drawer-title"'; ?>><?php esc_html_e( 'Cart', 'simms-research' ); ?></h2>
@@ -70,6 +72,10 @@ $volume_savings_total = 0.0;
 			$thumbnail         = $product->get_image( 'woocommerce_thumbnail' );
 			$line_subtotal     = (float) $cart_item['line_subtotal'] + (float) $cart_item['line_subtotal_tax'];
 			$line_total        = (float) $cart_item['line_total'] + (float) $cart_item['line_tax'];
+			$is_recon_water_item = $recon_water_product_id > 0 && (
+				(int) ( $cart_item['product_id'] ?? 0 ) === $recon_water_product_id ||
+				(int) ( $cart_item['variation_id'] ?? 0 ) === $recon_water_product_id
+			);
 
 			// The volume discount (Discount Rules / Flycart) lowers the unit price at
 			// source, so line_subtotal already reflects it and WC reports no native
@@ -111,7 +117,7 @@ $volume_savings_total = 0.0;
 
 			$meta_parts = array_unique( array_filter( array_map( 'trim', $meta_parts ) ) );
 			?>
-			<article class="simms-cart-item" data-simms-cart-item="<?php echo esc_attr( $cart_item_key ); ?>">
+			<article class="simms-cart-item" data-simms-cart-item="<?php echo esc_attr( $cart_item_key ); ?>"<?php echo $is_recon_water_item ? ' data-simms-cart-recon-water' : ''; ?>>
 				<a class="simms-cart-item__image" href="<?php echo esc_url( $product_permalink ?: $cart_url ); ?>" tabindex="-1">
 					<?php echo wp_kses_post( $thumbnail ); ?>
 				</a>
