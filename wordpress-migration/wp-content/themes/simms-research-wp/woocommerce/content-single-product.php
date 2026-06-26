@@ -200,6 +200,7 @@ $selected_price_text = $selected_variation ? $selected_variation['price_text'] :
 $selected_label      = $selected_variation['label'] ?? $dosage_summary;
 $selected_key        = $normalize_key( $selected_label );
 $selected_product_id = $selected_variation['id'] ?? $product_id;
+$ready_to_ship       = $selected_variation ? (bool) $selected_variation['available'] : (bool) $product->is_purchasable() && (bool) $product->is_in_stock();
 $cart_quantity       = 0;
 
 if ( function_exists( 'WC' ) && WC()->cart ) {
@@ -318,10 +319,19 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 
 			<div class="pdp__cart">
 				<form class="cart pdp__form" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype="multipart/form-data" data-pdp-form>
+					<?php if ( $ready_to_ship ) : ?>
+						<div class="pdp__stock-status" role="status">
+							<span class="pdp__stock-dot" aria-hidden="true"></span>
+							<span><?php esc_html_e( 'In stock', 'simms-research' ); ?></span>
+							<span class="pdp__stock-separator" aria-hidden="true">&middot;</span>
+							<span><?php esc_html_e( 'Ready to ship', 'simms-research' ); ?></span>
+						</div>
+					<?php endif; ?>
+
 					<?php if ( ! empty( $variation_options ) ) : ?>
 						<fieldset class="pdp__variant-picker">
-							<legend><?php esc_html_e( 'Dosage', 'simms-research' ); ?></legend>
-							<div class="pdp__variant-options" role="group" aria-label="<?php esc_attr_e( 'Choose dosage', 'simms-research' ); ?>">
+							<legend><?php esc_html_e( 'Size', 'simms-research' ); ?></legend>
+							<div class="pdp__variant-options" role="group" aria-label="<?php esc_attr_e( 'Choose size', 'simms-research' ); ?>">
 								<?php foreach ( $variation_options as $option ) : ?>
 									<button
 										type="button"
