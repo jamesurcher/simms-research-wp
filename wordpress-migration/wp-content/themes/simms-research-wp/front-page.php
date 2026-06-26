@@ -203,7 +203,7 @@ get_header();
 			$faqs = array(
 				array( 'How is purity verified?', 'Every batch is tested in-house by HPLC and independently re-verified by a third-party laboratory. We publish the Certificate of Analysis for each lot before the product ships.' ),
 				array( "What's included in the COA?", "Each Certificate of Analysis includes the compound's identity, HPLC purity percentage, mass-spec verification, lot number, manufacture date, and a sign-off from the testing laboratory." ),
-				array( 'How are compounds shipped and stored?', 'Compounds ship lyophilized in temperature-controlled, insulated packaging with cold packs. Once received, store at the temperature specified on the COA — typically refrigerated or frozen.' ),
+				array( 'How are compounds shipped and stored?', 'Compounds ship lyophilized in temperature-controlled, secure packaging. Once received, store at the temperature specified on the COA — typically refrigerated or frozen.' ),
 				array( 'Can I access historical COAs for past lots?', 'Yes. Every lot we have ever shipped is searchable in the public COA library by batch ID. Reach out if you need a hand locating a specific record.' ),
 				array( 'What is the replacement policy on purity?', 'If a batch does not meet the purity threshold listed on the COA, we replace it — no questions. Independent re-verification is welcome and reimbursable.' ),
 				array( 'Do you ship internationally?', "Domestic US shipping is supported by default. International availability depends on the destination country's regulations — contact us for a routing assessment before placing an order." ),
