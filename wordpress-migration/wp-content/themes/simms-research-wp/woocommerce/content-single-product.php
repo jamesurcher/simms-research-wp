@@ -122,8 +122,8 @@ $business_date = static function ( DateTimeImmutable $start, int $business_days 
 
 $now             = current_datetime();
 $today           = $now instanceof DateTimeImmutable ? $now : DateTimeImmutable::createFromMutable( $now );
-$delivery_start  = $business_date( $today, 3 );
-$delivery_end    = $business_date( $today, 6 );
+$delivery_start  = $business_date( $today, 2 );
+$delivery_end    = $business_date( $today, 3 );
 $delivery_window = $delivery_start->format( 'D, M j' ) . ' &ndash; ' . $delivery_end->format( 'D, M j' );
 
 $dosage_summary = simms_product_dosage_summary( $product );
