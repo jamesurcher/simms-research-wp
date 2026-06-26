@@ -131,18 +131,8 @@
       return;
     }
 
-    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-
-    if (reduceMotion) {
-      addon.remove();
-      return;
-    }
-
-    addon.style.height = `${addon.getBoundingClientRect().height}px`;
-    addon.style.boxSizing = 'border-box';
-    void addon.offsetHeight;
     addon.classList.add('is-dismissing');
-    setTimeout(() => addon.remove(), 220);
+    setTimeout(() => addon.remove(), 850);
   }
 
   function replaceFragments(fragments) {
