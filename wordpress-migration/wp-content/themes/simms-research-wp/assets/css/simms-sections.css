@@ -3509,10 +3509,28 @@ body.simms-cart-drawer-open { overflow: hidden; }
 /* Reconstitution reminder — nudges Research Water alongside lyophilized peptides. */
 .simms-cart-addon {
   flex: 0 0 auto;
+  position: relative;
   display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; align-items: center;
-  gap: 0.5rem; margin: 16px 0 0; padding: 12px 14px;
+  gap: 0.45rem; margin: 16px 0 0; padding: 12px 38px 12px 14px;
   border: 1px solid rgb(var(--color-foreground-rgb) / 0.12); border-radius: 12px;
   background: rgb(var(--color-foreground-rgb) / 0.025);
+  overflow: hidden;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    height 180ms ease,
+    margin 180ms ease,
+    padding 180ms ease,
+    border-color 180ms ease;
+}
+.simms-cart-addon.is-dismissing {
+  height: 0 !important;
+  margin-block-start: 0;
+  padding-block: 0;
+  border-color: transparent;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
 }
 .simms-cart-addon__image {
   display: block; width: 48px; height: 48px; overflow: hidden;
@@ -3540,8 +3558,24 @@ body.simms-cart-drawer-open { overflow: hidden; }
 }
 .simms-cart-addon__add:hover { opacity: 0.85; }
 .simms-cart-addon__add.is-tapped { animation: simms-card-tap 0.45s ease; }
+.simms-cart-addon__dismiss {
+  position: absolute; inset-block-start: 7px; inset-inline-end: 7px;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; padding: 0; border: 0; border-radius: 999px;
+  background: transparent; color: rgb(var(--color-foreground-rgb) / 0.58);
+  cursor: pointer; transition: background 160ms ease, color 160ms ease;
+}
+.simms-cart-addon__dismiss:hover {
+  background: rgb(var(--color-foreground-rgb) / 0.08);
+  color: var(--color-foreground);
+}
+.simms-cart-addon__dismiss svg { width: 11px; height: 11px; }
 @media (prefers-reduced-motion: reduce) {
-  .simms-cart-addon__add.is-tapped { animation: none; }
+  .simms-cart-addon,
+  .simms-cart-addon__add.is-tapped {
+    animation: none;
+    transition: none;
+  }
 }
 .simms-cart-drawer__summary {
   flex: 0 0 auto; padding: 18px 26px 26px;

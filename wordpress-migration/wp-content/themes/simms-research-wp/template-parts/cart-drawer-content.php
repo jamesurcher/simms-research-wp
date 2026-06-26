@@ -175,6 +175,14 @@ $volume_savings_total = 0.0;
 					data-quantity="1"
 					aria-label="<?php esc_attr_e( 'Add Research Water to your cart', 'simms-research' ); ?>"
 				>+ <?php esc_html_e( 'Add', 'simms-research' ); ?></button>
+				<button
+					type="button"
+					class="simms-cart-addon__dismiss"
+					data-simms-cart-addon-dismiss
+					aria-label="<?php esc_attr_e( 'Dismiss Research Water suggestion', 'simms-research' ); ?>"
+				>
+					<?php echo simms_inline_icon( 'close' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				</button>
 			</aside>
 		<?php endif; ?>
 	</div>

@@ -12,12 +12,15 @@
     open: '[data-simms-cart-open]',
     close: '[data-simms-cart-close]',
     addToCart: '[data-simms-add-to-cart]',
+    addon: '[data-simms-cart-addon]',
+    addonDismiss: '[data-simms-cart-addon-dismiss]',
     qtyButton: '[data-simms-cart-qty]',
     qtyInput: '[data-simms-cart-qty-input]',
     couponForm: '[data-simms-cart-coupon]',
     removeCoupon: '[data-simms-remove-coupon]',
   };
 
+  const addonDismissedKey = 'simmsCartReconWaterDismissed';
   let lastFocus = null;
   let pending = false;
 
@@ -99,6 +102,49 @@
     target.innerHTML = notices || '';
   }
 
+  function isAddonDismissed() {
+    try {
+      return window.sessionStorage?.getItem(addonDismissedKey) === '1';
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function setAddonDismissed() {
+    try {
+      window.sessionStorage?.setItem(addonDismissedKey, '1');
+    } catch (error) {
+      // Removing the current card is enough when storage is unavailable.
+    }
+  }
+
+  function hideDismissedAddon() {
+    if (!isAddonDismissed()) {
+      return;
+    }
+
+    document.querySelectorAll(selectors.addon).forEach((addon) => addon.remove());
+  }
+
+  function dismissAddon(addon) {
+    if (!addon) {
+      return;
+    }
+
+    const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduceMotion) {
+      addon.remove();
+      return;
+    }
+
+    addon.style.height = `${addon.getBoundingClientRect().height}px`;
+    addon.style.boxSizing = 'border-box';
+    void addon.offsetHeight;
+    addon.classList.add('is-dismissing');
+    setTimeout(() => addon.remove(), 220);
+  }
+
   function replaceFragments(fragments) {
     if (!fragments) {
       return;
@@ -120,8 +166,11 @@
 
     if (wasOpen) {
       requestAnimationFrame(() => {
+        hideDismissedAddon();
         drawer()?.querySelector('.simms-cart-drawer__items')?.scrollTo({ top: 0, left: 0 });
       });
+    } else {
+      hideDismissedAddon();
     }
   }
 
@@ -330,6 +379,16 @@
       return;
     }
 
+    const addonDismiss = event.target.closest(selectors.addonDismiss);
+
+    if (addonDismiss) {
+      event.preventDefault();
+      setAddonDismissed();
+      addonDismiss.disabled = true;
+      dismissAddon(addonDismiss.closest(selectors.addon));
+      return;
+    }
+
     const addButton = event.target.closest(selectors.addToCart);
 
     if (addButton) {
@@ -394,4 +453,6 @@
       closeDrawer();
     }
   });
+
+  hideDismissedAddon();
 })();
