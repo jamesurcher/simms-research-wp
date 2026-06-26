@@ -202,6 +202,8 @@ $selected_key        = $normalize_key( $selected_label );
 $selected_product_id = $selected_variation['id'] ?? $product_id;
 $ready_to_ship       = $selected_variation ? (bool) $selected_variation['available'] : (bool) $product->is_purchasable() && (bool) $product->is_in_stock();
 $cart_quantity       = 0;
+$single_size_label   = empty( $variation_options ) ? trim( $dosage_summary ) : '';
+$single_size_button  = '' !== $single_size_label ? strtoupper( preg_replace( '/\s+/', '', $single_size_label ) ) : '';
 
 if ( function_exists( 'WC' ) && WC()->cart ) {
 	foreach ( WC()->cart->get_cart() as $cart_item ) {
@@ -357,6 +359,17 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 						<?php foreach ( $selected_attrs as $attr_name => $attr_value ) : ?>
 							<input type="hidden" name="<?php echo esc_attr( $attr_name ); ?>" value="<?php echo esc_attr( $attr_value ); ?>" data-pdp-attribute="<?php echo esc_attr( $attr_name ); ?>">
 						<?php endforeach; ?>
+					<?php elseif ( '' !== $single_size_label ) : ?>
+						<fieldset class="pdp__variant-picker pdp__variant-picker--single">
+							<legend><?php esc_html_e( 'Size', 'simms-research' ); ?></legend>
+							<div class="pdp__variant-options" role="group" aria-label="<?php esc_attr_e( 'Selected size', 'simms-research' ); ?>">
+								<span class="pdp__variant-button pdp__variant-button--readonly is-active" aria-label="<?php echo esc_attr( $single_size_label ); ?>">
+									<?php echo esc_html( $single_size_button ); ?>
+								</span>
+							</div>
+						</fieldset>
+
+						<input type="hidden" name="product_id" value="<?php echo esc_attr( (string) $product_id ); ?>">
 					<?php else : ?>
 						<input type="hidden" name="product_id" value="<?php echo esc_attr( (string) $product_id ); ?>">
 					<?php endif; ?>

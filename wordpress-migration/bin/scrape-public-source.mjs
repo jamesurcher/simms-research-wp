@@ -182,18 +182,15 @@ function buildProductRows(products, specsByHandle) {
     const variants = Array.isArray(product.variants) && product.variants.length
       ? product.variants
       : [{ title: 'Default Title', available: true }];
-    const hasMultipleVariants = variants.length > 1;
     const optionName = resolveOptionName(product, variants);
     const images = Array.isArray(product.images)
       ? product.images.map((image) => normalizeUrl(image.src || image)).filter(Boolean)
       : [];
     const specs = specsByHandle.get(handle) || {};
+    const dosageSummary = specs.simms_dosage_summary || summarizeDosageOption(product, variants, optionName);
 
     for (const variant of variants) {
-      const variantTitle = String(variant.title || '').trim();
-      const variantOptionValue = hasMultipleVariants && variantTitle && variantTitle !== 'Default Title'
-        ? variantTitle
-        : '';
+      const variantOptionValue = resolveVariantOptionValue(product, variant, optionName);
 
       rows.push({
         shopify_handle: handle,
@@ -220,7 +217,7 @@ function buildProductRows(products, specsByHandle) {
         simms_solubility: specs.simms_solubility || '',
         simms_storage: specs.simms_storage || '',
         simms_purity: specs.simms_purity || '',
-        simms_dosage_summary: specs.simms_dosage_summary || '',
+        simms_dosage_summary: dosageSummary,
       });
     }
   }
@@ -228,16 +225,86 @@ function buildProductRows(products, specsByHandle) {
   return rows;
 }
 
+function resolveProductOption(product, optionName = '') {
+  const options = Array.isArray(product.options) ? product.options : [];
+
+  if (optionName) {
+    const normalizedName = optionName.toLowerCase();
+    const match = options.find((item) => String(item?.name || '').toLowerCase() === normalizedName);
+    if (match) {
+      return match;
+    }
+  }
+
+  return options.find((item) => item && item.name && item.name !== 'Title') || null;
+}
+
 function resolveOptionName(product, variants) {
-  const option = Array.isArray(product.options)
-    ? product.options.find((item) => item && item.name && item.name !== 'Title')
-    : null;
+  const option = resolveProductOption(product);
 
   if (option && option.name) {
     return option.name;
   }
 
   return variants.length > 1 ? 'Size' : 'Size';
+}
+
+function resolveVariantOptionValue(product, variant, optionName) {
+  const option = resolveProductOption(product, optionName);
+  const candidates = [];
+  const position = Number.parseInt(String(option?.position || ''), 10);
+
+  if (position >= 1 && position <= 3) {
+    candidates.push(variant[`option${position}`]);
+  }
+
+  candidates.push(variant.option1, variant.option2, variant.option3, variant.title);
+
+  if (Array.isArray(option?.values) && option.values.length === 1) {
+    candidates.push(option.values[0]);
+  }
+
+  return cleanOptionValue(candidates.find((value) => cleanOptionValue(value)));
+}
+
+function summarizeDosageOption(product, variants, optionName) {
+  if (!/dosage/i.test(optionName)) {
+    return '';
+  }
+
+  const option = resolveProductOption(product, optionName);
+  const values = Array.isArray(option?.values)
+    ? option.values.map(cleanOptionValue).filter(Boolean)
+    : variants.map((variant) => resolveVariantOptionValue(product, variant, optionName)).filter(Boolean);
+  const uniqueValues = [...new Set(values)];
+
+  if (!uniqueValues.length) {
+    return '';
+  }
+
+  if (uniqueValues.length === 1) {
+    return uniqueValues[0];
+  }
+
+  const parsed = uniqueValues.map((value) => {
+    const match = value.match(/^([0-9]+(?:\.[0-9]+)?)\s*([a-zA-Z]+)$/);
+    return match
+      ? { amount: Number.parseFloat(match[1]), label: `${match[1]}${match[2]}`, unit: match[2].toLowerCase() }
+      : null;
+  });
+
+  if (parsed.every(Boolean) && new Set(parsed.map((item) => item.unit)).size === 1) {
+    parsed.sort((a, b) => a.amount - b.amount);
+    return `${parsed[0].label}-${parsed[parsed.length - 1].label}`;
+  }
+
+  return uniqueValues.join(' / ');
+}
+
+function cleanOptionValue(value) {
+  const cleaned = String(value || '').trim();
+
+  return cleaned && cleaned !== 'Default Title' ? cleaned : '';
 }
 
 function extractSpecs(html) {

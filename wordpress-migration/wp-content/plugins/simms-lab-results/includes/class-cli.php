@@ -164,6 +164,7 @@ final class Simms_Lab_Results_CLI {
 		$product->set_regular_price( $row['regular_price'] ?? '' );
 		$product->set_sale_price( $row['sale_price'] ?? '' );
 		$product->set_stock_status( $this->stock_status( $row['stock_status'] ?? '' ) );
+		$this->set_single_option_attribute( $product, $row );
 
 		$saved_id = $product->save();
 		$this->after_product_save( $saved_id, $handle, $row );
@@ -172,7 +173,7 @@ final class Simms_Lab_Results_CLI {
 	}
 
 	private function import_variable_product( int $product_id, string $handle, array $rows, array &$stats ): int {
-		$first = $rows[0];
+		$first = $this->with_dosage_summary_from_rows( $rows[0], $rows );
 
 		if ( $product_id ) {
 			wp_set_object_terms( $product_id, 'variable', 'product_type' );
@@ -248,6 +249,8 @@ final class Simms_Lab_Results_CLI {
 	}
 
 	private function after_product_save( int $product_id, string $handle, array $row ): void {
+		$row = $this->with_dosage_summary_from_rows( $row, array( $row ) );
+
 		update_post_meta( $product_id, '_simms_shopify_handle', sanitize_title( $handle ) );
 		update_post_meta( $product_id, '_simms_source_image_urls', esc_url_raw( $row['image_urls'] ?? '' ) );
 		update_post_meta( $product_id, '_simms_source_gallery_image_urls', sanitize_textarea_field( $row['gallery_image_urls'] ?? '' ) );
@@ -272,6 +275,91 @@ final class Simms_Lab_Results_CLI {
 
 		$this->set_product_terms( $product_id, $row['categories'] ?? '', 'product_cat' );
 		$this->set_product_terms( $product_id, $row['tags'] ?? '', 'product_tag' );
+	}
+
+	private function set_single_option_attribute( WC_Product $product, array $row ): void {
+		$option_name  = trim( (string) ( $row['variant_option_name'] ?? '' ) );
+		$option_value = trim( (string) ( $row['variant_option_value'] ?? '' ) );
+
+		if ( '' === $option_name || '' === $option_value ) {
+			return;
+		}
+
+		$attribute = new WC_Product_Attribute();
+		$attribute->set_id( 0 );
+		$attribute->set_name( $option_name );
+		$attribute->set_options( array( $option_value ) );
+		$attribute->set_position( 0 );
+		$attribute->set_visible( true );
+		$attribute->set_variation( false );
+
+		$attributes = $product->get_attributes();
+		$attributes[ sanitize_title( $option_name ) ] = $attribute;
+		$product->set_attributes( $attributes );
+	}
+
+	private function with_dosage_summary_from_rows( array $row, array $rows ): array {
+		if ( '' !== trim( (string) ( $row['simms_dosage_summary'] ?? '' ) ) ) {
+			return $row;
+		}
+
+		$option_name = $this->variant_option_name( $rows );
+		if ( ! str_contains( strtolower( $option_name ), 'dosage' ) ) {
+			return $row;
+		}
+
+		$values = array_values(
+			array_unique(
+				array_filter(
+					array_map(
+						static fn( array $item ): string => trim( (string) ( $item['variant_option_value'] ?? '' ) ),
+						$rows
+					)
+				)
+			)
+		);
+
+		$summary = $this->format_option_summary( $values );
+		if ( '' !== $summary ) {
+			$row['simms_dosage_summary'] = $summary;
+		}
+
+		return $row;
+	}
+
+	private function format_option_summary( array $values ): string {
+		if ( empty( $values ) ) {
+			return '';
+		}
+
+		if ( 1 === count( $values ) ) {
+			return (string) $values[0];
+		}
+
+		$parsed = array();
+		foreach ( $values as $value ) {
+			if ( ! preg_match( '/^([0-9]+(?:\\.[0-9]+)?)\\s*([a-zA-Z]+)$/', (string) $value, $matches ) ) {
+				$parsed = array();
+				break;
+			}
+
+			$parsed[] = array(
+				'amount' => (float) $matches[1],
+				'label'  => $matches[1] . $matches[2],
+				'unit'   => strtolower( $matches[2] ),
+			);
+		}
+
+		if ( count( $parsed ) === count( $values ) && 1 === count( array_unique( wp_list_pluck( $parsed, 'unit' ) ) ) ) {
+			usort(
+				$parsed,
+				static fn( array $a, array $b ): int => $a['amount'] <=> $b['amount']
+			);
+
+			return $parsed[0]['label'] . '-' . $parsed[ count( $parsed ) - 1 ]['label'];
+		}
+
+		return implode( ' / ', $values );
 	}
 
 	private function import_coa_batch( int $existing_id, int $product_id, string $batch_id, array $row ): int {
