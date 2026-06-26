@@ -1092,9 +1092,8 @@
     display: none;
   }
 
-  .pdp__variant-options {
-    grid-template-columns: 1fr;
-  }
+  /* Keep size options at 2-up (~50% each) on mobile to match Shopify: a single
+     size sits left at half width, two sizes split the row. (No 1fr override.) */
 
   /* Bundle & Save: keep the three tiers horizontal on mobile */
   .volume-discount-table__tiers {
