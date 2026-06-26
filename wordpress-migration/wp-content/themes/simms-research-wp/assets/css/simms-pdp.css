@@ -655,7 +655,10 @@
   grid-column: 1;
 }
 
-.pdp__coa-card[hidden] {
+/* Must out-specify `.pdp .batch-verification { display: block }` below, which
+   otherwise overrides the [hidden] attribute on equal specificity + source order
+   and leaves every non-selected COA card visible (e.g. GLP-3's multiple batches). */
+.pdp .batch-verification.pdp__coa-card[hidden] {
   display: none;
 }
 

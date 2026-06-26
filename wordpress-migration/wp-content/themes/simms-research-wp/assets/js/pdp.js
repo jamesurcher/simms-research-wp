@@ -274,5 +274,12 @@
   }
 
   syncBundleState();
-  syncCoa(root.querySelector('[data-pdp-variant].is-active')?.dataset.variantKey || '');
+  // Prefer the active variant's key; for products with no variant picker (simple
+  // products) fall back to the COA card the server already marked active rather
+  // than cards[0], which may belong to a different dosage (e.g. GLP-3's 20mg batch).
+  syncCoa(
+    root.querySelector('[data-pdp-variant].is-active')?.dataset.variantKey
+      || root.querySelector('[data-pdp-coa-key].is-active')?.dataset.pdpCoaKey
+      || ''
+  );
 })();
