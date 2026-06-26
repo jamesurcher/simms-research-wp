@@ -2036,6 +2036,45 @@ body.woocommerce-checkout .simms-rail { width: 100%; max-width: none; margin-inl
 .wc-block-components-text-input input:focus {
   border-color: rgb(var(--color-foreground-rgb) / 0.55) !important;
 }
+/* ---- Shopify field metrics: single column, taller fields, roomier inset ----
+   Block defaults read busier than Shopify's: fields are 50px tall and the address
+   form lays first/last, city/state, zip/phone two-up (each flex 1 0 calc(50% - 12px)),
+   while selects keep the block's 4px corner (the 8px brand radius above only reached
+   text inputs). Shopify's checkout reads calmer — one field per row, taller boxes, a
+   wider text inset, and the brand corner on every control. */
+/* (1) Single column: collapse the address-form's 50% flex children to full width. */
+.wc-block-checkout__billing-fields .wc-block-components-address-form .wc-block-components-text-input,
+.wc-block-checkout__billing-fields .wc-block-components-address-form .wc-block-components-select-input,
+.wc-block-checkout__billing-fields .wc-block-components-address-form .wc-block-components-state-input,
+.wc-block-checkout__shipping-fields .wc-block-components-address-form .wc-block-components-text-input,
+.wc-block-checkout__shipping-fields .wc-block-components-address-form .wc-block-components-select-input,
+.wc-block-checkout__shipping-fields .wc-block-components-address-form .wc-block-components-state-input {
+  flex: 0 0 100% !important;
+}
+/* (2) Taller text inputs + wider inset (brand 8px radius already applied above). */
+.wc-block-checkout .wc-block-components-text-input input,
+.wc-block-checkout input.input-text {
+  height: 54px !important;
+  padding: 16px 14px !important;
+}
+/* Filled/active keeps the floated-label offset, now with the 14px inset. */
+.wc-block-checkout .wc-block-components-text-input.is-active input,
+.wc-block-checkout .wc-block-components-text-input input:-webkit-autofill {
+  padding: 24px 14px 8px !important;
+}
+/* (3) Selects (Country/Region, State): match height + inset + brand radius. */
+.wc-block-checkout .wc-blocks-components-select__select {
+  height: 54px !important;
+  padding: 18px 14px 0 !important;
+  border-radius: var(--inputs-border-radius) !important;
+}
+.wc-block-checkout .wc-blocks-components-select__container { border-radius: var(--inputs-border-radius); }
+/* (4) Align floated labels with the 14px value inset; recentre the idle
+   (placeholder) label in the taller 54px text field. Active label stays pinned
+   top:6px by the block's own higher-specificity rule. */
+.wc-block-checkout .wc-block-components-text-input label,
+.wc-block-checkout .wc-blocks-components-select__label { left: 14px; }
+.wc-block-checkout .wc-block-components-text-input label { top: 27px; }
 /* Step titles → Shopify scale */
 .wc-block-components-checkout-step__title { font-size: 1.25rem !important; }
 /* Pay button → full-width dark Shopify-style action */
