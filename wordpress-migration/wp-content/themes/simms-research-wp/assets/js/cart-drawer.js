@@ -284,6 +284,7 @@
 
   async function addCardProduct(button) {
     const productId = button.getAttribute('data-product_id') || button.dataset.productId;
+    const isAddonProduct = Boolean(button.closest(selectors.addon));
 
     if (!productId || pending) {
       return;
@@ -301,6 +302,10 @@
 
     const payload = await postCart('simms_cart_drawer_add', formData);
     if (payload?.success) {
+      if (isAddonProduct) {
+        setAddonDismissed();
+      }
+
       bumpCart();
       notifyAdded(payload);
     }
