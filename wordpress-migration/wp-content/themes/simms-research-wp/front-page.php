@@ -73,7 +73,7 @@ get_header();
 			array(
 				'post_type'      => 'product',
 				'post_status'    => 'publish',
-				'post_name__in'  => array( 'glp-3-rt', 'bpc-157', 'mots-c', 'nad', 'tesamorelin', 'ghk-cu', 'semax', 'selank' ),
+				'post_name__in'  => array( 'glp-3-rt', 'ghk-cu', 'mots-c', 'nad', 'tesamorelin', 'bpc-157', 'semax', 'selank' ),
 				'posts_per_page' => 8,
 				'orderby'        => 'post_name__in',
 				'meta_query'     => array(
