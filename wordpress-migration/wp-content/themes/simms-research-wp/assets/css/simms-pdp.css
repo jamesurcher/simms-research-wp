@@ -191,6 +191,8 @@
 }
 
 .pdp__variant-button {
+  --pdp-variant-line-color: rgb(var(--color-foreground-rgb) / 0.1);
+
   position: relative;
   overflow: hidden;
   display: inline-flex;
@@ -198,7 +200,7 @@
   justify-content: center;
   min-height: 42px;
   padding: 0.55rem 0.8rem;
-  border: 1px solid rgb(var(--color-foreground-rgb) / 0.1);
+  border: 1px solid var(--pdp-variant-line-color);
   border-radius: 2px;
   background: var(--color-background);
   color: var(--color-foreground);
@@ -214,11 +216,14 @@
 
 .pdp__variant-button:hover,
 .pdp__variant-button:focus-visible {
-  border-color: rgb(var(--color-foreground-rgb) / 0.35);
+  --pdp-variant-line-color: rgb(var(--color-foreground-rgb) / 0.35);
+
+  outline: 0;
 }
 
 .pdp__variant-button.is-active {
-  border-color: var(--color-foreground);
+  --pdp-variant-line-color: var(--color-foreground);
+
   background: var(--color-foreground);
   color: var(--color-background);
 }
@@ -236,8 +241,8 @@
   background: linear-gradient(
     to bottom right,
     transparent calc(50% - 0.5px),
-    currentColor calc(50% - 0.5px),
-    currentColor calc(50% + 0.5px),
+    var(--pdp-variant-line-color) calc(50% - 0.5px),
+    var(--pdp-variant-line-color) calc(50% + 0.5px),
     transparent calc(50% + 0.5px)
   );
   pointer-events: none;
@@ -245,9 +250,9 @@
 }
 
 .pdp__variant-button.is-unavailable.is-active {
-  border-color: var(--color-foreground);
+  --pdp-variant-line-color: var(--color-foreground);
+
   background: var(--color-background);
-  box-shadow: inset 0 0 0 1px var(--color-foreground);
   color: rgb(var(--color-foreground-rgb) / 0.62);
 }
 
