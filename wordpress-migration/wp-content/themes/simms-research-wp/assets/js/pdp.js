@@ -12,7 +12,25 @@
   const stickyVariant = root.querySelector('[data-pdp-sticky-variant]');
   const stickyPrice = root.querySelector('[data-pdp-sticky-price]');
   const submitButton = root.querySelector('[data-pdp-submit]');
+  const submitText = root.querySelector('[data-pdp-submit-text]');
+  const submitIcon = root.querySelector('[data-pdp-submit-icon]');
+  const stockStatus = root.querySelector('[data-pdp-stock-status]');
+  const stockLabel = root.querySelector('[data-pdp-stock-label]');
+  const stockDetail = root.querySelector('[data-pdp-stock-detail]');
+  const stockSeparator = root.querySelector('[data-pdp-stock-separator]');
+  const stockNotice = root.querySelector('[data-pdp-stock-notice]');
+  const expressButton = root.querySelector('[data-pdp-express]');
+  const paymentOptions = root.querySelector('[data-pdp-payment-options]');
+  const stickySubmitButton = root.querySelector('[data-pdp-sticky-submit]');
+  const stickySubmitText = root.querySelector('[data-pdp-sticky-submit-text]');
+  const stickySubmitIcon = root.querySelector('[data-pdp-sticky-icon]');
   const config = window.simmsCartDrawer || {};
+  let currentAvailable = form?.dataset.pdpAvailable !== 'false';
+
+  function setElementHidden(element, isHidden) {
+    if (!element) return;
+    element.hidden = isHidden;
+  }
 
   function parsePayload(text) {
     try {
@@ -103,6 +121,68 @@
     });
   }
 
+  function setPurchaseState(isAvailable, notice = '') {
+    currentAvailable = isAvailable;
+
+    if (form) {
+      form.dataset.pdpAvailable = isAvailable ? 'true' : 'false';
+      form.classList.toggle('is-sold-out', !isAvailable);
+    }
+
+    stockStatus?.classList.toggle('is-in-stock', isAvailable);
+    stockStatus?.classList.toggle('is-out-of-stock', !isAvailable);
+
+    if (stockLabel) {
+      stockLabel.textContent = isAvailable
+        ? form?.dataset.inStockLabel || 'In stock'
+        : form?.dataset.outOfStockLabel || 'Out of stock';
+    }
+
+    if (stockDetail) {
+      stockDetail.textContent = isAvailable ? form?.dataset.readyLabel || 'Ready to ship' : '';
+    }
+
+    setElementHidden(stockDetail, !isAvailable);
+    setElementHidden(stockSeparator, !isAvailable);
+
+    if (stockNotice) {
+      stockNotice.textContent = notice || form?.dataset.defaultOosNotice || '';
+      stockNotice.hidden = isAvailable;
+    }
+
+    if (submitButton) {
+      submitButton.disabled = !isAvailable;
+      submitButton.setAttribute('aria-disabled', isAvailable ? 'false' : 'true');
+    }
+
+    if (submitText && submitButton) {
+      submitText.textContent = isAvailable
+        ? submitButton.dataset.addLabel || 'Add to cart'
+        : submitButton.dataset.soldOutLabel || 'Sold out';
+    }
+
+    setElementHidden(submitIcon, !isAvailable);
+    setElementHidden(expressButton, !isAvailable);
+    setElementHidden(paymentOptions, !isAvailable);
+
+    if (stickySubmitButton) {
+      stickySubmitButton.disabled = !isAvailable;
+      stickySubmitButton.setAttribute('aria-disabled', isAvailable ? 'false' : 'true');
+    }
+
+    if (stickySubmitText && stickySubmitButton) {
+      stickySubmitText.textContent = isAvailable
+        ? stickySubmitButton.dataset.addLabel || 'Add to cart'
+        : stickySubmitButton.dataset.soldOutLabel || 'Sold out';
+    }
+
+    setElementHidden(stickySubmitIcon, !isAvailable);
+
+    if (!isAvailable) {
+      setStickyVisible(false);
+    }
+  }
+
   function ensureAttributeInput(name) {
     let input = form?.querySelector(`[data-pdp-attribute="${CSS.escape(name)}"]`);
 
@@ -132,7 +212,7 @@
   }
 
   function selectVariant(button) {
-    if (!button || button.disabled) return;
+    if (!button) return;
 
     root.querySelectorAll('[data-pdp-variant]').forEach((variantButton) => {
       const isActive = variantButton === button;
@@ -167,10 +247,15 @@
       stickyPrice.textContent = button.dataset.priceText;
     }
 
+    setPurchaseState(button.dataset.available !== 'false', button.dataset.stockNotice || '');
     syncCoa(button.dataset.variantKey || '');
   }
 
   async function addThenCheckout(button) {
+    if (!currentAvailable) {
+      return;
+    }
+
     if (!form || !config.ajaxUrl || !config.nonce || !config.checkoutUrl) {
       form?.requestSubmit?.(submitButton);
       return;
@@ -243,11 +328,20 @@
     const stickySubmit = event.target.closest('[data-pdp-sticky-submit]');
     if (stickySubmit) {
       event.preventDefault();
+      if (!currentAvailable) {
+        return;
+      }
       if (form?.requestSubmit) {
         form.requestSubmit(submitButton);
       } else {
         submitButton?.click();
       }
+    }
+  });
+
+  form?.addEventListener('submit', (event) => {
+    if (!currentAvailable) {
+      event.preventDefault();
     }
   });
 
@@ -257,8 +351,10 @@
   function setStickyVisible(isVisible) {
     if (!sticky) return;
 
-    sticky.classList.toggle('is-visible', isVisible);
-    sticky.setAttribute('aria-hidden', isVisible ? 'false' : 'true');
+    const shouldShow = isVisible && currentAvailable;
+
+    sticky.classList.toggle('is-visible', shouldShow);
+    sticky.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
   }
 
   if (sticky && submitButton && 'IntersectionObserver' in window) {
@@ -274,6 +370,11 @@
   }
 
   syncBundleState();
+  const activeVariant = root.querySelector('[data-pdp-variant].is-active');
+  setPurchaseState(
+    activeVariant ? activeVariant.dataset.available !== 'false' : currentAvailable,
+    activeVariant?.dataset.stockNotice || stockNotice?.textContent || ''
+  );
   // Prefer the active variant's key; for products with no variant picker (simple
   // products) fall back to the COA card the server already marked active rather
   // than cards[0], which may belong to a different dosage (e.g. GLP-3's 20mg batch).

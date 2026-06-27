@@ -37,6 +37,20 @@ $format_money_text = static function ( mixed $price ): string {
 	return html_entity_decode( wp_strip_all_tags( wc_price( $price ) ), ENT_QUOTES, get_bloginfo( 'charset' ) );
 };
 
+$out_of_stock_notice = static function ( string $label = '' ): string {
+	$label = trim( $label );
+
+	if ( '' !== $label ) {
+		return sprintf(
+			/* translators: %s: Selected product size or variant label. */
+			__( '%s is currently out of stock and cannot be added to cart.', 'simms-research' ),
+			$label
+		);
+	}
+
+	return __( 'This product is currently out of stock and cannot be added to cart.', 'simms-research' );
+};
+
 $format_test_date = static function ( mixed $date ): string {
 	$timestamp = strtotime( (string) $date );
 
@@ -135,15 +149,23 @@ $selected_variation = null;
 $selected_attrs     = array();
 
 if ( $product->is_type( 'variable' ) ) {
-	foreach ( $product->get_available_variations() as $variation_data ) {
-		$variation_id      = absint( $variation_data['variation_id'] ?? 0 );
+	foreach ( $product->get_children() as $variation_id ) {
+		$variation_id      = absint( $variation_id );
 		$variation_product = $variation_id ? wc_get_product( $variation_id ) : null;
 
 		if ( ! $variation_product instanceof WC_Product_Variation ) {
 			continue;
 		}
 
-		$attributes           = array_filter( (array) ( $variation_data['attributes'] ?? array() ) );
+		if ( 'publish' !== $variation_product->get_status() && ! current_user_can( 'edit_post', $variation_id ) ) {
+			continue;
+		}
+
+		if ( ! $variation_product->variation_is_visible() ) {
+			continue;
+		}
+
+		$attributes           = array_filter( (array) $variation_product->get_variation_attributes() );
 		$display_attribute    = '';
 		$display_attribute_id = '';
 
@@ -164,8 +186,8 @@ if ( $product->is_type( 'variable' ) ) {
 			$display_attribute = $variation_product->get_name();
 		}
 
-		$is_available = (bool) ( $variation_data['is_purchasable'] ?? true ) && (bool) ( $variation_data['is_in_stock'] ?? true );
-		$price        = (float) ( $variation_data['display_price'] ?? $variation_product->get_price() );
+		$is_available = $variation_product->is_purchasable() && $variation_product->is_in_stock();
+		$price        = (float) wc_get_price_to_display( $variation_product );
 
 		$option = array(
 			'id'            => $variation_id,
@@ -178,6 +200,7 @@ if ( $product->is_type( 'variable' ) ) {
 			'price_html'    => wc_price( $price ),
 			'price_text'    => $format_money_text( $price ),
 			'attribute_id'  => $display_attribute_id,
+			'stock_notice'  => $is_available ? '' : $out_of_stock_notice( $display_attribute ),
 			'variation_obj' => $variation_product,
 		);
 
@@ -204,6 +227,12 @@ $ready_to_ship       = $selected_variation ? (bool) $selected_variation['availab
 $cart_quantity       = 0;
 $single_size_label   = empty( $variation_options ) ? trim( $dosage_summary ) : '';
 $single_size_button  = '' !== $single_size_label ? strtoupper( preg_replace( '/\s+/', '', $single_size_label ) ) : '';
+$stock_status_class  = $ready_to_ship ? 'is-in-stock' : 'is-out-of-stock';
+$stock_label         = $ready_to_ship ? __( 'In stock', 'simms-research' ) : __( 'Out of stock', 'simms-research' );
+$stock_detail        = $ready_to_ship ? __( 'Ready to ship', 'simms-research' ) : '';
+$stock_notice        = $ready_to_ship ? '' : ( $selected_variation['stock_notice'] ?? $out_of_stock_notice( $single_size_label ) );
+$add_to_cart_label   = __( 'Add to cart', 'simms-research' );
+$sold_out_label      = __( 'Sold out', 'simms-research' );
 
 if ( function_exists( 'WC' ) && WC()->cart ) {
 	foreach ( WC()->cart->get_cart() as $cart_item ) {
@@ -320,33 +349,61 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 			</div>
 
 			<div class="pdp__cart">
-				<form class="cart pdp__form" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>" method="post" enctype="multipart/form-data" data-pdp-form>
-					<?php if ( $ready_to_ship ) : ?>
-						<div class="pdp__stock-status" role="status">
-							<span class="pdp__stock-dot" aria-hidden="true"></span>
-							<span><?php esc_html_e( 'In stock', 'simms-research' ); ?></span>
-							<span class="pdp__stock-separator" aria-hidden="true">&middot;</span>
-							<span><?php esc_html_e( 'Ready to ship', 'simms-research' ); ?></span>
-						</div>
-					<?php endif; ?>
+				<form
+					class="cart pdp__form<?php echo $ready_to_ship ? '' : ' is-sold-out'; ?>"
+					action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>"
+					method="post"
+					enctype="multipart/form-data"
+					data-pdp-form
+					data-pdp-available="<?php echo esc_attr( $ready_to_ship ? 'true' : 'false' ); ?>"
+					data-in-stock-label="<?php echo esc_attr__( 'In stock', 'simms-research' ); ?>"
+					data-ready-label="<?php echo esc_attr__( 'Ready to ship', 'simms-research' ); ?>"
+					data-out-of-stock-label="<?php echo esc_attr__( 'Out of stock', 'simms-research' ); ?>"
+					data-default-oos-notice="<?php echo esc_attr( $out_of_stock_notice() ); ?>"
+				>
+					<div class="pdp__stock-status <?php echo esc_attr( $stock_status_class ); ?>" role="status" data-pdp-stock-status>
+						<span class="pdp__stock-dot" aria-hidden="true"></span>
+						<span data-pdp-stock-label><?php echo esc_html( $stock_label ); ?></span>
+						<span class="pdp__stock-separator" aria-hidden="true" data-pdp-stock-separator<?php echo $ready_to_ship ? '' : ' hidden'; ?>>&middot;</span>
+						<span data-pdp-stock-detail<?php echo $ready_to_ship ? '' : ' hidden'; ?>><?php echo esc_html( $stock_detail ); ?></span>
+					</div>
+
+					<div class="pdp__stock-notice" role="note" data-pdp-stock-notice<?php echo $ready_to_ship ? ' hidden' : ''; ?>>
+						<?php echo esc_html( $stock_notice ); ?>
+					</div>
 
 					<?php if ( ! empty( $variation_options ) ) : ?>
 						<fieldset class="pdp__variant-picker">
 							<legend><?php esc_html_e( 'Size', 'simms-research' ); ?></legend>
 							<div class="pdp__variant-options" role="group" aria-label="<?php esc_attr_e( 'Choose size', 'simms-research' ); ?>">
 								<?php foreach ( $variation_options as $option ) : ?>
+									<?php
+									$is_selected_option = (int) $option['id'] === (int) ( $selected_variation['id'] ?? 0 );
+									$variant_classes    = 'pdp__variant-button';
+
+									if ( $is_selected_option ) {
+										$variant_classes .= ' is-active';
+									}
+
+									if ( ! $option['available'] ) {
+										$variant_classes .= ' is-unavailable';
+									}
+									?>
 									<button
 										type="button"
-										class="pdp__variant-button<?php echo (int) $option['id'] === (int) ( $selected_variation['id'] ?? 0 ) ? ' is-active' : ''; ?>"
+										class="<?php echo esc_attr( $variant_classes ); ?>"
 										data-pdp-variant
 										data-variation-id="<?php echo esc_attr( (string) $option['id'] ); ?>"
 										data-variant-key="<?php echo esc_attr( $option['key'] ); ?>"
 										data-variant-label="<?php echo esc_attr( $option['label'] ); ?>"
+										data-available="<?php echo esc_attr( $option['available'] ? 'true' : 'false' ); ?>"
 										data-price="<?php echo esc_attr( $option['price_html'] ); ?>"
 										data-price-text="<?php echo esc_attr( $option['price_text'] ); ?>"
+										data-stock-notice="<?php echo esc_attr( $option['stock_notice'] ); ?>"
 										data-attributes="<?php echo esc_attr( wp_json_encode( $option['attributes'] ) ); ?>"
-										aria-pressed="<?php echo (int) $option['id'] === (int) ( $selected_variation['id'] ?? 0 ) ? 'true' : 'false'; ?>"
-										<?php disabled( ! $option['available'] ); ?>
+										aria-pressed="<?php echo $is_selected_option ? 'true' : 'false'; ?>"
+										aria-disabled="<?php echo $option['available'] ? 'false' : 'true'; ?>"
+										aria-label="<?php echo esc_attr( $option['available'] ? $option['label'] : sprintf( __( '%s - out of stock', 'simms-research' ), $option['label'] ) ); ?>"
 									>
 										<?php echo esc_html( $option['button_label'] ); ?>
 									</button>
@@ -363,7 +420,7 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 						<fieldset class="pdp__variant-picker pdp__variant-picker--single">
 							<legend><?php esc_html_e( 'Size', 'simms-research' ); ?></legend>
 							<div class="pdp__variant-options" role="group" aria-label="<?php esc_attr_e( 'Selected size', 'simms-research' ); ?>">
-								<span class="pdp__variant-button pdp__variant-button--readonly is-active" aria-label="<?php echo esc_attr( $single_size_label ); ?>">
+								<span class="pdp__variant-button pdp__variant-button--readonly is-active<?php echo $ready_to_ship ? '' : ' is-unavailable'; ?>" aria-label="<?php echo esc_attr( $ready_to_ship ? $single_size_label : sprintf( __( '%s - out of stock', 'simms-research' ), $single_size_label ) ); ?>">
 									<?php echo esc_html( $single_size_button ); ?>
 								</span>
 							</div>
@@ -403,17 +460,17 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 							<input id="pdp-quantity-<?php echo esc_attr( (string) $product_id ); ?>" class="qty" type="number" name="quantity" value="1" min="1" step="1" inputmode="numeric" data-pdp-quantity>
 							<button type="button" data-pdp-qty-step="1" aria-label="<?php esc_attr_e( 'Increase quantity', 'simms-research' ); ?>">+</button>
 						</div>
-						<button type="submit" name="add-to-cart" value="<?php echo esc_attr( (string) $product_id ); ?>" class="single_add_to_cart_button button pdp__add-button" data-pdp-submit>
-							<span class="pdp__button-icon" aria-hidden="true"><?php echo simms_inline_icon( 'add-to-cart' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
-							<?php esc_html_e( 'Add to cart', 'simms-research' ); ?>
+						<button type="submit" name="add-to-cart" value="<?php echo esc_attr( (string) $product_id ); ?>" class="single_add_to_cart_button button pdp__add-button" data-pdp-submit data-add-label="<?php echo esc_attr( $add_to_cart_label ); ?>" data-sold-out-label="<?php echo esc_attr( $sold_out_label ); ?>"<?php disabled( ! $ready_to_ship ); ?>>
+							<span class="pdp__button-icon" aria-hidden="true" data-pdp-submit-icon<?php echo $ready_to_ship ? '' : ' hidden'; ?>><?php echo simms_inline_icon( 'add-to-cart' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+							<span data-pdp-submit-text><?php echo esc_html( $ready_to_ship ? $add_to_cart_label : $sold_out_label ); ?></span>
 						</button>
 					</div>
 
-					<button type="button" class="pdp__paypal-button" data-pdp-express>
+					<button type="button" class="pdp__paypal-button" data-pdp-express<?php echo $ready_to_ship ? '' : ' hidden'; ?>>
 						<span><?php esc_html_e( 'Pay with', 'simms-research' ); ?></span>
 						<strong><?php esc_html_e( 'PayPal', 'simms-research' ); ?></strong>
 					</button>
-					<a class="pdp__payment-options" href="<?php echo esc_url( function_exists( 'wc_get_checkout_url' ) ? wc_get_checkout_url() : home_url( '/checkout/' ) ); ?>"><?php esc_html_e( 'More payment options', 'simms-research' ); ?></a>
+					<a class="pdp__payment-options" href="<?php echo esc_url( function_exists( 'wc_get_checkout_url' ) ? wc_get_checkout_url() : home_url( '/checkout/' ) ); ?>" data-pdp-payment-options<?php echo $ready_to_ship ? '' : ' hidden'; ?>><?php esc_html_e( 'More payment options', 'simms-research' ); ?></a>
 				</form>
 			</div>
 
@@ -586,9 +643,9 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 			<span data-pdp-sticky-variant><?php echo esc_html( $selected_label ); ?></span>
 		</div>
 		<div class="pdp-sticky-cart__price" data-pdp-sticky-price><?php echo esc_html( $selected_price_text ); ?></div>
-		<button type="button" class="pdp-sticky-cart__button" data-pdp-sticky-submit>
-			<span aria-hidden="true"><?php echo simms_inline_icon( 'add-to-cart' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
-			<?php esc_html_e( 'Add to cart', 'simms-research' ); ?>
+		<button type="button" class="pdp-sticky-cart__button" data-pdp-sticky-submit data-add-label="<?php echo esc_attr( $add_to_cart_label ); ?>" data-sold-out-label="<?php echo esc_attr( $sold_out_label ); ?>"<?php disabled( ! $ready_to_ship ); ?>>
+			<span aria-hidden="true" data-pdp-sticky-icon<?php echo $ready_to_ship ? '' : ' hidden'; ?>><?php echo simms_inline_icon( 'add-to-cart' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+			<span data-pdp-sticky-submit-text><?php echo esc_html( $ready_to_ship ? $add_to_cart_label : $sold_out_label ); ?></span>
 		</button>
 	</div>
 </div>

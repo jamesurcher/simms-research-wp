@@ -76,6 +76,34 @@ add_action(
 );
 
 add_filter(
+	'woocommerce_product_is_visible',
+	function ( $visible, $product_id ): bool {
+		if ( $visible || is_admin() || ! function_exists( 'is_product' ) || ! is_product() || ! function_exists( 'wc_get_product' ) ) {
+			return (bool) $visible;
+		}
+
+		$product_id = absint( $product_id );
+		$product    = $product_id ? wc_get_product( $product_id ) : null;
+
+		if ( ! $product instanceof WC_Product || $product->is_in_stock() ) {
+			return (bool) $visible;
+		}
+
+		if ( 'publish' !== get_post_status( $product_id ) || 'hidden' === $product->get_catalog_visibility() ) {
+			return (bool) $visible;
+		}
+
+		if ( '' === (string) $product->get_price() && ! $product->is_type( 'variable' ) ) {
+			return (bool) $visible;
+		}
+
+		return true;
+	},
+	20,
+	2
+);
+
+add_filter(
 	'woocommerce_output_related_products_args',
 	function ( array $args ): array {
 		$args['posts_per_page'] = 4;
