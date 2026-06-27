@@ -230,17 +230,16 @@
 .pdp__variant-button.is-unavailable::after {
   content: "";
   position: absolute;
-  inset-block: 0.1rem;
+  inset-block: 0;
   inset-inline-start: 50%;
   width: clamp(4.7rem, 34%, 6.4rem);
   background: linear-gradient(
-    to bottom left,
-    transparent calc(50% - 0.6px),
-    currentColor calc(50% - 0.6px),
-    currentColor calc(50% + 0.6px),
-    transparent calc(50% + 0.6px)
+    to bottom right,
+    transparent calc(50% - 0.5px),
+    currentColor calc(50% - 0.5px),
+    currentColor calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
   );
-  opacity: 0.58;
   pointer-events: none;
   transform: translateX(-50%);
 }
