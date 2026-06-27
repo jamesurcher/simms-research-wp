@@ -230,7 +230,9 @@
 .pdp__variant-button.is-unavailable::after {
   content: "";
   position: absolute;
-  inset: 0.1rem;
+  inset-block: 0.1rem;
+  inset-inline-start: 50%;
+  width: clamp(4.7rem, 34%, 6.4rem);
   background: linear-gradient(
     to bottom left,
     transparent calc(50% - 0.6px),
@@ -240,6 +242,7 @@
   );
   opacity: 0.58;
   pointer-events: none;
+  transform: translateX(-50%);
 }
 
 .pdp__variant-button.is-unavailable.is-active {
@@ -293,22 +296,6 @@
 
 .pdp__stock-separator {
   color: rgb(var(--color-foreground-rgb) / 0.28);
-}
-
-.pdp__stock-notice {
-  margin-block: -0.55rem -0.15rem;
-  padding: 0.78rem 0.92rem;
-  border: 1px solid rgb(194 65 53 / 0.18);
-  border-radius: 8px;
-  background: rgb(194 65 53 / 0.045);
-  color: #8f332d;
-  font-family: var(--font-body--family);
-  font-size: 0.875rem;
-  line-height: 1.35;
-}
-
-.pdp__stock-notice[hidden] {
-  display: none;
 }
 
 .volume-discount-table {

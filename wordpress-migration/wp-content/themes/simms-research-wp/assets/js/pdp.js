@@ -18,7 +18,6 @@
   const stockLabel = root.querySelector('[data-pdp-stock-label]');
   const stockDetail = root.querySelector('[data-pdp-stock-detail]');
   const stockSeparator = root.querySelector('[data-pdp-stock-separator]');
-  const stockNotice = root.querySelector('[data-pdp-stock-notice]');
   const expressButton = root.querySelector('[data-pdp-express]');
   const paymentOptions = root.querySelector('[data-pdp-payment-options]');
   const stickySubmitButton = root.querySelector('[data-pdp-sticky-submit]');
@@ -121,7 +120,7 @@
     });
   }
 
-  function setPurchaseState(isAvailable, notice = '') {
+  function setPurchaseState(isAvailable) {
     currentAvailable = isAvailable;
 
     if (form) {
@@ -144,11 +143,6 @@
 
     setElementHidden(stockDetail, !isAvailable);
     setElementHidden(stockSeparator, !isAvailable);
-
-    if (stockNotice) {
-      stockNotice.textContent = notice || form?.dataset.defaultOosNotice || '';
-      stockNotice.hidden = isAvailable;
-    }
 
     if (submitButton) {
       submitButton.disabled = !isAvailable;
@@ -247,7 +241,7 @@
       stickyPrice.textContent = button.dataset.priceText;
     }
 
-    setPurchaseState(button.dataset.available !== 'false', button.dataset.stockNotice || '');
+    setPurchaseState(button.dataset.available !== 'false');
     syncCoa(button.dataset.variantKey || '');
   }
 
@@ -372,8 +366,7 @@
   syncBundleState();
   const activeVariant = root.querySelector('[data-pdp-variant].is-active');
   setPurchaseState(
-    activeVariant ? activeVariant.dataset.available !== 'false' : currentAvailable,
-    activeVariant?.dataset.stockNotice || stockNotice?.textContent || ''
+    activeVariant ? activeVariant.dataset.available !== 'false' : currentAvailable
   );
   // Prefer the active variant's key; for products with no variant picker (simple
   // products) fall back to the COA card the server already marked active rather

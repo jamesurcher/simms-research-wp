@@ -37,20 +37,6 @@ $format_money_text = static function ( mixed $price ): string {
 	return html_entity_decode( wp_strip_all_tags( wc_price( $price ) ), ENT_QUOTES, get_bloginfo( 'charset' ) );
 };
 
-$out_of_stock_notice = static function ( string $label = '' ): string {
-	$label = trim( $label );
-
-	if ( '' !== $label ) {
-		return sprintf(
-			/* translators: %s: Selected product size or variant label. */
-			__( '%s is currently out of stock and cannot be added to cart.', 'simms-research' ),
-			$label
-		);
-	}
-
-	return __( 'This product is currently out of stock and cannot be added to cart.', 'simms-research' );
-};
-
 $format_test_date = static function ( mixed $date ): string {
 	$timestamp = strtotime( (string) $date );
 
@@ -200,7 +186,6 @@ if ( $product->is_type( 'variable' ) ) {
 			'price_html'    => wc_price( $price ),
 			'price_text'    => $format_money_text( $price ),
 			'attribute_id'  => $display_attribute_id,
-			'stock_notice'  => $is_available ? '' : $out_of_stock_notice( $display_attribute ),
 			'variation_obj' => $variation_product,
 		);
 
@@ -230,7 +215,6 @@ $single_size_button  = '' !== $single_size_label ? strtoupper( preg_replace( '/\
 $stock_status_class  = $ready_to_ship ? 'is-in-stock' : 'is-out-of-stock';
 $stock_label         = $ready_to_ship ? __( 'In stock', 'simms-research' ) : __( 'Out of stock', 'simms-research' );
 $stock_detail        = $ready_to_ship ? __( 'Ready to ship', 'simms-research' ) : '';
-$stock_notice        = $ready_to_ship ? '' : ( $selected_variation['stock_notice'] ?? $out_of_stock_notice( $single_size_label ) );
 $add_to_cart_label   = __( 'Add to cart', 'simms-research' );
 $sold_out_label      = __( 'Sold out', 'simms-research' );
 
@@ -359,17 +343,12 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 					data-in-stock-label="<?php echo esc_attr__( 'In stock', 'simms-research' ); ?>"
 					data-ready-label="<?php echo esc_attr__( 'Ready to ship', 'simms-research' ); ?>"
 					data-out-of-stock-label="<?php echo esc_attr__( 'Out of stock', 'simms-research' ); ?>"
-					data-default-oos-notice="<?php echo esc_attr( $out_of_stock_notice() ); ?>"
 				>
 					<div class="pdp__stock-status <?php echo esc_attr( $stock_status_class ); ?>" role="status" data-pdp-stock-status>
 						<span class="pdp__stock-dot" aria-hidden="true"></span>
 						<span data-pdp-stock-label><?php echo esc_html( $stock_label ); ?></span>
 						<span class="pdp__stock-separator" aria-hidden="true" data-pdp-stock-separator<?php echo $ready_to_ship ? '' : ' hidden'; ?>>&middot;</span>
 						<span data-pdp-stock-detail<?php echo $ready_to_ship ? '' : ' hidden'; ?>><?php echo esc_html( $stock_detail ); ?></span>
-					</div>
-
-					<div class="pdp__stock-notice" role="note" data-pdp-stock-notice<?php echo $ready_to_ship ? ' hidden' : ''; ?>>
-						<?php echo esc_html( $stock_notice ); ?>
 					</div>
 
 					<?php if ( ! empty( $variation_options ) ) : ?>
@@ -399,7 +378,6 @@ $pdp_js_ver   = file_exists( $pdp_js_path ) ? (string) filemtime( $pdp_js_path )
 										data-available="<?php echo esc_attr( $option['available'] ? 'true' : 'false' ); ?>"
 										data-price="<?php echo esc_attr( $option['price_html'] ); ?>"
 										data-price-text="<?php echo esc_attr( $option['price_text'] ); ?>"
-										data-stock-notice="<?php echo esc_attr( $option['stock_notice'] ); ?>"
 										data-attributes="<?php echo esc_attr( wp_json_encode( $option['attributes'] ) ); ?>"
 										aria-pressed="<?php echo $is_selected_option ? 'true' : 'false'; ?>"
 										aria-disabled="<?php echo $option['available'] ? 'false' : 'true'; ?>"
