@@ -464,3 +464,31 @@ add_action(
 	},
 	20
 );
+
+/* -------------------------------------------------------------------------
+ * The guest "verify your email to view this order" gate (order-pay /
+ * order-received) reuses the account sign-in styles, so load simms-account.css
+ * on those endpoints too. The .simms-auth rules only activate via the override
+ * template (woocommerce/checkout/form-verify-email.php), so this is a no-op
+ * visually on orders that don't hit the gate.
+ * ---------------------------------------------------------------------- */
+
+add_action(
+	'wp_enqueue_scripts',
+	function (): void {
+		$is_verify_context = ( function_exists( 'is_checkout_pay_page' ) && is_checkout_pay_page() )
+			|| ( function_exists( 'is_order_received_page' ) && is_order_received_page() );
+
+		if ( ! $is_verify_context ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'simms-account',
+			SIMMS_THEME_URI . '/assets/css/simms-account.css',
+			array( 'simms-base', 'simms-sections' ),
+			SIMMS_THEME_VERSION
+		);
+	},
+	20
+);
