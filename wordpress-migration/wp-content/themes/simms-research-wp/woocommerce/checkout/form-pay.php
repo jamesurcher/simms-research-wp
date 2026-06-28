@@ -21,30 +21,21 @@ $shipping_items      = $order->get_items( 'shipping' );
 $discount_total      = (float) $order->get_discount_total() + (float) $order->get_discount_tax();
 $order_total_row     = $totals['order_total'] ?? null;
 
-ob_start();
 /**
- * Triggered from within the checkout/form-pay.php template, immediately before
- * the payment section.
- *
- * @since 8.2.0
+ * Fire the pay-page hook so payment plugins can still register their assets, but
+ * discard its markup. WooCommerce PayPal Payments prints an express-button
+ * container here that never paints on the order-pay endpoint, which left a hollow
+ * "Express Checkout" box on the recovery page. Customers still pay with PayPal
+ * (and every other gateway) via the payment-method list in the Payment section.
  */
+ob_start();
 do_action( 'woocommerce_pay_order_before_payment' );
-$before_payment_html = trim( (string) ob_get_clean() );
+ob_end_clean();
 ?>
 
 <form id="order_review" class="wc-block-checkout simms-order-pay-checkout" method="post">
 	<div class="wc-block-checkout__main simms-order-pay-checkout__main">
 		<div class="wc-block-checkout__form simms-order-pay-checkout__form">
-			<?php if ( '' !== $before_payment_html ) : ?>
-				<section class="simms-order-pay-express" aria-label="<?php esc_attr_e( 'Express checkout', 'simms-research' ); ?>">
-					<div class="simms-order-pay-express__label"><?php esc_html_e( 'Express Checkout', 'simms-research' ); ?></div>
-					<div class="simms-order-pay-express__inner">
-						<?php echo $before_payment_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-					</div>
-				</section>
-				<div class="simms-order-pay-divider"><span><?php esc_html_e( 'Or continue below', 'simms-research' ); ?></span></div>
-			<?php endif; ?>
-
 			<?php if ( $billing_email ) : ?>
 				<section class="simms-order-pay-section">
 					<h2><?php esc_html_e( 'Contact', 'simms-research' ); ?></h2>
@@ -171,6 +162,7 @@ $before_payment_html = trim( (string) ob_get_clean() );
 						</div>
 						<div class="simms-order-pay-item__body">
 							<h3><?php echo wp_kses_post( apply_filters( 'woocommerce_order_item_name', $product_name, $item, false ) ); ?></h3>
+							<p class="simms-order-pay-item__unit"><?php echo wp_kses_post( wc_price( $order->get_item_total( $item ) ) ); ?></p>
 							<?php if ( '' !== trim( wp_strip_all_tags( $item_meta ) ) ) : ?>
 								<div class="simms-order-pay-item__meta">
 									<?php echo wp_kses_post( $item_meta ); ?>
