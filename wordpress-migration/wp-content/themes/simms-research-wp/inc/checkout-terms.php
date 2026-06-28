@@ -68,6 +68,27 @@ add_filter(
 );
 
 /**
+ * Mirror the consent on the classic "Pay for order" page (order-pay endpoint).
+ *
+ * That page renders WooCommerce's classic checkout/terms.php — not the block
+ * terms block — so it otherwise shows the default "I have read and agree to the
+ * website terms" label. Swap in the same explicit 21+/research-use consent text.
+ * The label is run through wp_kses_post() in the template, so the policy links in
+ * the returned HTML are preserved. Scoped to the pay page; the block /checkout is
+ * handled by the render_block_data filter above.
+ */
+add_filter(
+	'woocommerce_get_terms_and_conditions_checkbox_text',
+	function ( $text ) {
+		if ( function_exists( 'is_checkout_pay_page' ) && is_checkout_pay_page() ) {
+			return simms_checkout_terms_text();
+		}
+
+		return $text;
+	}
+);
+
+/**
  * Hide the "Add a note to your order" block at render time (code-only, reversible).
  */
 add_filter(

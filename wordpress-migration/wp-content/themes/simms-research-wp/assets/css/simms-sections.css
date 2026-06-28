@@ -2389,14 +2389,12 @@ body.woocommerce-order-pay .woocommerce-message { border-color: rgb(47 125 70 / 
 .simms-order-pay-payment .woocommerce-terms-and-conditions-wrapper {
   margin-top: 18px;
 }
-.simms-order-pay-payment .woocommerce-privacy-policy-text {
-  margin: 0 0 18px;
-  color: rgb(var(--color-foreground-rgb) / 0.72);
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
-.simms-order-pay-payment .woocommerce-privacy-policy-text p {
-  margin: 0;
+/* Match the block /checkout consent: the explicit checkbox text links the Privacy
+   Policy, so the separate WooCommerce privacy paragraph and the trailing required
+   asterisk are suppressed here. */
+.simms-order-pay-payment .woocommerce-privacy-policy-text,
+.simms-order-pay-payment .woocommerce-form__label-for-checkbox .required {
+  display: none;
 }
 .simms-order-pay-payment .woocommerce-terms-and-conditions-wrapper a {
   color: var(--color-foreground);
@@ -2436,6 +2434,10 @@ body.woocommerce-order-pay .woocommerce-message { border-color: rgb(47 125 70 / 
 }
 .simms-order-pay-payment #place_order:hover {
   opacity: 0.88;
+}
+.simms-order-pay-payment #place_order:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 .simms-order-pay-summary__inner {
   max-width: 440px;

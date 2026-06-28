@@ -210,3 +210,24 @@ ob_end_clean();
 		</div>
 	</aside>
 </form>
+
+<script>
+/* Require the 21+/research-use consent before the order can be paid, mirroring the
+   block /checkout terms gate. The classic pay form has no terms validation of its
+   own, so disable the submit button until the box is ticked. */
+( function () {
+	var terms = document.getElementById( 'terms' );
+	var button = document.getElementById( 'place_order' );
+
+	if ( ! terms || ! button ) {
+		return;
+	}
+
+	function sync() {
+		button.disabled = ! terms.checked;
+	}
+
+	terms.addEventListener( 'change', sync );
+	sync();
+} )();
+</script>
