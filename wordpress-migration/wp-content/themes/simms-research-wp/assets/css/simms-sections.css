@@ -2153,6 +2153,483 @@ body.woocommerce-checkout .simms-entry > h1 { display: none; }
   .wc-block-checkout__actions > .wc-block-components-notices__snackbar { order: 2; }
 }
 
+/* ---- Shopify-style pay-for-order recovery checkout ---- */
+body.woocommerce-order-pay .simms-entry__content {
+  font-family: var(--font-body--family);
+  color: var(--color-foreground);
+}
+body.woocommerce-order-pay .woocommerce-info,
+body.woocommerce-order-pay .woocommerce-error,
+body.woocommerce-order-pay .woocommerce-message {
+  width: min(560px, calc(100% - 32px));
+  margin: 24px auto 0;
+  padding: 14px 16px;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.14);
+  border-radius: 8px;
+  background: #f7f7f7;
+  color: rgb(var(--color-foreground-rgb) / 0.78);
+  font-family: var(--font-body--family);
+  font-size: 0.875rem;
+  line-height: 1.45;
+  list-style-position: inside;
+}
+body.woocommerce-order-pay .woocommerce-info::before,
+body.woocommerce-order-pay .woocommerce-error::before,
+body.woocommerce-order-pay .woocommerce-message::before { display: none; }
+body.woocommerce-order-pay .woocommerce-error { border-color: rgb(175 35 35 / 0.28); background: #fff7f7; }
+body.woocommerce-order-pay .woocommerce-message { border-color: rgb(47 125 70 / 0.28); background: #f7fbf8; }
+@media (min-width: 991px) {
+  body.woocommerce-order-pay .woocommerce-info,
+  body.woocommerce-order-pay .woocommerce-error,
+  body.woocommerce-order-pay .woocommerce-message {
+    width: min(560px, calc(50% - 80px));
+    margin-left: max(24px, calc(50% - 616px));
+    margin-right: 0;
+  }
+}
+.simms-order-pay-checkout {
+  display: flex;
+  align-items: stretch;
+  min-height: calc(100vh - 118px);
+}
+.simms-order-pay-checkout__form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.simms-order-pay-express {
+  position: relative;
+  margin-bottom: 2px;
+  padding: 26px 18px 20px;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.16);
+  border-radius: 6px;
+}
+.simms-order-pay-express__label {
+  position: absolute;
+  left: 50%;
+  top: -0.72em;
+  transform: translateX(-50%);
+  padding-inline: 14px;
+  background: var(--color-background);
+  color: rgb(var(--color-foreground-rgb) / 0.72);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+.simms-order-pay-express__inner {
+  display: grid;
+  gap: 12px;
+}
+.simms-order-pay-express__inner:empty { display: none; }
+.simms-order-pay-divider {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  color: rgb(var(--color-foreground-rgb) / 0.64);
+  font-size: 0.8125rem;
+}
+.simms-order-pay-divider::before,
+.simms-order-pay-divider::after {
+  content: "";
+  height: 1px;
+  background: rgb(var(--color-foreground-rgb) / 0.14);
+}
+.simms-order-pay-section h2,
+.simms-order-pay-summary h2 {
+  margin: 0 0 18px;
+  font-family: var(--font-heading--family);
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--color-foreground-heading);
+}
+.simms-order-pay-card,
+.simms-order-pay-options,
+.simms-order-pay-payment .wc_payment_methods {
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.18);
+  border-radius: 8px;
+  background: var(--color-background);
+}
+.simms-order-pay-card {
+  padding: 18px 20px;
+}
+.simms-order-pay-card--field {
+  display: grid;
+  gap: 4px;
+  min-height: 64px;
+  padding-block: 10px;
+}
+.simms-order-pay-card--field span {
+  color: rgb(var(--color-foreground-rgb) / 0.7);
+  font-size: 0.8125rem;
+}
+.simms-order-pay-card--field strong {
+  color: var(--color-foreground);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: 1.35;
+}
+.simms-order-pay-card address {
+  margin: 0;
+  color: var(--color-foreground);
+  font-style: normal;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+.simms-order-pay-options {
+  overflow: hidden;
+}
+.simms-order-pay-option {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  padding: 14px 18px;
+}
+.simms-order-pay-option + .simms-order-pay-option {
+  border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.12);
+}
+.simms-order-pay-option.is-selected {
+  box-shadow: inset 0 0 0 1px var(--color-foreground);
+}
+.simms-order-pay-option__radio {
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.44);
+  border-radius: 50%;
+  background: radial-gradient(circle at center, var(--color-foreground) 0 42%, transparent 45%);
+}
+.simms-order-pay-option__label {
+  font-weight: 500;
+}
+.simms-order-pay-option__price {
+  color: rgb(var(--color-foreground-rgb) / 0.78);
+}
+.simms-order-pay-payment .wc_payment_methods {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+}
+.simms-order-pay-payment .wc_payment_method {
+  margin: 0;
+  padding: 0;
+  background: var(--color-background);
+}
+.simms-order-pay-payment .wc_payment_method + .wc_payment_method {
+  border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.12);
+}
+.simms-order-pay-payment .wc_payment_method > input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.simms-order-pay-payment .wc_payment_method > label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 56px;
+  margin: 0;
+  padding: 16px 18px 16px 48px;
+  color: var(--color-foreground);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+.simms-order-pay-payment .wc_payment_method > label::before,
+.simms-order-pay-payment .wc_payment_method > label::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+.simms-order-pay-payment .wc_payment_method > label::before {
+  left: 18px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.44);
+  background: var(--color-background);
+}
+.simms-order-pay-payment .wc_payment_method > input[type="radio"]:checked + label::after {
+  left: 23px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  transform: translateY(-50%);
+  background: var(--color-foreground);
+}
+.simms-order-pay-payment .wc_payment_method > input[type="radio"]:checked + label {
+  box-shadow: inset 0 0 0 1px var(--color-foreground);
+}
+.simms-order-pay-payment .wc_payment_method > input[type="radio"]:focus-visible + label {
+  outline: 2px solid var(--color-foreground);
+  outline-offset: -2px;
+}
+.simms-order-pay-payment .wc_payment_method img {
+  max-height: 24px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+.simms-order-pay-payment .payment_box {
+  margin: 0;
+  padding: 0 26px 24px 48px;
+  color: rgb(var(--color-foreground-rgb) / 0.72);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+.simms-order-pay-payment .payment_box p {
+  margin: 0 0 12px;
+}
+.simms-order-pay-payment .payment_box fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.simms-order-pay-payment .form-row {
+  margin: 0 0 16px;
+  padding: 0;
+}
+.simms-order-pay-payment label {
+  display: inline-block;
+  margin-bottom: 7px;
+  color: var(--color-foreground);
+  font-size: 0.875rem;
+}
+.simms-order-pay-payment input.input-text,
+.simms-order-pay-payment input[type="text"],
+.simms-order-pay-payment input[type="tel"],
+.simms-order-pay-payment input[type="email"],
+.simms-order-pay-payment select {
+  width: 100%;
+  min-height: 54px;
+  padding: 14px;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.18);
+  border-radius: var(--inputs-border-radius);
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-body--family);
+  font-size: 0.9375rem;
+}
+.simms-order-pay-payment input:focus,
+.simms-order-pay-payment select:focus {
+  border-color: rgb(var(--color-foreground-rgb) / 0.55);
+  outline: none;
+}
+.simms-order-pay-payment .form-row-first,
+.simms-order-pay-payment .form-row-last {
+  float: none;
+  width: 100%;
+}
+.simms-order-pay-payment .woocommerce-terms-and-conditions-wrapper {
+  margin-top: 18px;
+}
+.simms-order-pay-payment .woocommerce-privacy-policy-text {
+  margin: 0 0 18px;
+  color: rgb(var(--color-foreground-rgb) / 0.72);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+.simms-order-pay-payment .woocommerce-privacy-policy-text p {
+  margin: 0;
+}
+.simms-order-pay-payment .woocommerce-terms-and-conditions-wrapper a {
+  color: var(--color-foreground);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.simms-order-pay-payment .woocommerce-form__label-for-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  color: var(--color-foreground);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+.simms-order-pay-payment .woocommerce-form__input-checkbox {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+}
+.simms-order-pay-place-order {
+  margin-top: 20px;
+}
+.simms-order-pay-payment #place_order {
+  width: 100%;
+  min-height: 52px;
+  border: 0;
+  border-radius: var(--style-border-radius-buttons-primary);
+  background: var(--color-foreground);
+  color: var(--color-background);
+  font-family: var(--font-body--family);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 160ms ease;
+}
+.simms-order-pay-payment #place_order:hover {
+  opacity: 0.88;
+}
+.simms-order-pay-summary__inner {
+  max-width: 440px;
+  margin-right: auto;
+}
+.simms-order-pay-items {
+  display: grid;
+  gap: 18px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgb(var(--color-foreground-rgb) / 0.14);
+}
+.simms-order-pay-item {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: start;
+  gap: 16px;
+}
+.simms-order-pay-item__image {
+  position: relative;
+  width: 64px;
+  aspect-ratio: 1;
+  border: 1px solid rgb(var(--color-foreground-rgb) / 0.1);
+  border-radius: 6px;
+  background: #ffffff;
+}
+.simms-order-pay-item__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: inherit;
+}
+.simms-order-pay-item__qty {
+  position: absolute;
+  right: -9px;
+  top: -9px;
+  display: grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding-inline: 6px;
+  border-radius: 999px;
+  background: var(--color-foreground);
+  color: var(--color-background);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+}
+.simms-order-pay-item__body {
+  min-width: 0;
+}
+.simms-order-pay-item h3 {
+  margin: 2px 0 8px;
+  font-family: var(--font-body--family);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--color-foreground);
+}
+.simms-order-pay-item__meta,
+.simms-order-pay-item__meta p,
+.simms-order-pay-item__meta .wc-item-meta {
+  margin: 0;
+  padding: 0;
+  color: rgb(var(--color-foreground-rgb) / 0.68);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  list-style: none;
+}
+.simms-order-pay-item__meta li {
+  display: flex;
+  gap: 4px;
+  margin: 0;
+}
+.simms-order-pay-item__meta .wc-item-meta-label {
+  font-weight: 400;
+}
+.simms-order-pay-item__price {
+  padding-top: 2px;
+  white-space: nowrap;
+  color: var(--color-foreground);
+  font-size: 0.9375rem;
+}
+.simms-order-pay-totals {
+  display: grid;
+  gap: 0;
+  padding-top: 18px;
+}
+.simms-order-pay-total-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  color: rgb(var(--color-foreground-rgb) / 0.78);
+  font-size: 0.9375rem;
+}
+.simms-order-pay-total-row strong {
+  color: var(--color-foreground);
+  font-weight: 400;
+  text-align: right;
+}
+.simms-order-pay-total-row--order-total {
+  margin-top: 12px;
+  padding-top: 24px;
+  border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.14);
+  color: var(--color-foreground);
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+.simms-order-pay-total-row--order-total strong {
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+.simms-order-pay-total-row--savings {
+  margin-top: 18px;
+  padding-top: 22px;
+  border-top: 1px solid rgb(var(--color-foreground-rgb) / 0.14);
+  color: #2f7d46;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.simms-order-pay-total-row--savings strong {
+  color: inherit;
+  font-weight: 500;
+}
+@media (max-width: 990px) {
+  .simms-order-pay-checkout {
+    display: flex;
+    flex-direction: column-reverse;
+    min-height: 0;
+    background: none;
+  }
+  body.woocommerce-order-pay .simms-order-pay-checkout__main {
+    max-width: 100%;
+    padding: 24px 16px !important;
+  }
+  body.woocommerce-order-pay .simms-order-pay-summary {
+    max-width: 100%;
+    padding: 24px 16px !important;
+    background: #fafafa;
+  }
+  .simms-order-pay-checkout__form,
+  .simms-order-pay-summary__inner {
+    max-width: none;
+    margin: 0;
+  }
+  .simms-order-pay-payment .payment_box {
+    padding-inline: 18px;
+  }
+  .simms-order-pay-item {
+    grid-template-columns: 56px 1fr auto;
+    gap: 14px;
+  }
+  .simms-order-pay-item__image {
+    width: 56px;
+  }
+}
+
 /* ============================================================
    LAB RESULTS — hero icon enhancements (1:1 with source)
    ============================================================ */
