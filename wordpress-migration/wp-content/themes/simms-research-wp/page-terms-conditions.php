@@ -59,34 +59,39 @@ get_header();
 					<section>
 						<h2 class="font-serif text-2xl font-semibold mb-4">4. FDA Disclaimer</h2>
 						<p class="text-muted-foreground leading-relaxed mb-4">The statements made within this website have not been evaluated by the US Food and Drug Administration. The statements and the products of this company are not intended to diagnose, treat, cure, or prevent any disease.</p>
-						<p class="text-muted-foreground leading-relaxed mb-4">Simms Research is a chemical supplier. Simms Research is not a compounding pharmacy or chemical compounding facility as defined under 503A of the Federal Food, Drug, and Cosmetic Act. Simms Research is not an outsourcing facility as defined under 503B of the Federal Food, Drug, and Cosmetic Act.</p>
+						<p class="text-muted-foreground leading-relaxed mb-4">Simms Research is not a compounding pharmacy or chemical compounding facility as defined under 503A of the Federal Food, Drug, and Cosmetic Act. Simms Research is not an outsourcing facility as defined under 503B of the Federal Food, Drug, and Cosmetic Act.</p>
 					</section>
 					<section>
 						<h2 class="font-serif text-2xl font-semibold mb-4">5. Product Information</h2>
 						<p class="text-muted-foreground leading-relaxed mb-4">All compounds are sold individually and do not include research supplies such as bacteriostatic water, syringes, or other accessories. Most products are provided in lyophilized (powder) form and require proper reconstitution with a suitable diluent before use in research settings.</p>
 					</section>
 					<section>
-						<h2 class="font-serif text-2xl font-semibold mb-4">6. Ordering and Payment</h2>
+						<h2 class="font-serif text-2xl font-semibold mb-4">6. Fulfillment Partners</h2>
+						<p class="text-muted-foreground leading-relaxed mb-4">By placing an order through our website, you acknowledge and agree that your order may be processed, packed, shipped, and delivered through one or more third-party fulfillment, logistics, warehouse, carrier, or delivery partners.</p>
+						<p class="text-muted-foreground leading-relaxed mb-4">You authorize us to transfer your order or share the information necessary to fulfill and deliver your order with these partners, which may include your name, shipping address, contact information, order details, product information, tracking information, and any delivery instructions you provide.  If you do not consent to your order handled by our fulfillment partner(s), do not place an order through this website.</p>
+					</section>
+					<section>
+						<h2 class="font-serif text-2xl font-semibold mb-4">7. Ordering and Payment</h2>
 						<p class="text-muted-foreground leading-relaxed mb-4">All orders are subject to acceptance by Simms Research. We reserve the right to refuse service to anyone for any reason at any time. Payment must be received in full before orders are shipped.</p>
 					</section>
 					<section>
-						<h2 class="font-serif text-2xl font-semibold mb-4">7. Shipping</h2>
-						<p class="text-muted-foreground leading-relaxed mb-4">Orders placed before 2PM EST will ship the same day. Free shipping is available on orders over $250. All packages are shipped discreetly with tracking provided. International customers are responsible for any customs duties, taxes, or fees that may be assessed by their country.</p>
+						<h2 class="font-serif text-2xl font-semibold mb-4">8. Shipping</h2>
+						<p class="text-muted-foreground leading-relaxed mb-4">Orders placed before 2PM EST will ship the same day. Free shipping is available on orders over $200. All packages are shipped discreetly with tracking provided. International customers are responsible for any customs duties, taxes, or fees that may be assessed by their country.</p>
 					</section>
 					<section>
-						<h2 class="font-serif text-2xl font-semibold mb-4">8. Refunds and Returns</h2>
+						<h2 class="font-serif text-2xl font-semibold mb-4">9. Refunds and Returns</h2>
 						<p class="text-muted-foreground leading-relaxed mb-4">Refunds are available for damaged or incorrect products. Please contact our support team within 48 hours of receiving your order if there are any issues. Due to the nature of our products, we cannot accept returns of opened or used products.</p>
 					</section>
 					<section>
-						<h2 class="font-serif text-2xl font-semibold mb-4">9. Limitation of Liability</h2>
+						<h2 class="font-serif text-2xl font-semibold mb-4">10. Limitation of Liability</h2>
 						<p class="text-muted-foreground leading-relaxed mb-4">Simms Research shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of your use of the products or services provided. The customer acknowledges that there are risks in the handling, use, and distribution of these products, and certifies that it has the proper equipment, facilities, and personnel for managing those risks.</p>
 					</section>
 					<section>
-						<h2 class="font-serif text-2xl font-semibold mb-4">10. Governing Law</h2>
+						<h2 class="font-serif text-2xl font-semibold mb-4">11. Governing Law</h2>
 						<p class="text-muted-foreground leading-relaxed mb-4">These terms and conditions are governed by and construed in accordance with the laws of the United States. Any disputes arising under these terms shall be subject to the exclusive jurisdiction of the courts of the United States.</p>
 					</section>
 					<section>
-						<h2 class="font-serif text-2xl font-semibold mb-4">11. Contact Information</h2>
+						<h2 class="font-serif text-2xl font-semibold mb-4">12. Contact Information</h2>
 						<p class="text-muted-foreground leading-relaxed mb-4">If you have any questions about these Terms and Conditions, please contact us at support@simmsresearch.com.</p>
 					</section>
 				</div>
