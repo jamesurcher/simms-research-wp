@@ -438,9 +438,7 @@ function simms_posthog_capture_server( string $event, string $distinct_id, array
 }
 
 /**
- * Fire order_completed to PostHog server-side, once per order. Hooked to both the
- * block (Store API) and classic checkout order-processed actions; the first arg
- * is a WC_Order (Store API) or an order id (classic).
+ * Fire order_completed to PostHog server-side, once per paid order.
  *
  * @param int|WC_Order $order_or_id Order or order id.
  */
@@ -451,6 +449,10 @@ function simms_tracking_send_purchase_server( $order_or_id ): void {
 
 	$order = $order_or_id instanceof WC_Order ? $order_or_id : wc_get_order( $order_or_id );
 	if ( ! $order instanceof WC_Order ) {
+		return;
+	}
+
+	if ( ! $order->is_paid() ) {
 		return;
 	}
 
@@ -475,5 +477,4 @@ function simms_tracking_send_purchase_server( $order_or_id ): void {
 	$order->update_meta_data( '_simms_ph_purchase_sent', 'yes' );
 	$order->save();
 }
-add_action( 'woocommerce_store_api_checkout_order_processed', 'simms_tracking_send_purchase_server', 20 );
-add_action( 'woocommerce_checkout_order_processed', 'simms_tracking_send_purchase_server', 20 );
+add_action( 'woocommerce_payment_complete', 'simms_tracking_send_purchase_server', 20 );
