@@ -136,7 +136,7 @@ $simms_drawer_products = new WP_Query(
 								</span>
 								<span class="mobile-nav__featured-title"><?php the_title(); ?></span>
 								<?php if ( $simms_dp ) : ?>
-									<span class="mobile-nav__featured-price"><?php echo wp_kses_post( $simms_dp->get_price_html() ); ?></span>
+									<span class="mobile-nav__featured-price"><?php echo wp_kses_post( simms_product_card_price_html( $simms_dp ) ); ?></span>
 								<?php endif; ?>
 							</a>
 						</li>

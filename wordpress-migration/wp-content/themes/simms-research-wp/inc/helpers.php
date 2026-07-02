@@ -114,9 +114,27 @@ function simms_product_purity_summary( WC_Product $product ): string {
 
 function simms_product_card_price_html( WC_Product $product ): string {
 	if ( $product->is_type( 'variable' ) ) {
-		$price = $product->get_variation_price( 'min', true );
+		$prices = array();
 
-		return '' !== $price ? wc_price( $price ) : '';
+		foreach ( $product->get_children() as $variation_id ) {
+			$variation = wc_get_product( $variation_id );
+
+			if ( ! $variation instanceof WC_Product_Variation ) {
+				continue;
+			}
+
+			if ( 'publish' !== $variation->get_status() || ! $variation->variation_is_visible() ) {
+				continue;
+			}
+
+			if ( ! $variation->is_purchasable() || ! $variation->is_in_stock() || '' === $variation->get_price() ) {
+				continue;
+			}
+
+			$prices[] = (float) wc_get_price_to_display( $variation );
+		}
+
+		return ! empty( $prices ) ? wc_price( min( $prices ) ) : '';
 	}
 
 	return $product->get_price_html();
