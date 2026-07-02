@@ -127,14 +127,23 @@ function simms_product_card_price_html( WC_Product $product ): string {
 				continue;
 			}
 
-			if ( ! $variation->is_purchasable() || ! $variation->is_in_stock() || '' === $variation->get_price() ) {
+			if ( '' === $variation->get_price() ) {
 				continue;
 			}
 
 			$prices[] = (float) wc_get_price_to_display( $variation );
 		}
 
-		return ! empty( $prices ) ? wc_price( min( $prices ) ) : '';
+		$prices = array_values( array_unique( $prices ) );
+
+		if ( empty( $prices ) ) {
+			return '';
+		}
+
+		$min_price = min( $prices );
+		$max_price = max( $prices );
+
+		return $min_price === $max_price ? wc_price( $min_price ) : wc_price( $min_price ) . ' &ndash; ' . wc_price( $max_price );
 	}
 
 	return $product->get_price_html();
